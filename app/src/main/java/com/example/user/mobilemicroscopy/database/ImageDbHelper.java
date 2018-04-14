@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 // import Contract class
 import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 
-public class ImageDbHelper extends SQLiteOpenHelper{
+public class ImageDbHelper extends SQLiteOpenHelper {
 
     /**
      * Declare database name
@@ -22,8 +22,7 @@ public class ImageDbHelper extends SQLiteOpenHelper{
     /**
      * Constructor method
      */
-    public ImageDbHelper(Context context)
-    {
+    public ImageDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

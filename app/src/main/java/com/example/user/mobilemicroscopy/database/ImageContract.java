@@ -7,9 +7,10 @@ public final class ImageContract {
     /**
      * ImageContract class should not be instantiated
      */
-    private ImageContract() {};
+    private ImageContract() {
+    };
 
-    public static final class ImageEntry implements BaseColumns{
+    public static final class ImageEntry implements BaseColumns {
 
         public final static String TABLE_NAME = "Image";
 

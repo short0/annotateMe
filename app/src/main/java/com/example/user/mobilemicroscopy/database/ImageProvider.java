@@ -161,7 +161,23 @@ public class ImageProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        // Get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        final int match = mUriMatcher.match(uri);
+        switch (match) {
+            case IMAGES:
+                // Delete all rows that match the selection and selection args
+                return database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+            case IMAGE_ID:
+                // Delete a single row given by the ID in the URI
+                selection = ImageEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
     }
 
     /**

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,8 @@ import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 // import Contract class
 import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         String[] projection = {
                 ImageEntry._ID,
                 ImageEntry.COLUMN_NAME_DATE,
+                ImageEntry.COLUMN_NAME_TIME
         };
 
 //        Cursor cursor = database.query(
@@ -76,26 +80,14 @@ public class MainActivity extends AppCompatActivity {
                 null
         );
 
-        TextView displayView = findViewById(R.id.displayView);
+        // Find list view
+        ListView imageListView = findViewById(R.id.list);
 
+        // Create an Adapter
+        ImageCursorAdapter adapter = new ImageCursorAdapter(this, cursor);
 
-        try {
-            displayView.setText("number of rows: " + cursor.getCount() + "\n\n");
-            displayView.append(ImageEntry._ID + "-" + ImageEntry.COLUMN_NAME_DATE + "\n");
-
-            int idColumnIndex = cursor.getColumnIndex(ImageEntry._ID);
-            int dateColumIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_DATE);
-
-            while (cursor.moveToNext()) {
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentDate = cursor.getString(dateColumIndex);
-
-                displayView.append(currentID + "-" + currentDate + "\n");
-            }
-        } finally {
-            // Close the cursor when done to releases resources and makes it invalid.
-            cursor.close();
-        }
+        // Attach the adapter to list view
+        imageListView.setAdapter(adapter);
     }
 
     /**

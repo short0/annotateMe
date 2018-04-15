@@ -1,28 +1,31 @@
 package com.example.user.mobilemicroscopy;
 
-import android.app.LoaderManager;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.app.LoaderManager;
+        import android.content.ContentUris;
+        import android.content.CursorLoader;
+        import android.content.Intent;
+        import android.content.Loader;
+        import android.database.Cursor;
+        import android.database.sqlite.SQLiteDatabase;
+        import android.net.Uri;
+        import android.support.design.widget.FloatingActionButton;
+        import android.support.v7.app.AppCompatActivity;
+        import android.os.Bundle;
+        import android.view.Menu;
+        import android.view.MenuItem;
+        import android.view.View;
+        import android.widget.AdapterView;
+        import android.widget.ListView;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import com.example.user.mobilemicroscopy.database.ImageContract;
-import com.example.user.mobilemicroscopy.database.ImageDbHelper;
+        import com.example.user.mobilemicroscopy.database.ImageContract;
+        import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 // import Contract class
-import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
+        import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 
-import java.util.List;
+        import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -52,6 +55,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // Attach the adapter to list view
         imageListView.setAdapter(mCursorAdapter);
+
+        // set up on item click listener
+        imageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                // create an intent to send
+                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+
+                // get the current URI
+                Uri currentImageUri = ContentUris.withAppendedId(ImageEntry.CONTENT_URI, id);
+
+                // set the intent to data field of the intent
+                intent.setData(currentImageUri);
+
+                // Launch the intent
+                startActivity(intent);
+            }
+        });
 
         // Start the loader
         getLoaderManager().initLoader(IMAGE_LOADER, null, this);
@@ -166,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // when reset loader, reset the cursor
+
         mCursorAdapter.swapCursor(null);
     }
 }

@@ -1,6 +1,11 @@
 package com.example.user.mobilemicroscopy;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +20,12 @@ import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 import com.example.user.mobilemicroscopy.database.ImageContract;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int EXISTING_IMAGE_LOADER = 0;
+
+    // content URI of existing image
+    private Uri mCurrentImageUri;
 
     /**
      * Date input EditText
@@ -36,6 +46,21 @@ public class DetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+
+        // get intent which is passed to
+        Intent intent = getIntent();
+        // get the URI in the intent
+        mCurrentImageUri = intent.getData();
+
+        // check the URI if it's null to set the title of the activity
+        if (mCurrentImageUri == null) {
+            setTitle("Details");
+        } else {
+            setTitle("Details");
+            // start the Loader
+            getLoaderManager().initLoader(EXISTING_IMAGE_LOADER, null, this);
+        }
 
         // initialize views
         mDateEditText = (EditText) findViewById(R.id.details_date_edit_text);
@@ -122,5 +147,59 @@ public class DetailsActivity extends AppCompatActivity {
             Toast.makeText(this, "Succeed to insert",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // projection
+        String[] projection = {
+                ImageEntry._ID,
+                ImageEntry.COLUMN_NAME_DATE,
+                ImageEntry.COLUMN_NAME_TIME,
+                ImageEntry.COLUMN_NAME_SPECIMEN_TYPE
+        };
+
+        // The Loader will execute similar like the ContentProvider's query method
+        return new CursorLoader(
+                this,
+                mCurrentImageUri,
+                projection,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // exit if the cursor is null or there is less than 1 row in the cursor
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
+        if (cursor.moveToFirst()) {
+            // Select columns to display
+            int dateColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_DATE);
+            int timeColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_TIME);
+            int specimenTypeColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_SPECIMEN_TYPE);
+
+            // get the values to display
+            String date = cursor.getString(dateColumnIndex);
+            String time = cursor.getString(timeColumnIndex);
+            String specimenType = cursor.getString(specimenTypeColumnIndex);
+
+            // put data to the views
+            mDateEditText.setText(date);
+            mTimeEditText.setText(time);
+            mSpecimenTypeEditText.setText(specimenType);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // If the loader is invalidated, clear out all the data from the input fields.
+        mDateEditText.setText("");
+        mTimeEditText.setText("");
+        mSpecimenTypeEditText.setText("");
     }
 }

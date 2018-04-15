@@ -127,7 +127,7 @@ public class ImageProvider extends ContentProvider {
                 return updatePet(uri, contentValues, selection, selectionArgs);
             case IMAGE_ID:
                 selection = ImageEntry._ID + "=?";
-                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updatePet(uri, contentValues, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Update is not supported for " + uri);
@@ -156,6 +156,7 @@ public class ImageProvider extends ContentProvider {
         // Returns the number of database rows affected by the update statement
         return database.update(ImageEntry.TABLE_NAME, values, selection, selectionArgs);
     }
+
     /**
      * Delete data
      */
@@ -185,6 +186,14 @@ public class ImageProvider extends ContentProvider {
      */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = mUriMatcher.match(uri);
+        switch (match) {
+            case IMAGES:
+                return ImageEntry.CONTENT_LIST_TYPE;
+            case IMAGE_ID:
+                return ImageEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.user.mobilemicroscopy.database;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -23,6 +24,16 @@ public final class ImageContract {
     ;
 
     public static final class ImageEntry implements BaseColumns {
+        /**
+         * MIME type for a list of images
+         */
+        public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_IMAGES;
+
+        /**
+         * MIME type for an single image
+         */
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_IMAGES;
+
 
         public final static Uri CONTENT_URI = BASE_CONTENT_URI.withAppendedPath(BASE_CONTENT_URI, PATH_IMAGES);
 

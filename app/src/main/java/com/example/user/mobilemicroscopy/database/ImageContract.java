@@ -35,20 +35,20 @@ public final class ImageContract {
         public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_IMAGES;
 
 
-        public final static Uri CONTENT_URI = BASE_CONTENT_URI.withAppendedPath(BASE_CONTENT_URI, PATH_IMAGES);
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.withAppendedPath(BASE_CONTENT_URI, PATH_IMAGES);
 
-        public final static String TABLE_NAME = "Image";
+        public static final String TABLE_NAME = "Image";
 
-        public final static String _ID = BaseColumns._ID;
-        public final static String COLUMN_NAME_DATE = "date";
-        public final static String COLUMN_NAME_TIME = "time";
-        public final static String COLUMN_NAME_SPECIMEN_TYPE = "specimenType";
-        public final static String COLUMN_NAME_ORIGINAL_FILE_NAME = "originalFileName";
-        public final static String COLUMN_NAME_ANNOTATED_FILE_NAME = "annotatedFileName";
-        public final static String COLUMN_NAME_GPS_POSITION = "GPSposition";
-        public final static String COLUMN_NAME_MAGNIFICATION = "magnification";
-        public final static String COLUMN_NAME_ORIGINAL_IMAGE_LINK = "originalImageLink";
-        public final static String COLUMN_NAME_ANNOTATED_IMAGE_LINK = "annotatedImageLink";
-        public final static String COLUMN_NAME_COMMENT = "comment";
+        public static final String _ID = BaseColumns._ID;
+        public static final String COLUMN_NAME_DATE = "date";
+        public static final String COLUMN_NAME_TIME = "time";
+        public static final String COLUMN_NAME_SPECIMEN_TYPE = "specimenType";
+        public static final String COLUMN_NAME_ORIGINAL_FILE_NAME = "originalFileName";
+        public static final String COLUMN_NAME_ANNOTATED_FILE_NAME = "annotatedFileName";
+        public static final String COLUMN_NAME_GPS_POSITION = "GPSposition";
+        public static final String COLUMN_NAME_MAGNIFICATION = "magnification";
+        public static final String COLUMN_NAME_ORIGINAL_IMAGE_LINK = "originalImageLink";
+        public static final String COLUMN_NAME_ANNOTATED_IMAGE_LINK = "annotatedImageLink";
+        public static final String COLUMN_NAME_COMMENT = "comment";
     }
 }

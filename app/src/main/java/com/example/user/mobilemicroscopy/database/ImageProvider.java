@@ -79,6 +79,9 @@ public class ImageProvider extends ContentProvider {
                 throw new IllegalArgumentException("Invalid URI " + uri);
         }
 
+        // set notification URI on the cursor
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
@@ -112,6 +115,10 @@ public class ImageProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
+
+        // Notify all listeners that the data has changed for the image content URI
+        getContext().getContentResolver().notifyChange(uri, null);
+
         // Return the new URI with the ID (of the newly inserted row) appended at the end
         return ContentUris.withAppendedId(uri, id);
     }
@@ -153,8 +160,16 @@ public class ImageProvider extends ContentProvider {
         // if nothing is wrong, get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Returns the number of database rows affected by the update statement
-        return database.update(ImageEntry.TABLE_NAME, values, selection, selectionArgs);
+        // get number of rows updated
+        int rowsUpdated = database.update(ImageEntry.TABLE_NAME, values, selection, selectionArgs);
+
+        // if any rows updated, notify all listeners that the data has changed for the image content URI
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // return number of rows updated
+        return rowsUpdated;
     }
 
     /**
@@ -165,20 +180,32 @@ public class ImageProvider extends ContentProvider {
         // Get writeable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
+        // Keep track the number of rows deleted
+        int rowsDeleted;
+
         final int match = mUriMatcher.match(uri);
         switch (match) {
             case IMAGES:
                 // Delete all rows that match the selection and selection args
-                return database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case IMAGE_ID:
                 // Delete a single row given by the ID in the URI
                 selection = ImageEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
 
+        // if any rows deleted, notify all listeners that the data has changed for the image content URI
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // return number of rows deleted
+        return rowsDeleted;
     }
 
     /**

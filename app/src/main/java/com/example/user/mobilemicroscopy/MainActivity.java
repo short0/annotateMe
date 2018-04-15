@@ -1,6 +1,9 @@
 package com.example.user.mobilemicroscopy;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.design.widget.FloatingActionButton;
@@ -21,7 +24,11 @@ import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int IMAGE_LOADER = 0;
+
+    ImageCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,58 +44,68 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Find list view
+        ListView imageListView = findViewById(R.id.list);
 
+        // Create an Adapter
+        mCursorAdapter = new ImageCursorAdapter(this, null);
+
+        // Attach the adapter to list view
+        imageListView.setAdapter(mCursorAdapter);
+
+        // Start the loader
+        getLoaderManager().initLoader(IMAGE_LOADER, null, this);
     }
 
     @Override
     protected void onStart() {
-        displayDatabaseInfo();
+//        displayDatabaseInfo();
         super.onStart();
     }
 
     /**
      * Method to display information in the onscreen
      */
-    private void displayDatabaseInfo() {
-        // Create an ImageDbHelper to access database
-        ImageDbHelper databaseHelper = new ImageDbHelper(this);
-
-        // Prepare to read from database
-        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-
-        String[] projection = {
-                ImageEntry._ID,
-                ImageEntry.COLUMN_NAME_DATE,
-                ImageEntry.COLUMN_NAME_TIME
-        };
-
-//        Cursor cursor = database.query(
-//                ImageEntry.TABLE_NAME,
+//    private void displayDatabaseInfo() {
+////        // Create an ImageDbHelper to access database
+////        ImageDbHelper databaseHelper = new ImageDbHelper(this);
+////
+////        // Prepare to read from database
+////        SQLiteDatabase database = databaseHelper.getReadableDatabase();
+//
+//        String[] projection = {
+//                ImageEntry._ID,
+//                ImageEntry.COLUMN_NAME_DATE,
+//                ImageEntry.COLUMN_NAME_TIME
+//        };
+//
+////        Cursor cursor = database.query(
+////                ImageEntry.TABLE_NAME,
+////                projection,
+////                null,
+////                null,
+////                null,
+////                null,
+////                null
+////        );
+//
+//        Cursor cursor = getContentResolver().query(
+//                ImageEntry.CONTENT_URI,
 //                projection,
-//                null,
-//                null,
 //                null,
 //                null,
 //                null
 //        );
-
-        Cursor cursor = getContentResolver().query(
-                ImageEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null
-        );
-
-        // Find list view
-        ListView imageListView = findViewById(R.id.list);
-
-        // Create an Adapter
-        ImageCursorAdapter adapter = new ImageCursorAdapter(this, cursor);
-
-        // Attach the adapter to list view
-        imageListView.setAdapter(adapter);
-    }
+//
+//        // Find list view
+//        ListView imageListView = findViewById(R.id.list);
+//
+//        // Create an Adapter
+//        ImageCursorAdapter adapter = new ImageCursorAdapter(this, cursor);
+//
+//        // Attach the adapter to list view
+//        imageListView.setAdapter(adapter);
+//    }
 
     /**
      * Create menu
@@ -117,5 +134,38 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // projection
+        String[] projection = {
+                ImageEntry._ID,
+                ImageEntry.COLUMN_NAME_DATE,
+                ImageEntry.COLUMN_NAME_TIME
+        };
+
+        // The Loader will execute similar like the ContentProvider's query method
+        return new CursorLoader(
+                this,
+                ImageEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        // update cursor
+        mCursorAdapter.swapCursor(cursor);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // when reset loader, reset the cursor
+        mCursorAdapter.swapCursor(null);
     }
 }

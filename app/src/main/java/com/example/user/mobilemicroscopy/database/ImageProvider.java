@@ -120,11 +120,42 @@ public class ImageProvider extends ContentProvider {
      * Updates data
      */
     @Override
-    public int update(Uri uri, ContentValues contentValues, String selection, String[]
-            selectionArgs) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        final int match = mUriMatcher.match(uri);
+        switch (match) {
+            case IMAGES:
+                return updatePet(uri, contentValues, selection, selectionArgs);
+            case IMAGE_ID:
+                selection = ImageEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+                return updatePet(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
     }
 
+    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+        // check if date is in the update query, if yes, check if it's null
+        if (values.containsKey(ImageEntry.COLUMN_NAME_DATE)) {
+            String date = values.getAsString(ImageEntry.COLUMN_NAME_DATE);
+            if (date == null) {
+                throw new IllegalArgumentException("Image requires date");
+            }
+        }
+
+        // TODO check other attribures
+
+        // If there are no values to update, then don't try to update the database
+        if (values.size() == 0) {
+            return 0;
+        }
+
+        // if nothing is wrong, get writeable database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        // Returns the number of database rows affected by the update statement
+        return database.update(ImageEntry.TABLE_NAME, values, selection, selectionArgs);
+    }
     /**
      * Delete data
      */

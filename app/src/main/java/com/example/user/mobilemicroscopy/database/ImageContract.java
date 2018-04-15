@@ -1,16 +1,30 @@
 package com.example.user.mobilemicroscopy.database;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public final class ImageContract {
+
+    // Declare Content Authority
+    public static final String CONTENT_AUTHORITY = "com.example.user.mobilemicroscopy";
+
+    // Create Base Content URI
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    // Declare possible paths
+    public static final String PATH_IMAGES = "Image";
 
     /**
      * ImageContract class should not be instantiated
      */
     private ImageContract() {
-    };
+    }
+
+    ;
 
     public static final class ImageEntry implements BaseColumns {
+
+        public final static Uri CONTENT_URI = BASE_CONTENT_URI.withAppendedPath(BASE_CONTENT_URI, PATH_IMAGES);
 
         public final static String TABLE_NAME = "Image";
 

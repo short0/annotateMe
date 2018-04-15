@@ -2,6 +2,7 @@ package com.example.user.mobilemicroscopy;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -82,11 +83,11 @@ public class DetailsActivity extends AppCompatActivity {
         String timeString = mTimeEditText.getText().toString().trim();
         String specimenTypeString = mSpecimenTypeEditText.getText().toString().trim();
 
-        // Create database helper
-        ImageDbHelper databaseHelper = new ImageDbHelper(this);
-
-        // Get object tp prepare to write to database
-        SQLiteDatabase database = databaseHelper.getWritableDatabase();
+//        // Create database helper
+//        ImageDbHelper databaseHelper = new ImageDbHelper(this);
+//
+//        // Get object tp prepare to write to database
+//        SQLiteDatabase database = databaseHelper.getWritableDatabase();
 
         // Create a ContentValues object to insert values to record
         ContentValues values = new ContentValues();
@@ -95,16 +96,31 @@ public class DetailsActivity extends AppCompatActivity {
         values.put(ImageEntry.COLUMN_NAME_SPECIMEN_TYPE, specimenTypeString);
 
 
-        // Insert the object, get the id
-        long newRowId = database.insert(ImageEntry.TABLE_NAME, null, values);
+//        // Insert the object, get the id
+//        long newRowId = database.insert(ImageEntry.TABLE_NAME, null, values);
 
-        // Check if insertion is successful
-        if (newRowId == -1) {
-            // Encounter error
-            Toast.makeText(this, "Error saving", Toast.LENGTH_SHORT).show();
+        // Insert a new pet into the provider, returning the content URI for the new pet.
+        Uri newUri = getContentResolver().insert(ImageEntry.CONTENT_URI, values);
+
+
+//        // Check if insertion is successful
+//        if (newRowId == -1) {
+//            // Encounter error
+//            Toast.makeText(this, "Error saving", Toast.LENGTH_SHORT).show();
+//        } else {
+//            // successful
+//            Toast.makeText(this, "Successfully, id: " + newRowId, Toast.LENGTH_SHORT).show();
+//        }
+
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the new content URI is null, then there was an error with insertion.
+            Toast.makeText(this, "Fail to insert",
+                    Toast.LENGTH_SHORT).show();
         } else {
-            // successful
-            Toast.makeText(this, "Successfully, id: " + newRowId, Toast.LENGTH_SHORT).show();
+            // Otherwise, the insertion was successful and we can display a toast.
+            Toast.makeText(this, "Succeed to insert",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 }

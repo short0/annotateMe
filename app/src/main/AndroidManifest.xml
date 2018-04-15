@@ -17,6 +17,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".DetailsActivity"></activity>
+
+        <provider
+            android:name=".database.ImageProvider"
+            android:authorities="com.example.user.mobilemicroscopy"
+            android:exported="false" />
     </application>
 
 </manifest>

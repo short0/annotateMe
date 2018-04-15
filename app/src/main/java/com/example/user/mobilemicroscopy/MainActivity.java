@@ -51,12 +51,47 @@ public class MainActivity extends AppCompatActivity {
         ImageDbHelper databaseHelper = new ImageDbHelper(this);
 
         // Prepare to read from database
-        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        SQLiteDatabase database = databaseHelper.getReadableDatabase();
 
-        // Perform raw query
-        Cursor cursor = db.rawQuery("SELECT * FROM " + ImageEntry.TABLE_NAME, null);
+        String[] projection = {
+                ImageEntry._ID,
+                ImageEntry.COLUMN_NAME_DATE,
+        };
+
+//        Cursor cursor = database.query(
+//                ImageEntry.TABLE_NAME,
+//                projection,
+//                null,
+//                null,
+//                null,
+//                null,
+//                null
+//        );
+
+        Cursor cursor = getContentResolver().query(
+                ImageEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null
+        );
+
+        TextView displayView = findViewById(R.id.displayView);
+
+
         try {
-            Toast.makeText(this, "Number of rows in image table in database: " + cursor.getCount(), Toast.LENGTH_SHORT).show();
+            displayView.setText("number of rows: " + cursor.getCount() + "\n\n");
+            displayView.append(ImageEntry._ID + "-" + ImageEntry.COLUMN_NAME_DATE + "\n");
+
+            int idColumnIndex = cursor.getColumnIndex(ImageEntry._ID);
+            int dateColumIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_DATE);
+
+            while (cursor.moveToNext()) {
+                int currentID = cursor.getInt(idColumnIndex);
+                String currentDate = cursor.getString(dateColumIndex);
+
+                displayView.append(currentID + "-" + currentDate + "\n");
+            }
         } finally {
             // Close the cursor when done to releases resources and makes it invalid.
             cursor.close();

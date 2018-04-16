@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -86,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         switch (item.getItemId()) {
             case R.id.menu_save:
 
-                insertImage();
+                saveImage();
 
                 // End the activity
                 finish();
@@ -103,11 +104,16 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         return super.onOptionsItemSelected(item);
     }
 
-    public void insertImage() {
+    public void saveImage() {
         String dateString = mDateEditText.getText().toString().trim();
         String timeString = mTimeEditText.getText().toString().trim();
         String specimenTypeString = mSpecimenTypeEditText.getText().toString().trim();
 
+        // check if this is a new image
+        if (mCurrentImageUri == null && TextUtils.isEmpty(dateString) && TextUtils.isEmpty(timeString)) {
+            // if date and time are empty, do nothing
+            return;
+        }
 //        // Create database helper
 //        ImageDbHelper databaseHelper = new ImageDbHelper(this);
 //
@@ -124,9 +130,6 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 //        // Insert the object, get the id
 //        long newRowId = database.insert(ImageEntry.TABLE_NAME, null, values);
 
-        // Insert a new pet into the provider, returning the content URI for the new pet.
-        Uri newUri = getContentResolver().insert(ImageEntry.CONTENT_URI, values);
-
 
 //        // Check if insertion is successful
 //        if (newRowId == -1) {
@@ -138,14 +141,32 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
 //        }
 
         // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
-            // If the new content URI is null, then there was an error with insertion.
-            Toast.makeText(this, "Fail to insert",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast.
-            Toast.makeText(this, "Succeed to insert",
-                    Toast.LENGTH_SHORT).show();
+        // check if current URI is null
+        if (mCurrentImageUri == null) {
+
+            // Insert a new image into the provider
+            Uri newUri = getContentResolver().insert(ImageEntry.CONTENT_URI, values);
+
+            // error when inserting
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, "Fail to insert", Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, "Succeed to insert", Toast.LENGTH_SHORT).show();
+            }
+        }
+        // otherwise, editing existing image
+        else {
+            // check how many rows are affected
+            int rowsAffected = getContentResolver().update(mCurrentImageUri, values, null, null);
+
+            if (rowsAffected == 0) {
+                // If no rows were affected
+                Toast.makeText(this, "Fail to update", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Succeed to update", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

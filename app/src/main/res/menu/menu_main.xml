@@ -10,6 +10,6 @@
 
     <item
         android:id="@+id/menu_delete_all"
-        android:title="Delete"
+        android:title="Delete all"
         app:showAsAction="never" />
 </menu>

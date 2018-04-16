@@ -1,31 +1,31 @@
 package com.example.user.mobilemicroscopy;
 
-        import android.app.LoaderManager;
-        import android.content.ContentUris;
-        import android.content.CursorLoader;
-        import android.content.Intent;
-        import android.content.Loader;
-        import android.database.Cursor;
-        import android.database.sqlite.SQLiteDatabase;
-        import android.net.Uri;
-        import android.support.design.widget.FloatingActionButton;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.ListView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.app.LoaderManager;
+import android.content.ContentUris;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import com.example.user.mobilemicroscopy.database.ImageContract;
-        import com.example.user.mobilemicroscopy.database.ImageDbHelper;
+import com.example.user.mobilemicroscopy.database.ImageContract;
+import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 // import Contract class
-        import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
+import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 
-        import java.util.List;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -150,8 +150,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return true;
 
             case R.id.menu_delete_all:
+                deleteAll();
                 // Show text
-                Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Delete all", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -189,5 +190,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // when reset loader, reset the cursor
 
         mCursorAdapter.swapCursor(null);
+    }
+
+    private void deleteAll() {
+        int rowsDeleted = getContentResolver().delete(ImageEntry.CONTENT_URI, null, null);
     }
 }

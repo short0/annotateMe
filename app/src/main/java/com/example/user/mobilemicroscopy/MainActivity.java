@@ -50,6 +50,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Find list view
         ListView imageListView = findViewById(R.id.list);
 
+        // find empty view
+        View emptyView = findViewById(R.id.empty_view);
+        // set empty view
+        imageListView.setEmptyView(emptyView);
+
         // Create an Adapter
         mCursorAdapter = new ImageCursorAdapter(this, null);
 

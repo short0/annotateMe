@@ -11,9 +11,11 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
@@ -21,9 +23,12 @@ import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 import com.example.user.mobilemicroscopy.database.ImageContract;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class DetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final int EXISTING_IMAGE_LOADER = 0;
+    private static final int EXISTING_IMAGE_LOADER = 100;
 
     // content URI of existing image
     private Uri mCurrentImageUri;
@@ -31,23 +36,44 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     /**
      * Date input EditText
      */
-    private EditText mDateEditText;
+    private TextView mDateTextView;
 
     /**
      * Time input EditText
      */
-    private EditText mTimeEditText;
+    private TextView mTimeTextView;
 
     /**
      * Specimen Type input EditText
      */
     private EditText mSpecimenTypeEditText;
 
+    /**
+     * GPS Position input EditText
+     */
+    private EditText mGPSPositionEditText;
+
+    private String simpleDate;
+
+    private String simpleTime;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        // get the date and time
+        SimpleDateFormat dateFormater = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
+        Date date = new Date();
+        simpleDate = dateFormater.format(date);
+        simpleTime = timeFormater.format(date);
+
+        // initialize views
+        mDateTextView = (TextView) findViewById(R.id.details_date_text_view);
+        mTimeTextView = (TextView) findViewById(R.id.details_time_text_view);
+        mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
+        mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
 
         // get intent which is passed to
         Intent intent = getIntent();
@@ -57,16 +83,15 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         // check the URI if it's null to set the title of the activity
         if (mCurrentImageUri == null) {
             setTitle("Details");
+            mDateTextView.setText(simpleDate);
+            mTimeTextView.setText(simpleTime);
         } else {
             setTitle("Details");
             // start the Loader
             getLoaderManager().initLoader(EXISTING_IMAGE_LOADER, null, this);
         }
 
-        // initialize views
-        mDateEditText = (EditText) findViewById(R.id.details_date_edit_text);
-        mTimeEditText = (EditText) findViewById(R.id.details_time_edit_text);
-        mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
+
     }
 
     /**
@@ -105,9 +130,10 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
     }
 
     public void saveImage() {
-        String dateString = mDateEditText.getText().toString().trim();
-        String timeString = mTimeEditText.getText().toString().trim();
+        String dateString = mDateTextView.getText().toString().trim();
+        String timeString = mTimeTextView.getText().toString().trim();
         String specimenTypeString = mSpecimenTypeEditText.getText().toString().trim();
+        String gpsPositionString = mGPSPositionEditText.getText().toString().trim();
 
         // check if this is a new image
         if (mCurrentImageUri == null && TextUtils.isEmpty(dateString) && TextUtils.isEmpty(timeString)) {
@@ -125,6 +151,7 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
         values.put(ImageEntry.COLUMN_NAME_DATE, dateString);
         values.put(ImageEntry.COLUMN_NAME_TIME, timeString);
         values.put(ImageEntry.COLUMN_NAME_SPECIMEN_TYPE, specimenTypeString);
+        values.put(ImageEntry.COLUMN_NAME_GPS_POSITION, gpsPositionString);
 
 
 //        // Insert the object, get the id
@@ -177,7 +204,14 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
                 ImageEntry._ID,
                 ImageEntry.COLUMN_NAME_DATE,
                 ImageEntry.COLUMN_NAME_TIME,
-                ImageEntry.COLUMN_NAME_SPECIMEN_TYPE
+                ImageEntry.COLUMN_NAME_SPECIMEN_TYPE,
+                ImageEntry.COLUMN_NAME_ORIGINAL_FILE_NAME,
+                ImageEntry.COLUMN_NAME_ANNOTATED_FILE_NAME,
+                ImageEntry.COLUMN_NAME_GPS_POSITION,
+                ImageEntry.COLUMN_NAME_MAGNIFICATION,
+                ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK,
+                ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK,
+                ImageEntry.COLUMN_NAME_COMMENT
         };
 
         // The Loader will execute similar like the ContentProvider's query method
@@ -203,24 +237,28 @@ public class DetailsActivity extends AppCompatActivity implements LoaderManager.
             int dateColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_DATE);
             int timeColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_TIME);
             int specimenTypeColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_SPECIMEN_TYPE);
+            int gpsPositionColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_GPS_POSITION);
 
             // get the values to display
             String date = cursor.getString(dateColumnIndex);
             String time = cursor.getString(timeColumnIndex);
             String specimenType = cursor.getString(specimenTypeColumnIndex);
+            String gpsPosition = cursor.getString(gpsPositionColumnIndex);
 
             // put data to the views
-            mDateEditText.setText(date);
-            mTimeEditText.setText(time);
+            mDateTextView.setText(date);
+            mTimeTextView.setText(time);
             mSpecimenTypeEditText.setText(specimenType);
+            mGPSPositionEditText.setText(gpsPosition);
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the input fields.
-        mDateEditText.setText("");
-        mTimeEditText.setText("");
+        mDateTextView.setText("");
+        mTimeTextView.setText("");
         mSpecimenTypeEditText.setText("");
+        mGPSPositionEditText.setText("");
     }
 }

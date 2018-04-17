@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ListView
-        android:id="@+id/list"
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></ListView>
 
@@ -19,9 +19,9 @@
         android:layout_centerVertical="true">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher_round" />
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_logo" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -31,5 +31,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="8dp"
-        android:clickable="true" />
+        android:clickable="true"
+        android:src="@mipmap/ic_logo"
+        app:backgroundTint="@android:color/background_dark" />
 </RelativeLayout>

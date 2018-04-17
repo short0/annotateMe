@@ -18,8 +18,8 @@
             android:layout_weight="1"
             android:text="Date" />
 
-        <EditText
-            android:id="@+id/details_date_edit_text"
+        <TextView
+            android:id="@+id/details_date_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,8 +39,8 @@
             android:layout_weight="1"
             android:text="Time" />
 
-        <EditText
-            android:id="@+id/details_time_edit_text"
+        <TextView
+            android:id="@+id/details_time_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -65,6 +65,26 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Specimen type" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GPS Location" />
+
+        <EditText
+            android:id="@+id/details_gps_position_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="GPS Position" />
 
     </LinearLayout>
 </LinearLayout>

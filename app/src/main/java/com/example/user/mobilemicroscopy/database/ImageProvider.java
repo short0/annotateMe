@@ -14,14 +14,14 @@ import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 public class ImageProvider extends ContentProvider {
 
     /**
-     * URI matcher code for the content URI for the pets table
+     * URI matcher code for images table
      */
-    private static final int IMAGES = 100;
+    private static final int IMAGES = 10;
 
     /**
-     * URI matcher code for the content URI for a single pet in the pets table
+     * URI matcher code for an image
      */
-    private static final int IMAGE_ID = 101;
+    private static final int IMAGE_ID = 11;
 
     private static final UriMatcher mUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -32,11 +32,6 @@ public class ImageProvider extends ContentProvider {
         // Map URI "content://com.example.user.mobilemicroscopy/Image/# with int code IMAGE_ID
         mUriMatcher.addURI(ImageContract.CONTENT_AUTHORITY, ImageContract.PATH_IMAGES + "/#", IMAGE_ID);
     }
-
-    /**
-     * Tag for the log messages
-     */
-    public static final String LOG_TAG = ImageProvider.class.getSimpleName();
 
     private ImageDbHelper mDbHelper;
 
@@ -58,10 +53,10 @@ public class ImageProvider extends ContentProvider {
         // Get readable database
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
-        // This cursor will hold the result of the query
+        // Declare cursor to get the result
         Cursor cursor;
 
-        // Try to match URI from parameters
+        // match URI
         int match = mUriMatcher.match(uri);
 
         switch (match) {
@@ -76,7 +71,7 @@ public class ImageProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Invalid URI " + uri);
+                throw new IllegalArgumentException("Invalid URI");
         }
 
         // set notification URI on the cursor
@@ -95,31 +90,37 @@ public class ImageProvider extends ContentProvider {
             case IMAGES:
                 return insertImage(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Insertion is not supported for " + uri);
+                throw new IllegalArgumentException("In valid Insertion");
         }
     }
 
+    /**
+     * Helper method to insert image
+     */
     private Uri insertImage(Uri uri, ContentValues values) {
         // Check that the date is not null
         String date = values.getAsString(ImageEntry.COLUMN_NAME_DATE);
         if (date == null) {
-            throw new IllegalArgumentException("Image requires date");
+            throw new IllegalArgumentException("Date is required");
         }
-        // Get writeable database
+
+        // TODO check other attributes
+
+        // Get writable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
-        // Insert the new pet with the given values
+        // Insert the new image with the given values
         long id = database.insert(ImageEntry.TABLE_NAME, null, values);
-        // If the ID is -1, then the insertion failed. Log an error and return null.
-        if (id == -1) {
-            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+        // If id is -1, do nothing
+        if (id == -1)
+        {
             return null;
         }
 
-        // Notify all listeners that the data has changed for the image content URI
+        // Notify data has changed
         getContext().getContentResolver().notifyChange(uri, null);
 
-        // Return the new URI with the ID (of the newly inserted row) appended at the end
+        // Return the new URI
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -131,45 +132,48 @@ public class ImageProvider extends ContentProvider {
         final int match = mUriMatcher.match(uri);
         switch (match) {
             case IMAGES:
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateImage(uri, contentValues, selection, selectionArgs);
             case IMAGE_ID:
                 selection = ImageEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return updatePet(uri, contentValues, selection, selectionArgs);
+                return updateImage(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+                throw new IllegalArgumentException("Invalid Update");
         }
     }
 
-    private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    /**
+     * Helper method to update image
+     */
+    private int updateImage(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // check if date is in the update query, if yes, check if it's null
         if (values.containsKey(ImageEntry.COLUMN_NAME_DATE)) {
             String date = values.getAsString(ImageEntry.COLUMN_NAME_DATE);
             if (date == null) {
-                throw new IllegalArgumentException("Image requires date");
+                throw new IllegalArgumentException("Date is required");
             }
         }
 
-        // TODO check other attribures
+        // TODO check other attributes
 
-        // If there are no values to update, then don't try to update the database
+        // If no new values, do nothing
         if (values.size() == 0) {
             return 0;
         }
 
-        // if nothing is wrong, get writeable database
+        // get writable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // get number of rows updated
-        int rowsUpdated = database.update(ImageEntry.TABLE_NAME, values, selection, selectionArgs);
+        int updatedRows = database.update(ImageEntry.TABLE_NAME, values, selection, selectionArgs);
 
-        // if any rows updated, notify all listeners that the data has changed for the image content URI
-        if (rowsUpdated != 0) {
+        // if any rows updated, notify data has changed
+        if (updatedRows != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
         // return number of rows updated
-        return rowsUpdated;
+        return updatedRows;
     }
 
     /**
@@ -177,35 +181,35 @@ public class ImageProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Get writeable database
+        // Get writable database
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Keep track the number of rows deleted
-        int rowsDeleted;
+        int deletedRows;
 
         final int match = mUriMatcher.match(uri);
         switch (match) {
             case IMAGES:
-                // Delete all rows that match the selection and selection args
-                rowsDeleted = database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+                // Delete rows based on selection and selection args
+                deletedRows = database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             case IMAGE_ID:
-                // Delete a single row given by the ID in the URI
+                // Delete the row with id in the URI
                 selection = ImageEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                rowsDeleted = database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
+                deletedRows = database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalArgumentException("Invalid deletion");
         }
 
-        // if any rows deleted, notify all listeners that the data has changed for the image content URI
-        if (rowsDeleted != 0) {
+        // if any rows deleted, notify data has changed
+        if (deletedRows != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
         // return number of rows deleted
-        return rowsDeleted;
+        return deletedRows;
     }
 
     /**
@@ -220,7 +224,7 @@ public class ImageProvider extends ContentProvider {
             case IMAGE_ID:
                 return ImageEntry.CONTENT_ITEM_TYPE;
             default:
-                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+                throw new IllegalStateException("Unknown URI");
         }
     }
 }

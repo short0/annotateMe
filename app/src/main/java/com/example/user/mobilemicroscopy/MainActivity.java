@@ -29,16 +29,18 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final int IMAGE_LOADER = 0;
+    private static final int IMAGE_LOADER = 100;
 
-    ImageCursorAdapter mCursorAdapter;
+    ImageCursorAdapter mImageCursorAdapter;
+
+    FloatingActionButton fabTakePhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FloatingActionButton fabTakePhoto = (FloatingActionButton) findViewById(R.id.fab_take_photo);
+        fabTakePhoto = (FloatingActionButton) findViewById(R.id.fab_take_photo);
         fabTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         // Find list view
-        ListView imageListView = findViewById(R.id.list);
+        ListView imageListView = findViewById(R.id.list_view);
 
         // find empty view
         View emptyView = findViewById(R.id.empty_view);
@@ -56,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         imageListView.setEmptyView(emptyView);
 
         // Create an Adapter
-        mCursorAdapter = new ImageCursorAdapter(this, null);
+        mImageCursorAdapter = new ImageCursorAdapter(this, null);
 
         // Attach the adapter to list view
-        imageListView.setAdapter(mCursorAdapter);
+        imageListView.setAdapter(mImageCursorAdapter);
 
         // set up on item click listener
         imageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -69,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 
                 // get the current URI
-                Uri currentImageUri = ContentUris.withAppendedId(ImageEntry.CONTENT_URI, id);
+                Uri imageUri = ContentUris.withAppendedId(ImageEntry.CONTENT_URI, id);
 
                 // set the intent to data field of the intent
-                intent.setData(currentImageUri);
+                intent.setData(imageUri);
 
                 // Launch the intent
                 startActivity(intent);
@@ -84,54 +86,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    protected void onStart() {
-//        displayDatabaseInfo();
+    protected void onStart()
+    {
         super.onStart();
     }
-
-    /**
-     * Method to display information in the onscreen
-     */
-//    private void displayDatabaseInfo() {
-////        // Create an ImageDbHelper to access database
-////        ImageDbHelper databaseHelper = new ImageDbHelper(this);
-////
-////        // Prepare to read from database
-////        SQLiteDatabase database = databaseHelper.getReadableDatabase();
-//
-//        String[] projection = {
-//                ImageEntry._ID,
-//                ImageEntry.COLUMN_NAME_DATE,
-//                ImageEntry.COLUMN_NAME_TIME
-//        };
-//
-////        Cursor cursor = database.query(
-////                ImageEntry.TABLE_NAME,
-////                projection,
-////                null,
-////                null,
-////                null,
-////                null,
-////                null
-////        );
-//
-//        Cursor cursor = getContentResolver().query(
-//                ImageEntry.CONTENT_URI,
-//                projection,
-//                null,
-//                null,
-//                null
-//        );
-//
-//        // Find list view
-//        ListView imageListView = findViewById(R.id.list);
-//
-//        // Create an Adapter
-//        ImageCursorAdapter adapter = new ImageCursorAdapter(this, cursor);
-//
-//        // Attach the adapter to list view
-//        imageListView.setAdapter(adapter);
-//    }
 
     /**
      * Create menu
@@ -147,8 +105,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
      * Take action based on what is selected
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
             case R.id.menu_insert:
                 // Show text
                 Toast.makeText(this, "Insert", Toast.LENGTH_SHORT).show();
@@ -160,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 Toast.makeText(this, "Delete all", Toast.LENGTH_SHORT).show();
                 return true;
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(menuItem);
     }
 
 
@@ -170,10 +128,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String[] projection = {
                 ImageEntry._ID,
                 ImageEntry.COLUMN_NAME_DATE,
-                ImageEntry.COLUMN_NAME_TIME
+                ImageEntry.COLUMN_NAME_TIME,
+                ImageEntry.COLUMN_NAME_SPECIMEN_TYPE,
+                ImageEntry.COLUMN_NAME_ORIGINAL_FILE_NAME,
+                ImageEntry.COLUMN_NAME_ANNOTATED_FILE_NAME,
+                ImageEntry.COLUMN_NAME_GPS_POSITION,
+                ImageEntry.COLUMN_NAME_MAGNIFICATION,
+                ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK,
+                ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK,
+                ImageEntry.COLUMN_NAME_COMMENT
         };
 
-        // The Loader will execute similar like the ContentProvider's query method
         return new CursorLoader(
                 this,
                 ImageEntry.CONTENT_URI,
@@ -187,16 +152,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         // update cursor
-        mCursorAdapter.swapCursor(cursor);
+        mImageCursorAdapter.swapCursor(cursor);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         // when reset loader, reset the cursor
-
-        mCursorAdapter.swapCursor(null);
+        mImageCursorAdapter.swapCursor(null);
     }
 
+    /**
+     * delete all rows method
+     */
     private void deleteAll() {
         int rowsDeleted = getContentResolver().delete(ImageEntry.CONTENT_URI, null, null);
     }

@@ -10,9 +10,14 @@ import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 public class ImageDbHelper extends SQLiteOpenHelper {
 
     /**
+     * Statement to delete every entries
+     */
+    private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + ImageEntry.TABLE_NAME;
+
+    /**
      * Declare database name
      */
-    private final static String DATABASE_NAME = "eyeAnnotate.db";
+    private final static String DATABASE_NAME = "annotateMe.db";
 
     /**
      * Declare database version
@@ -46,8 +51,20 @@ public class ImageDbHelper extends SQLiteOpenHelper {
         database.execSQL(CREATE_IMAGE_TABLE);
     }
 
+    /**
+     * Method called when the database is upgraded
+     */
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
+        onCreate(sqLiteDatabase);
+    }
 
+    /**
+     * Method called when the database is downgraded
+     */
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        onUpgrade(db, oldVersion, newVersion);
     }
 }

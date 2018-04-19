@@ -56,7 +56,7 @@
             tools:text="Fungi" />
 
         <TextView
-            android:id="@+id/gps_location"
+            android:id="@+id/gps_position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"

@@ -18,8 +18,8 @@
             android:layout_weight="1"
             android:text="Date" />
 
-        <TextView
-            android:id="@+id/details_date_text_view"
+        <EditText
+            android:id="@+id/details_date_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -39,8 +39,8 @@
             android:layout_weight="1"
             android:text="Time" />
 
-        <TextView
-            android:id="@+id/details_time_text_view"
+        <EditText
+            android:id="@+id/details_time_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

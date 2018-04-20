@@ -9,15 +9,6 @@ import android.provider.BaseColumns;
  */
 public final class ImageContract {
 
-//    // Declare Content Authority
-//    public static final String CONTENT_AUTHORITY = "com.example.user.mobilemicroscopy";
-//
-//    // Create Base Content URI
-//    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-//
-//    // Declare possible paths
-//    public static final String PATH_IMAGES = "images";
-
     /**
      * private constructor to ensure ImageContract class should not be instantiated
      */
@@ -28,21 +19,6 @@ public final class ImageContract {
      * Inner class that contains constants for database
      */
     public static final class ImageEntry implements BaseColumns {
-
-//        /**
-//         * MIME type for a list of images
-//         */
-//        public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_IMAGES;
-//
-//        /**
-//         * MIME type for an single image
-//         */
-//        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_IMAGES;
-//
-//        /**
-//         * Content URI
-//         */
-//        public static final Uri CONTENT_URI = BASE_CONTENT_URI.withAppendedPath(BASE_CONTENT_URI, PATH_IMAGES);
 
         // Table name
         public static final String TABLE_NAME = "images";

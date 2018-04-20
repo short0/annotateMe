@@ -28,11 +28,7 @@ import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity /*implements LoaderManager.LoaderCallbacks<Cursor>*/ {
-
-//    private static final int IMAGE_LOADER = 100;
-
-//    ImageCursorAdapter mImageCursorAdapter;
+public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton fabTakePhoto;
 
@@ -84,33 +80,10 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
         imageListView.setEmptyView(emptyView);
 
         // Create an Adapter
-//        mImageCursorAdapter = new ImageCursorAdapter(this, null);
         adapter = new ImageAdapter(this, mImages);
 
         // Attach the adapter to list view
-//        imageListView.setAdapter(mImageCursorAdapter);
         imageListView.setAdapter(adapter);
-
-//        // set up on item click listener
-//        imageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//                // create an intent to send
-//                Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-//
-//                // get the current URI
-//                Uri imageUri = ContentUris.withAppendedId(ImageEntry.CONTENT_URI, id);
-//
-//                // set the intent to data field of the intent
-//                intent.setData(imageUri);
-//
-//                // Launch the intent
-//                startActivity(intent);
-//            }
-//        });
-//
-//        // Start the loader
-//        getLoaderManager().initLoader(IMAGE_LOADER, null, this);
 
         // specify action when an item is clicked
         imageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -170,56 +143,18 @@ public class MainActivity extends AppCompatActivity /*implements LoaderManager.L
         return super.onOptionsItemSelected(menuItem);
     }
 
-
-//    @Override
-//    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-//        // projection
-//        String[] projection = {
-//                ImageEntry._ID,
-//                ImageEntry.COLUMN_NAME_DATE,
-//                ImageEntry.COLUMN_NAME_TIME,
-//                ImageEntry.COLUMN_NAME_SPECIMEN_TYPE,
-//                ImageEntry.COLUMN_NAME_ORIGINAL_FILE_NAME,
-//                ImageEntry.COLUMN_NAME_ANNOTATED_FILE_NAME,
-//                ImageEntry.COLUMN_NAME_GPS_POSITION,
-//                ImageEntry.COLUMN_NAME_MAGNIFICATION,
-//                ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK,
-//                ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK,
-//                ImageEntry.COLUMN_NAME_COMMENT
-//        };
-//
-//        return new CursorLoader(
-//                this,
-//                ImageEntry.CONTENT_URI,
-//                projection,
-//                null,
-//                null,
-//                null
-//        );
-//    }
-
-//    @Override
-//    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-//        // update cursor
-//        mImageCursorAdapter.swapCursor(cursor);
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<Cursor> loader) {
-//        // when reset loader, reset the cursor
-//        mImageCursorAdapter.swapCursor(null);
-//    }
-
     /**
      * delete all rows method
      */
     private void deleteAll() {
-//        int rowsDeleted = getContentResolver().delete(ImageEntry.CONTENT_URI, null, null);
         database.deleteAll();
         loadDatabase();
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * load all images to a list
+     */
     public void loadDatabase()
     {
         mImages.clear();

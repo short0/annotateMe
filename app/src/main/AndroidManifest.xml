@@ -24,10 +24,6 @@
         <activity android:name=".DetailsActivity" />
         <activity android:name=".MainActivity" />
 
-        <!--<provider-->
-            <!--android:name=".database.ImageProvider"-->
-            <!--android:authorities="com.example.user.mobilemicroscopy"-->
-            <!--android:exported="false" />-->
 
         <activity android:name=".LoginActivity"></activity>
     </application>

@@ -42,7 +42,8 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * Constructor method
      */
-    public ImageDbHelper(Context context) {
+    public ImageDbHelper(Context context)
+    {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -12,6 +12,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        final int SPLASH_TIME = 1000;
+
         // use the Handler to go to LoginActivity after 1 second
         new Handler().postDelayed(new Runnable() {
 
@@ -23,6 +25,6 @@ public class SplashActivity extends AppCompatActivity {
                 // end the activity
                 finish();
             }
-        }, 1000);
+        }, SPLASH_TIME);
     }
 }

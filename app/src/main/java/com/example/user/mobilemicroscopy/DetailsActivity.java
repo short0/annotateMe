@@ -26,12 +26,7 @@ import com.example.user.mobilemicroscopy.database.ImageContract;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DetailsActivity extends AppCompatActivity /*implements LoaderManager.LoaderCallbacks<Cursor>*/ {
-
-//    private static final int EXISTING_IMAGE_LOADER = 100;
-
-    // content URI of existing image
-//    private Uri mCurrentImageUri;
+public class DetailsActivity extends AppCompatActivity {
 
     /**
      * Date input EditText
@@ -53,10 +48,6 @@ public class DetailsActivity extends AppCompatActivity /*implements LoaderManage
      */
     private EditText mGPSPositionEditText;
 
-//    private String simpleDate;
-//
-//    private String simpleTime;
-
     /**
      * store the image object passed by MainActivity
      */
@@ -77,34 +68,11 @@ public class DetailsActivity extends AppCompatActivity /*implements LoaderManage
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
-//        // get the date and time
-//        SimpleDateFormat dateFormater = new SimpleDateFormat("dd/MM/yyyy");
-//        SimpleDateFormat timeFormater = new SimpleDateFormat("HH:mm:ss");
-//        Date date = new Date();
-//        simpleDate = dateFormater.format(date);
-//        simpleTime = timeFormater.format(date);
-
         // initialize views
         mDateEditText = (EditText) findViewById(R.id.details_date_edit_text);
         mTimeEditText = (EditText) findViewById(R.id.details_time_edit_text);
         mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
-
-//        // get intent which is passed to
-//        Intent intent = getIntent();
-//        // get the URI in the intent
-//        mCurrentImageUri = intent.getData();
-//
-//        // check the URI if it's null to set the title of the activity
-//        if (mCurrentImageUri == null) {
-//            setTitle("Details");
-////            mDateEditText.setText(simpleDate);
-////            mTimeEditText.setText(simpleTime);
-//        } else {
-//            setTitle("Details");
-//            // start the Loader
-//            getLoaderManager().initLoader(EXISTING_IMAGE_LOADER, null, this);
-//        }
 
         // get the intent from MainActivity
         Intent intent = getIntent();
@@ -214,140 +182,4 @@ public class DetailsActivity extends AppCompatActivity /*implements LoaderManage
         finish();
     }
 
-    /**************************************************************************
-    public void saveImage() {
-        String dateString = mDateEditText.getText().toString().trim();
-        String timeString = mTimeEditText.getText().toString().trim();
-        String specimenTypeString = mSpecimenTypeEditText.getText().toString().trim();
-        String gpsPositionString = mGPSPositionEditText.getText().toString().trim();
-
-        // check if this is a new image
-        if (mCurrentImageUri == null && TextUtils.isEmpty(dateString) && TextUtils.isEmpty(timeString)) {
-            // if date and time are empty, do nothing
-            return;
-        }
-//        // Create database helper
-//        ImageDbHelper databaseHelper = new ImageDbHelper(this);
-//
-//        // Get object tp prepare to write to database
-//        SQLiteDatabase database = databaseHelper.getWritableDatabase();
-
-        // Create a ContentValues object to insert values to record
-        ContentValues values = new ContentValues();
-        values.put(ImageEntry.COLUMN_NAME_DATE, dateString);
-        values.put(ImageEntry.COLUMN_NAME_TIME, timeString);
-        values.put(ImageEntry.COLUMN_NAME_SPECIMEN_TYPE, specimenTypeString);
-        values.put(ImageEntry.COLUMN_NAME_GPS_POSITION, gpsPositionString);
-
-
-//        // Insert the object, get the id
-//        long newRowId = database.insert(ImageEntry.TABLE_NAME, null, values);
-
-
-//        // Check if insertion is successful
-//        if (newRowId == -1) {
-//            // Encounter error
-//            Toast.makeText(this, "Error saving", Toast.LENGTH_SHORT).show();
-//        } else {
-//            // successful
-//            Toast.makeText(this, "Successfully, id: " + newRowId, Toast.LENGTH_SHORT).show();
-//        }
-
-        // Show a toast message depending on whether or not the insertion was successful
-        // check if current URI is null
-        if (mCurrentImageUri == null) {
-
-            // Insert a new image into the provider
-            Uri newUri = getContentResolver().insert(ImageEntry.CONTENT_URI, values);
-
-            // error when inserting
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, "Fail to insert", Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, "Succeed to insert", Toast.LENGTH_SHORT).show();
-            }
-        }
-        // otherwise, editing existing image
-        else {
-            // check how many rows are affected
-            int rowsAffected = getContentResolver().update(mCurrentImageUri, values, null, null);
-
-            if (rowsAffected == 0) {
-                // If no rows were affected
-                Toast.makeText(this, "Fail to update", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Succeed to update", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-
-    /*****************************************************************
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // projection
-        String[] projection = {
-                ImageEntry._ID,
-                ImageEntry.COLUMN_NAME_DATE,
-                ImageEntry.COLUMN_NAME_TIME,
-                ImageEntry.COLUMN_NAME_SPECIMEN_TYPE,
-                ImageEntry.COLUMN_NAME_ORIGINAL_FILE_NAME,
-                ImageEntry.COLUMN_NAME_ANNOTATED_FILE_NAME,
-                ImageEntry.COLUMN_NAME_GPS_POSITION,
-                ImageEntry.COLUMN_NAME_MAGNIFICATION,
-                ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK,
-                ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK,
-                ImageEntry.COLUMN_NAME_COMMENT
-        };
-
-        // The Loader will execute similar like the ContentProvider's query method
-        return new CursorLoader(
-                this,
-                mCurrentImageUri,
-                projection,
-                null,
-                null,
-                null
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        // exit if the cursor is null or there is less than 1 row in the cursor
-        if (cursor == null || cursor.getCount() < 1) {
-            return;
-        }
-
-        if (cursor.moveToFirst()) {
-            // Select columns to display
-            int dateColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_DATE);
-            int timeColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_TIME);
-            int specimenTypeColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_SPECIMEN_TYPE);
-            int gpsPositionColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_GPS_POSITION);
-
-            // get the values to display
-            String date = cursor.getString(dateColumnIndex);
-            String time = cursor.getString(timeColumnIndex);
-            String specimenType = cursor.getString(specimenTypeColumnIndex);
-            String gpsPosition = cursor.getString(gpsPositionColumnIndex);
-
-            // put data to the views
-            mDateEditText.setText(date);
-            mTimeEditText.setText(time);
-            mSpecimenTypeEditText.setText(specimenType);
-            mGPSPositionEditText.setText(gpsPosition);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        // If the loader is invalidated, clear out all the data from the input fields.
-        mDateEditText.setText("");
-        mTimeEditText.setText("");
-        mSpecimenTypeEditText.setText("");
-        mGPSPositionEditText.setText("");
-    }
-    **********************************************************************/
 }

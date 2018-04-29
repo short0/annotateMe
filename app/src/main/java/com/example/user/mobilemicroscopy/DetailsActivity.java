@@ -7,14 +7,21 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,10 +30,32 @@ import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 import com.example.user.mobilemicroscopy.database.ImageContract;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DetailsActivity extends AppCompatActivity {
+    /**
+     * Image view to show the image
+     */
+    ImageView mImageView;
+//    Bitmap myBitmap;
+
+    /**
+     * identify type of intent passed in
+     */
+    String mPassedType;
+
+    /**
+     * store current annotated image path
+     */
+    String mCurrentAnnotatedImagePath;
+
+    /**
+     * store current original image path
+     */
+    String mCurrentOriginalImagePath;
 
     /**
      * Date input EditText
@@ -74,14 +103,35 @@ public class DetailsActivity extends AppCompatActivity {
         mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
 
+        mImageView = (ImageView) findViewById(R.id.details_image_view);
+
+        // add click action on image view
+        mImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(DetailsActivity.this, AnnotateActivity.class);
+                i.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
+                startActivity(i);
+            }
+        });
+
         // get the intent from MainActivity
         Intent intent = getIntent();
+
+        mPassedType = intent.getStringExtra("passedType");
+        mCurrentOriginalImagePath = intent.getStringExtra("originalImagePath");
+        mCurrentAnnotatedImagePath = intent.getStringExtra("annotatedImagePath");
+
+        // display the image if the link is found in the intent
+        if (mPassedType.equals("annotatedImagePath")) {
+            displayImage();
+        }
 
         // extract the image object in the intent
         mImage = (Image) intent.getSerializableExtra("image");
 
         // set text for all views if the image is not null
-        if (mImage != null)
+        if (mPassedType.equals("imageObject"))
         {
             id = mImage.getId();
             mDateEditText.setText(mImage.getDate());
@@ -139,7 +189,7 @@ public class DetailsActivity extends AppCompatActivity {
     public void saveImage()
     {
         // create a new Image object if no image is passed from MainActivity
-        if (mImage == null)
+        if (!mPassedType.equals("imageObject"))
         {
             mImage = new Image();
         }
@@ -151,7 +201,7 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
 
         // if the Image is null
-        if (id == -100)
+        if (!mPassedType.equals("imageObject"))
         {
             // insert new image to the database
             database.addImage(mImage);
@@ -172,7 +222,7 @@ public class DetailsActivity extends AppCompatActivity {
     public void deleteImage()
     {
         // If the image is not null
-        if (mImage != null && id != -100)
+        if (mPassedType.equals("imageObject"))
         {
             // delete the image in database
             database.deleteImage(mImage);
@@ -182,4 +232,98 @@ public class DetailsActivity extends AppCompatActivity {
         finish();
     }
 
+    private void displayImage() {
+//        // Get the dimensions of the View
+//        int targetW = mImageView.getWidth();
+//        int targetH = mImageView.getHeight();
+//
+//        // Get the dimensions of the bitmap
+//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+//        bmOptions.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+//        int photoW = bmOptions.outWidth;
+//        int photoH = bmOptions.outHeight;
+//
+//        // Determine how much to scale down the image
+//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//
+//        // Decode the image file into a Bitmap sized to fill the View
+//        bmOptions.inJustDecodeBounds = false;
+//        bmOptions.inSampleSize = scaleFactor;
+//        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentAnnotatedImagePath/*, bmOptions*/);
+        mImageView.setImageBitmap(rotateImage(bitmap));
+    }
+
+    /**
+     * rotate image using ExifInterface
+     */
+    public Bitmap rotateImage(Bitmap bitmap) {
+        ExifInterface exifInterface = null;
+        try
+        {
+            exifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(-90);
+                break;
+            default:
+                return bitmap;
+        }
+
+        try
+        {
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return rotatedBitmap;
+        }
+        catch (OutOfMemoryError e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * display the image when the activity is resumed
+     *
+     * TODO: not working due to the path is null when restart
+     */
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        displayImage();
+//    }
 }

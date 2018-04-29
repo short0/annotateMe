@@ -58,6 +58,16 @@ public class DetailsActivity extends AppCompatActivity {
     String mCurrentOriginalImagePath;
 
     /**
+     * store the current original image file name
+     */
+    String mCurrentOriginalImageFileName;
+
+    /**
+     * store the annotated image file name;
+     */
+    String mCurrentAnnotatedImageFileName;
+
+    /**
      * Date input EditText
      */
     private EditText mDateEditText;
@@ -78,6 +88,11 @@ public class DetailsActivity extends AppCompatActivity {
     private EditText mGPSPositionEditText;
 
     /**
+     * Comment input EditText
+     */
+    private EditText mCommentEditText;
+
+    /**
      * store the image object passed by MainActivity
      */
     private Image mImage;
@@ -92,6 +107,11 @@ public class DetailsActivity extends AppCompatActivity {
      */
     ImageDbHelper database;
 
+    /**
+     * Exif Interface to extract useful data
+     */
+    ExifInterface mExifInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +122,7 @@ public class DetailsActivity extends AppCompatActivity {
         mTimeEditText = (EditText) findViewById(R.id.details_time_edit_text);
         mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
+        mCommentEditText = (EditText) findViewById(R.id.details_comment_edit_text);
 
         mImageView = (ImageView) findViewById(R.id.details_image_view);
 
@@ -121,9 +142,39 @@ public class DetailsActivity extends AppCompatActivity {
         mPassedType = intent.getStringExtra("passedType");
         mCurrentOriginalImagePath = intent.getStringExtra("originalImagePath");
         mCurrentAnnotatedImagePath = intent.getStringExtra("annotatedImagePath");
+        mCurrentOriginalImageFileName = intent.getStringExtra("originalImageFileName");
+        mCurrentAnnotatedImageFileName = intent.getStringExtra("annotatedImageFileName");
 
         // display the image if the link is found in the intent
         if (mPassedType.equals("annotatedImagePath")) {
+            try
+            {
+                // create exif interface object and extract useful data
+                mExifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
+
+                // extract and format date and time
+                String dateTimeTag = mExifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+                String dateTag = dateTimeTag.substring(0, 10).trim();
+                String timeTag = dateTimeTag.substring(10).trim();
+
+                // extract GPS Position
+                float[] latLong = new float[2];
+                String gpsPositionTag = "unknown";
+                if (mExifInterface.getLatLong(latLong))
+                {
+                    gpsPositionTag = latLong[0] + " " + latLong[1];
+                }
+
+                // set the data to the views
+                mDateEditText.setText(dateTag);
+                mTimeEditText.setText(timeTag);
+                mGPSPositionEditText.setText(gpsPositionTag);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
             displayImage();
         }
 
@@ -138,7 +189,24 @@ public class DetailsActivity extends AppCompatActivity {
             mTimeEditText.setText(mImage.getTime());
             mSpecimenTypeEditText.setText(mImage.getSpecimenType());
             mGPSPositionEditText.setText(mImage.getGpsPosition());
+            mCommentEditText.setText(mImage.getComment());
 
+            // add image links
+            mCurrentOriginalImagePath = mImage.getOriginalImageLink();
+            mCurrentAnnotatedImagePath = mImage.getAnnotatedImageLink();
+            mCurrentOriginalImageFileName = mImage.getOriginalFileName();
+            mCurrentAnnotatedImageFileName = mImage.getAnnotatedFileName();
+
+            try
+            {
+                mExifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+            displayImage();
         }
 
         // connect to the database
@@ -199,6 +267,13 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setTime(mTimeEditText.getText().toString());
         mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
         mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
+        mImage.setComment(mCommentEditText.getText().toString());
+
+        // set the links and file names
+        mImage.setOriginalImageLink(mCurrentOriginalImagePath);
+        mImage.setAnnotatedImageLink(mCurrentAnnotatedImagePath);
+        mImage.setOriginalFileName(mCurrentOriginalImageFileName);
+        mImage.setAnnotatedFileName(mCurrentAnnotatedImageFileName);
 
         // if the Image is null
         if (!mPassedType.equals("imageObject"))
@@ -260,16 +335,19 @@ public class DetailsActivity extends AppCompatActivity {
      * rotate image using ExifInterface
      */
     public Bitmap rotateImage(Bitmap bitmap) {
-        ExifInterface exifInterface = null;
-        try
-        {
-            exifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+//        ExifInterface exifInterface = null;
+//        try
+//        {
+//            exifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
+//            float[] latLong = new float[2];
+//            exifInterface.getLatLong(latLong);
+//            Log.d("aaaaaaaaaaaaaaaaaaaaaaa", exifInterface.getAttribute(ExifInterface.TAG_DATETIME));
+//        }
+//        catch (IOException e)
+//        {
+//            e.printStackTrace();
+//        }
+        int orientation = mExifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
         Matrix matrix = new Matrix();
         switch (orientation) {

@@ -1,14 +1,20 @@
 package com.example.user.mobilemicroscopy;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ImageAdapter extends ArrayAdapter<Image> {
@@ -40,6 +46,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         Image currentImage = getItem(position);
 
         // find the views in list item view
+        ImageView imageView = (ImageView) listItemView.findViewById(R.id.image_view);
         TextView fileNameView = (TextView) listItemView.findViewById(R.id.file_name);
         TextView dateView = (TextView) listItemView.findViewById(R.id.date);
         TextView timeView = (TextView) listItemView.findViewById(R.id.time);
@@ -47,6 +54,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         TextView gpsPositionView = (TextView) listItemView.findViewById(R.id.gps_position);
 
         // set the text to the views using data in currentImage
+        imageView.setImageBitmap(rotateImage(BitmapFactory.decodeFile(currentImage.getAnnotatedImageLink()), currentImage.getAnnotatedImageLink()));
         fileNameView.setText(currentImage.getAnnotatedFileName());
         dateView.setText(currentImage.getDate());
         timeView.setText(currentImage.getTime());
@@ -57,5 +65,64 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         return listItemView;
     }
 
+    /**
+     * rotate image using ExifInterface
+     */
+    public Bitmap rotateImage(Bitmap bitmap, String path) {
+        ExifInterface exifInterface = null;
+        try
+        {
+            exifInterface = new ExifInterface(path);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+        Matrix matrix = new Matrix();
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_NORMAL:
+                return bitmap;
+            case ExifInterface.ORIENTATION_FLIP_HORIZONTAL:
+                matrix.setScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                matrix.setRotate(180);
+                break;
+            case ExifInterface.ORIENTATION_FLIP_VERTICAL:
+                matrix.setRotate(180);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_TRANSPOSE:
+                matrix.setRotate(90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                matrix.setRotate(90);
+                break;
+            case ExifInterface.ORIENTATION_TRANSVERSE:
+                matrix.setRotate(-90);
+                matrix.postScale(-1, 1);
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                matrix.setRotate(-90);
+                break;
+            default:
+                return bitmap;
+        }
+
+        try
+        {
+            Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap.recycle();
+            return rotatedBitmap;
+        }
+        catch (OutOfMemoryError e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

@@ -52,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
     // variable to hold original image file
     File mOriginalImageFile;
 
+    // store original image file name
+    static String mOriginalImageFileName;
+
+    // store annotated image file name
+    static String mAnnotatedImageFileName;
+
     // store original image path
     static String mOriginalImagePath;
 
@@ -263,6 +269,10 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("originalImagePath", mOriginalImagePath);
             // send the annotated image path with the intent
             intent.putExtra("annotatedImagePath", mAnnotatedImagePath);
+            // send the original image file name
+            intent.putExtra("originalImageFileName", mOriginalImageFileName);
+            // send the annotated image file name
+            intent.putExtra("annotatedImageFileName", mAnnotatedImageFileName);
             // declare what is passed in the intent
             intent.putExtra("passedType", "annotatedImagePath");
 
@@ -286,6 +296,9 @@ public class MainActivity extends AppCompatActivity {
         // save the path to pass to other activity
         mOriginalImagePath = imageFile.getAbsolutePath();
 
+        // get the file name
+        mOriginalImageFileName = imageFile.getName();
+
         return imageFile;
     }
 
@@ -304,6 +317,9 @@ public class MainActivity extends AppCompatActivity {
         File imageFile = new File(directory + "/" + annotatedImageFileName + ".jpg");
         // save the path to pass to other activity
         mAnnotatedImagePath = imageFile.getAbsolutePath();
+
+        // get the file name
+        mAnnotatedImageFileName = imageFile.getName();
 
         return imageFile;
     }

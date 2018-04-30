@@ -23,8 +23,8 @@
             android:id="@+id/file_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="2018041700001_ann.jpg"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            tools:text="2018041700001_ann.jpg" />
 
         <TextView
             android:id="@+id/date"

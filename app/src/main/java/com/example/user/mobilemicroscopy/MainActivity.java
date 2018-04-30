@@ -89,9 +89,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // check for CAMERA permission, if not granted, request it
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE }, 0);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
         }
 
         // connect to the database
@@ -153,8 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
     }
 
@@ -204,8 +202,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * load all images to a list
      */
-    public void loadDatabase()
-    {
+    public void loadDatabase() {
         mImages.clear();
         ArrayList<Image> temp = database.getAllImages();
         mImages.addAll(temp);
@@ -230,19 +227,15 @@ public class MainActivity extends AppCompatActivity {
             // create actual file
             mOriginalImageFile = null;
             mAnnotatedImageFile = null;
-            try
-            {
+            try {
                 mOriginalImageFile = createOriginalImageFile();
                 mAnnotatedImageFile = createAnnotatedImageFile();
-            }
-            catch (IOException ex)
-            {
+            } catch (IOException ex) {
                 // Error occurred while creating the File
             }
 
             // check if file is created an start the camera
-            if (mOriginalImageFile != null)
-            {
+            if (mOriginalImageFile != null) {
                 // get the URI from the file created in fileprovider
                 Uri photoURI = FileProvider.getUriForFile(this, "com.example.android.fileprovider", mOriginalImageFile);
                 // indicate a content resolver URI to store the capture image

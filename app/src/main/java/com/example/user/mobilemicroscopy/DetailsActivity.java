@@ -85,7 +85,7 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      * Magnification input EditText
      */
-    private EditText mMagnificationTypeEditText;
+    private EditText mMagnificationEditText;
 
     /**
      * GPS Position input EditText
@@ -126,7 +126,7 @@ public class DetailsActivity extends AppCompatActivity {
         mDateEditText = (EditText) findViewById(R.id.details_date_edit_text);
         mTimeEditText = (EditText) findViewById(R.id.details_time_edit_text);
         mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
-        mMagnificationTypeEditText = (EditText) findViewById(R.id.details_magnification_edit_text);
+        mMagnificationEditText = (EditText) findViewById(R.id.details_magnification_edit_text);
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
         mCommentEditText = (EditText) findViewById(R.id.details_comment_edit_text);
 
@@ -153,8 +153,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         // display the image if the link is found in the intent
         if (mPassedType.equals("annotatedImagePath")) {
-            try
-            {
+            try {
                 // create exif interface object and extract useful data
                 mExifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
 
@@ -166,8 +165,7 @@ public class DetailsActivity extends AppCompatActivity {
                 // extract GPS Position
                 float[] latLong = new float[2];
                 String gpsPositionTag = "unknown";
-                if (mExifInterface.getLatLong(latLong))
-                {
+                if (mExifInterface.getLatLong(latLong)) {
                     gpsPositionTag = latLong[0] + " " + latLong[1];
                 }
 
@@ -175,9 +173,7 @@ public class DetailsActivity extends AppCompatActivity {
                 mDateEditText.setText(dateTag);
                 mTimeEditText.setText(timeTag);
                 mGPSPositionEditText.setText(gpsPositionTag);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -188,13 +184,12 @@ public class DetailsActivity extends AppCompatActivity {
         mImage = (Image) intent.getSerializableExtra("image");
 
         // set text for all views if the image is not null
-        if (mPassedType.equals("imageObject"))
-        {
+        if (mPassedType.equals("imageObject")) {
             id = mImage.getId();
             mDateEditText.setText(mImage.getDate());
             mTimeEditText.setText(mImage.getTime());
             mSpecimenTypeEditText.setText(mImage.getSpecimenType());
-            mMagnificationTypeEditText.setText(mImage.getMagnification());
+            mMagnificationEditText.setText(mImage.getMagnification());
             mGPSPositionEditText.setText(mImage.getGpsPosition());
             mCommentEditText.setText(mImage.getComment());
 
@@ -204,12 +199,9 @@ public class DetailsActivity extends AppCompatActivity {
             mCurrentOriginalImageFileName = mImage.getOriginalFileName();
             mCurrentAnnotatedImageFileName = mImage.getAnnotatedFileName();
 
-            try
-            {
+            try {
                 mExifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
@@ -261,11 +253,9 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      * methods to save an image to database
      */
-    public void saveImage()
-    {
+    public void saveImage() {
         // create a new Image object if no image is passed from MainActivity
-        if (!mPassedType.equals("imageObject"))
-        {
+        if (!mPassedType.equals("imageObject")) {
             mImage = new Image();
         }
 
@@ -273,7 +263,7 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setDate(mDateEditText.getText().toString());
         mImage.setTime(mTimeEditText.getText().toString());
         mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
-        mImage.setMagnification(mMagnificationTypeEditText.getText().toString());
+        mImage.setMagnification(mMagnificationEditText.getText().toString());
         mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
         mImage.setComment(mCommentEditText.getText().toString());
 
@@ -284,13 +274,10 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setAnnotatedFileName(mCurrentAnnotatedImageFileName);
 
         // if the Image is null
-        if (!mPassedType.equals("imageObject"))
-        {
+        if (!mPassedType.equals("imageObject")) {
             // insert new image to the database
             database.addImage(mImage);
-        }
-        else
-        {
+        } else {
             // update existing image in database
             database.updateImage(mImage);
         }
@@ -302,11 +289,9 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      * method to delete an image in database
      */
-    public void deleteImage()
-    {
+    public void deleteImage() {
         // If the image is not null
-        if (mPassedType.equals("imageObject"))
-        {
+        if (mPassedType.equals("imageObject")) {
             // delete the image in database
             database.deleteImage(mImage);
         }
@@ -389,14 +374,11 @@ public class DetailsActivity extends AppCompatActivity {
                 return bitmap;
         }
 
-        try
-        {
+        try {
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             bitmap.recycle();
             return rotatedBitmap;
-        }
-        catch (OutOfMemoryError e)
-        {
+        } catch (OutOfMemoryError e) {
             e.printStackTrace();
             return null;
         }

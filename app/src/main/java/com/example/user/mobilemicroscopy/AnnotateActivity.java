@@ -68,12 +68,9 @@ public class AnnotateActivity extends AppCompatActivity {
      */
     public Bitmap rotateImage(Bitmap bitmap) {
         ExifInterface exifInterface = null;
-        try
-        {
+        try {
             exifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
@@ -110,14 +107,11 @@ public class AnnotateActivity extends AppCompatActivity {
                 return bitmap;
         }
 
-        try
-        {
+        try {
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             bitmap.recycle();
             return rotatedBitmap;
-        }
-        catch (OutOfMemoryError e)
-        {
+        } catch (OutOfMemoryError e) {
             e.printStackTrace();
             return null;
         }

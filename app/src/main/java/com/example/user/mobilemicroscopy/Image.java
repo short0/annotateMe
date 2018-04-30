@@ -33,8 +33,7 @@ public class Image implements Serializable {
                  String magnification,
                  String originalImageLink,
                  String annotatedImageLink,
-                 String comment)
-    {
+                 String comment) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -60,8 +59,7 @@ public class Image implements Serializable {
                  String magnification,
                  String originalImageLink,
                  String annotatedImageLink,
-                 String comment)
-    {
+                 String comment) {
         this.date = date;
         this.time = time;
         this.specimenType = specimenType;
@@ -77,34 +75,97 @@ public class Image implements Serializable {
     /**
      * Empty Constructor
      */
-    public Image()
-    {
+    public Image() {
 
     }
 
     // Accessor methods
-    public int getId() { return id; }
-    public String getDate() { return date; }
-    public String getTime() { return time; }
-    public String getSpecimenType() { return specimenType; }
-    public String getOriginalFileName() { return originalFileName; }
-    public String getAnnotatedFileName() { return annotatedFileName; }
-    public String getGpsPosition() { return gpsPosition; }
-    public String getMagnification() { return magnification; }
-    public String getOriginalImageLink() { return originalImageLink; }
-    public String getAnnotatedImageLink() { return annotatedImageLink; }
-    public String getComment() { return comment; }
+    public int getId() {
+        return id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public String getSpecimenType() {
+        return specimenType;
+    }
+
+    public String getOriginalFileName() {
+        return originalFileName;
+    }
+
+    public String getAnnotatedFileName() {
+        return annotatedFileName;
+    }
+
+    public String getGpsPosition() {
+        return gpsPosition;
+    }
+
+    public String getMagnification() {
+        return magnification;
+    }
+
+    public String getOriginalImageLink() {
+        return originalImageLink;
+    }
+
+    public String getAnnotatedImageLink() {
+        return annotatedImageLink;
+    }
+
+    public String getComment() {
+        return comment;
+    }
 
     // Mutator methods
-    public void setId(int id) { this.id = id; }
-    public void setDate(String date) { this.date = date; }
-    public void setTime(String time) { this.time = time; }
-    public void setSpecimenType(String specimenType) { this.specimenType = specimenType; }
-    public void setOriginalFileName(String originalFileName) { this.originalFileName = originalFileName; }
-    public void setAnnotatedFileName(String annotatedFileName) { this.annotatedFileName = annotatedFileName; }
-    public void setGpsPosition(String gpsPosition) { this.gpsPosition = gpsPosition; }
-    public void setMagnification(String magnification) { this.magnification = magnification; }
-    public void setOriginalImageLink(String originalImageLink) { this.originalImageLink = originalImageLink; }
-    public void setAnnotatedImageLink(String annotatedImageLink) { this.annotatedImageLink = annotatedImageLink; }
-    public void setComment(String comment) { this.comment = comment; }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setSpecimenType(String specimenType) {
+        this.specimenType = specimenType;
+    }
+
+    public void setOriginalFileName(String originalFileName) {
+        this.originalFileName = originalFileName;
+    }
+
+    public void setAnnotatedFileName(String annotatedFileName) {
+        this.annotatedFileName = annotatedFileName;
+    }
+
+    public void setGpsPosition(String gpsPosition) {
+        this.gpsPosition = gpsPosition;
+    }
+
+    public void setMagnification(String magnification) {
+        this.magnification = magnification;
+    }
+
+    public void setOriginalImageLink(String originalImageLink) {
+        this.originalImageLink = originalImageLink;
+    }
+
+    public void setAnnotatedImageLink(String annotatedImageLink) {
+        this.annotatedImageLink = annotatedImageLink;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 }

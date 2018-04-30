@@ -24,8 +24,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
     /**
      * Constructor
      */
-    public ImageAdapter(Context context, List<Image> list)
-    {
+    public ImageAdapter(Context context, List<Image> list) {
         super(context, 0, list);
         mList = list;
     }
@@ -37,8 +36,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         View listItemView = convertView;
 
         // Check if there is a recycled view availabe to reuse
-        if (listItemView == null)
-        {
+        if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
 
@@ -70,12 +68,9 @@ public class ImageAdapter extends ArrayAdapter<Image> {
      */
     public Bitmap rotateImage(Bitmap bitmap, String path) {
         ExifInterface exifInterface = null;
-        try
-        {
+        try {
             exifInterface = new ExifInterface(path);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
@@ -112,14 +107,11 @@ public class ImageAdapter extends ArrayAdapter<Image> {
                 return bitmap;
         }
 
-        try
-        {
+        try {
             Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             bitmap.recycle();
             return rotatedBitmap;
-        }
-        catch (OutOfMemoryError e)
-        {
+        } catch (OutOfMemoryError e) {
             e.printStackTrace();
             return null;
         }

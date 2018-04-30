@@ -42,8 +42,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * Constructor method
      */
-    public ImageDbHelper(Context context)
-    {
+    public ImageDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -70,8 +69,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * Add an image
      */
-    public void addImage(Image image)
-    {
+    public void addImage(Image image) {
         // get writable database
         SQLiteDatabase database = this.getWritableDatabase();
 
@@ -99,8 +97,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * get an image
      */
-    public Image getImage(int id)
-    {
+    public Image getImage(int id) {
         // get readable database
         SQLiteDatabase database = this.getReadableDatabase();
 
@@ -121,7 +118,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
 
         // selection
         String selection = ImageEntry._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
 
         // order by
         String sortOrder = ImageEntry._ID + " DESC";
@@ -137,8 +134,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                 null
         );
 
-        if (cursor.moveToFirst())
-        {
+        if (cursor.moveToFirst()) {
             // Select columns to display
             int idColumnIndex = cursor.getColumnIndex(ImageEntry._ID);
             int dateColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_DATE);
@@ -154,17 +150,17 @@ public class ImageDbHelper extends SQLiteOpenHelper {
 
             // create an image object
             Image image = new Image(
-                            cursor.getInt(idColumnIndex),
-                            cursor.getString(dateColumnIndex),
-                            cursor.getString(timeColumnIndex),
-                            cursor.getString(specimenTypeColumnIndex),
-                            cursor.getString(originalImageFileNameColumnIndex),
-                            cursor.getString(annotatedImageFileNameColumnIndex),
-                            cursor.getString(gpsPositionColumnIndex),
-                            cursor.getString(magnificationColumnIndex),
-                            cursor.getString(originalImageLinkColumnIndex),
-                            cursor.getString(annotatedImageLinkColumnIndex),
-                            cursor.getString(commentColumnIndex)
+                    cursor.getInt(idColumnIndex),
+                    cursor.getString(dateColumnIndex),
+                    cursor.getString(timeColumnIndex),
+                    cursor.getString(specimenTypeColumnIndex),
+                    cursor.getString(originalImageFileNameColumnIndex),
+                    cursor.getString(annotatedImageFileNameColumnIndex),
+                    cursor.getString(gpsPositionColumnIndex),
+                    cursor.getString(magnificationColumnIndex),
+                    cursor.getString(originalImageLinkColumnIndex),
+                    cursor.getString(annotatedImageLinkColumnIndex),
+                    cursor.getString(commentColumnIndex)
             );
             return image;
         }
@@ -174,8 +170,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * Get all images
      */
-    public ArrayList<Image> getAllImages()
-    {
+    public ArrayList<Image> getAllImages() {
         ArrayList<Image> list = new ArrayList<Image>();
 
         // get readable database
@@ -208,6 +203,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                 image.setOriginalFileName(cursor.getString(originalImageFileNameColumnIndex));
                 image.setAnnotatedFileName(cursor.getString(annotatedImageFileNameColumnIndex));
                 image.setGpsPosition(cursor.getString(gpsPositionColumnIndex));
+                image.setMagnification(cursor.getString(magnificationColumnIndex));
                 image.setOriginalImageLink(cursor.getString(originalImageLinkColumnIndex));
                 image.setAnnotatedImageLink(cursor.getString(annotatedImageLinkColumnIndex));
                 image.setComment(cursor.getString(commentColumnIndex));
@@ -223,8 +219,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * update an image
      */
-    public int updateImage(Image image)
-    {
+    public int updateImage(Image image) {
         // get writable database
         SQLiteDatabase database = this.getWritableDatabase();
 
@@ -244,7 +239,7 @@ public class ImageDbHelper extends SQLiteOpenHelper {
 
         // selection
         String selection = ImageEntry._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(image.getId()) };
+        String[] selectionArgs = {String.valueOf(image.getId())};
 
         return database.update(
                 ImageEntry.TABLE_NAME,
@@ -256,20 +251,18 @@ public class ImageDbHelper extends SQLiteOpenHelper {
     /**
      * delete an image
      */
-    public int deleteImage(Image image)
-    {
+    public int deleteImage(Image image) {
         // get writable database
         SQLiteDatabase database = this.getWritableDatabase();
 
         // selection
         String selection = ImageEntry._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(image.getId()) };
+        String[] selectionArgs = {String.valueOf(image.getId())};
 
         return database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
     }
 
-    public void deleteAll()
-    {
+    public void deleteAll() {
         // get writable database
         SQLiteDatabase database = this.getWritableDatabase();
 

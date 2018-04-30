@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/menu_insert"
-        android:title="Insert"
+        android:id="@+id/menu_login"
+        android:title="Login"
         app:showAsAction="never" />
 
     <item

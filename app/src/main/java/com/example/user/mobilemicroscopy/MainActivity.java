@@ -174,9 +174,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.menu_insert:
+            case R.id.menu_login:
+                // go to LoginActivity
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
                 // Show text message
-                Toast.makeText(this, "Insert", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.menu_delete_all:

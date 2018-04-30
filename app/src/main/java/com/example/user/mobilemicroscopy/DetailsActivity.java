@@ -83,6 +83,11 @@ public class DetailsActivity extends AppCompatActivity {
     private EditText mSpecimenTypeEditText;
 
     /**
+     * Magnification input EditText
+     */
+    private EditText mMagnificationTypeEditText;
+
+    /**
      * GPS Position input EditText
      */
     private EditText mGPSPositionEditText;
@@ -121,6 +126,7 @@ public class DetailsActivity extends AppCompatActivity {
         mDateEditText = (EditText) findViewById(R.id.details_date_edit_text);
         mTimeEditText = (EditText) findViewById(R.id.details_time_edit_text);
         mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
+        mMagnificationTypeEditText = (EditText) findViewById(R.id.details_magnification_edit_text);
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
         mCommentEditText = (EditText) findViewById(R.id.details_comment_edit_text);
 
@@ -188,6 +194,7 @@ public class DetailsActivity extends AppCompatActivity {
             mDateEditText.setText(mImage.getDate());
             mTimeEditText.setText(mImage.getTime());
             mSpecimenTypeEditText.setText(mImage.getSpecimenType());
+            mMagnificationTypeEditText.setText(mImage.getMagnification());
             mGPSPositionEditText.setText(mImage.getGpsPosition());
             mCommentEditText.setText(mImage.getComment());
 
@@ -266,6 +273,7 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setDate(mDateEditText.getText().toString());
         mImage.setTime(mTimeEditText.getText().toString());
         mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
+        mImage.setMagnification(mMagnificationTypeEditText.getText().toString());
         mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
         mImage.setComment(mCommentEditText.getText().toString());
 

@@ -174,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.menu_login:
                 // go to LoginActivity
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+//                startActivity(intent);
                 // Show text message
                 Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
                 return true;

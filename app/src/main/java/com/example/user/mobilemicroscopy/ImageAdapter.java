@@ -53,6 +53,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
 
         // set the text to the views using data in currentImage
         imageView.setImageBitmap(rotateImage(BitmapFactory.decodeFile(currentImage.getAnnotatedImageLink()), currentImage.getAnnotatedImageLink()));
+        displayImage(imageView, currentImage.getAnnotatedImageLink());
         fileNameView.setText(currentImage.getAnnotatedFileName());
         dateView.setText(currentImage.getDate());
         timeView.setText(currentImage.getTime());
@@ -115,6 +116,32 @@ public class ImageAdapter extends ArrayAdapter<Image> {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void displayImage(ImageView imageView, String path) {
+        // Get the dimensions of the View
+        int targetW = 60; //imageView.getWidth();
+        int targetH = 60; //imageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(path, bmOptions);
+        Bitmap rotatedBitmap = rotateImage(bitmap, path);
+        imageView.setImageBitmap(rotatedBitmap);
+
     }
 
 }

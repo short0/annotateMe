@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DetailsActivity extends AppCompatActivity {
+    int x;
+    int y;
+
     /**
      * Image view to show the image
      */
@@ -117,6 +121,7 @@ public class DetailsActivity extends AppCompatActivity {
      */
     ExifInterface mExifInterface;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,6 +184,8 @@ public class DetailsActivity extends AppCompatActivity {
 
             displayImage();
         }
+
+
 
         // extract the image object in the intent
         mImage = (Image) intent.getSerializableExtra("image");
@@ -301,26 +308,26 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     private void displayImage() {
-//        // Get the dimensions of the View
-//        int targetW = mImageView.getWidth();
-//        int targetH = mImageView.getHeight();
-//
-//        // Get the dimensions of the bitmap
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        int photoW = bmOptions.outWidth;
-//        int photoH = bmOptions.outHeight;
-//
-//        // Determine how much to scale down the image
-//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-//
-//        // Decode the image file into a Bitmap sized to fill the View
-//        bmOptions.inJustDecodeBounds = false;
-//        bmOptions.inSampleSize = scaleFactor;
-//        bmOptions.inPurgeable = true;
+        // Get the dimensions of the View
+        int targetW = 300; //mImageView.getMeasuredWidth();
+        int targetH = 300; //mImageView.getMeasuredHeight();
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentAnnotatedImagePath/*, bmOptions*/);
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mCurrentAnnotatedImagePath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentAnnotatedImagePath, bmOptions);
         mImageView.setImageBitmap(rotateImage(bitmap));
     }
 
@@ -394,4 +401,5 @@ public class DetailsActivity extends AppCompatActivity {
 //        super.onResume();
 //        displayImage();
 //    }
+
 }

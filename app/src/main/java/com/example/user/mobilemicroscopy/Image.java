@@ -18,7 +18,9 @@ public class Image implements Serializable {
     private String magnification;
     private String originalImageLink;
     private String annotatedImageLink;
-    private String comment;
+    private String studentComment;
+    private String teacherComment;
+    private String username;
 
     /**
      * Constructor WITH id
@@ -33,7 +35,9 @@ public class Image implements Serializable {
                  String magnification,
                  String originalImageLink,
                  String annotatedImageLink,
-                 String comment) {
+                 String studentComment,
+                 String teacherComment,
+                 String username) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -44,7 +48,9 @@ public class Image implements Serializable {
         this.magnification = magnification;
         this.originalImageLink = originalImageLink;
         this.annotatedImageLink = annotatedImageLink;
-        this.comment = comment;
+        this.studentComment = studentComment;
+        this.teacherComment = teacherComment;
+        this.username = username;
     }
 
     /**
@@ -59,7 +65,9 @@ public class Image implements Serializable {
                  String magnification,
                  String originalImageLink,
                  String annotatedImageLink,
-                 String comment) {
+                 String studentComment,
+                 String teacherComment,
+                 String username) {
         this.date = date;
         this.time = time;
         this.specimenType = specimenType;
@@ -69,7 +77,9 @@ public class Image implements Serializable {
         this.magnification = magnification;
         this.originalImageLink = originalImageLink;
         this.annotatedImageLink = annotatedImageLink;
-        this.comment = comment;
+        this.studentComment = studentComment;
+        this.teacherComment = teacherComment;
+        this.username = username;
     }
 
     /**
@@ -120,8 +130,16 @@ public class Image implements Serializable {
         return annotatedImageLink;
     }
 
-    public String getComment() {
-        return comment;
+    public String getStudentComment() {
+        return studentComment;
+    }
+
+    public String getTeacherComment() {
+        return teacherComment;
+    }
+
+    public String getUsername() {
+        return username;
     }
 
     // Mutator methods
@@ -165,7 +183,15 @@ public class Image implements Serializable {
         this.annotatedImageLink = annotatedImageLink;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setStudentComment(String studentComment) {
+        this.studentComment = studentComment;
+    }
+
+    public void setTeacherComment(String teacherComment) {
+        this.teacherComment = teacherComment;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

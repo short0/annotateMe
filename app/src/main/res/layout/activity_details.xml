@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".DetailsActivity">
 
@@ -130,7 +130,7 @@
                 android:text="Comment" />
 
             <EditText
-                android:id="@+id/details_comment_edit_text"
+                android:id="@+id/details_student_comment_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

@@ -34,6 +34,9 @@ public final class ImageContract {
         public static final String COLUMN_NAME_MAGNIFICATION = "magnification";
         public static final String COLUMN_NAME_ORIGINAL_IMAGE_LINK = "originalImageLink";
         public static final String COLUMN_NAME_ANNOTATED_IMAGE_LINK = "annotatedImageLink";
-        public static final String COLUMN_NAME_COMMENT = "comment";
+//        public static final String COLUMN_NAME_COMMENT = "comment";
+        public static final String COLUMN_NAME_STUDENT_COMMENT = "studentComment";
+        public static final String COLUMN_NAME_TEACHER_COMMENT = "teacherComment";
+        public static final String COLUMN_NAME_USERNAME = "username";
     }
 }

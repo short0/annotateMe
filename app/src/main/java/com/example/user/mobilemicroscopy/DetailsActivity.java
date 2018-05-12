@@ -97,9 +97,9 @@ public class DetailsActivity extends AppCompatActivity {
     private EditText mGPSPositionEditText;
 
     /**
-     * Comment input EditText
+     * Student Comment input EditText
      */
-    private EditText mCommentEditText;
+    private EditText mStudentCommentEditText;
 
     /**
      * store the image object passed by MainActivity
@@ -133,7 +133,7 @@ public class DetailsActivity extends AppCompatActivity {
         mSpecimenTypeEditText = (EditText) findViewById(R.id.details_specimen_type_edit_text);
         mMagnificationEditText = (EditText) findViewById(R.id.details_magnification_edit_text);
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
-        mCommentEditText = (EditText) findViewById(R.id.details_comment_edit_text);
+        mStudentCommentEditText = (EditText) findViewById(R.id.details_student_comment_edit_text);
 
         mImageView = (ImageView) findViewById(R.id.details_image_view);
 
@@ -198,7 +198,7 @@ public class DetailsActivity extends AppCompatActivity {
             mSpecimenTypeEditText.setText(mImage.getSpecimenType());
             mMagnificationEditText.setText(mImage.getMagnification());
             mGPSPositionEditText.setText(mImage.getGpsPosition());
-            mCommentEditText.setText(mImage.getComment());
+            mStudentCommentEditText.setText(mImage.getStudentComment());
 
             // add image links
             mCurrentOriginalImagePath = mImage.getOriginalImageLink();
@@ -272,7 +272,7 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
         mImage.setMagnification(mMagnificationEditText.getText().toString());
         mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
-        mImage.setComment(mCommentEditText.getText().toString());
+        mImage.setStudentComment(mStudentCommentEditText.getText().toString());
 
         // set the links and file names
         mImage.setOriginalImageLink(mCurrentOriginalImagePath);

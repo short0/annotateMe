@@ -60,7 +60,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                 + ImageEntry.COLUMN_NAME_MAGNIFICATION + " TEXT, "
                 + ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK + " TEXT, "
                 + ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK + " TEXT, "
-                + ImageEntry.COLUMN_NAME_COMMENT + " TEXT); ";
+                + ImageEntry.COLUMN_NAME_STUDENT_COMMENT + " TEXT, "
+                + ImageEntry.COLUMN_NAME_TEACHER_COMMENT + " TEXT, "
+                + ImageEntry.COLUMN_NAME_USERNAME + " TEXT); ";
 
         // Execute the statement
         database.execSQL(CREATE_IMAGE_TABLE);
@@ -85,7 +87,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
         values.put(ImageEntry.COLUMN_NAME_MAGNIFICATION, image.getMagnification());
         values.put(ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK, image.getOriginalImageLink());
         values.put(ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK, image.getAnnotatedImageLink());
-        values.put(ImageEntry.COLUMN_NAME_COMMENT, image.getComment());
+        values.put(ImageEntry.COLUMN_NAME_STUDENT_COMMENT, image.getStudentComment());
+        values.put(ImageEntry.COLUMN_NAME_TEACHER_COMMENT, image.getTeacherComment());
+        values.put(ImageEntry.COLUMN_NAME_USERNAME, image.getUsername());
 
         // insert to database
         long newRowId = database.insert(ImageEntry.TABLE_NAME, null, values);
@@ -113,7 +117,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                 ImageEntry.COLUMN_NAME_MAGNIFICATION,
                 ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK,
                 ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK,
-                ImageEntry.COLUMN_NAME_COMMENT
+                ImageEntry.COLUMN_NAME_STUDENT_COMMENT,
+                ImageEntry.COLUMN_NAME_TEACHER_COMMENT,
+                ImageEntry.COLUMN_NAME_USERNAME
         };
 
         // selection
@@ -146,7 +152,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
             int magnificationColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_MAGNIFICATION);
             int originalImageLinkColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK);
             int annotatedImageLinkColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK);
-            int commentColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_COMMENT);
+            int studentCommentColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_STUDENT_COMMENT);
+            int teacherCommentColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_TEACHER_COMMENT);
+            int usernameColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_USERNAME);
 
             // create an image object
             Image image = new Image(
@@ -160,7 +168,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                     cursor.getString(magnificationColumnIndex),
                     cursor.getString(originalImageLinkColumnIndex),
                     cursor.getString(annotatedImageLinkColumnIndex),
-                    cursor.getString(commentColumnIndex)
+                    cursor.getString(studentCommentColumnIndex),
+                    cursor.getString(teacherCommentColumnIndex),
+                    cursor.getString(usernameColumnIndex)
             );
             return image;
         }
@@ -194,7 +204,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                 int magnificationColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_MAGNIFICATION);
                 int originalImageLinkColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK);
                 int annotatedImageLinkColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK);
-                int commentColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_COMMENT);
+                int studentCommentColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_STUDENT_COMMENT);
+                int teacherCommentColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_TEACHER_COMMENT);
+                int usernameColumnIndex = cursor.getColumnIndex(ImageEntry.COLUMN_NAME_USERNAME);
 
                 image.setId(cursor.getInt(idColumnIndex));
                 image.setDate(cursor.getString(dateColumnIndex));
@@ -206,7 +218,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
                 image.setMagnification(cursor.getString(magnificationColumnIndex));
                 image.setOriginalImageLink(cursor.getString(originalImageLinkColumnIndex));
                 image.setAnnotatedImageLink(cursor.getString(annotatedImageLinkColumnIndex));
-                image.setComment(cursor.getString(commentColumnIndex));
+                image.setStudentComment(cursor.getString(studentCommentColumnIndex));
+                image.setTeacherComment(cursor.getString(teacherCommentColumnIndex));
+                image.setUsername(cursor.getString(usernameColumnIndex));
 
                 // Adding image to list
                 list.add(image);
@@ -235,7 +249,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
         values.put(ImageEntry.COLUMN_NAME_MAGNIFICATION, image.getMagnification());
         values.put(ImageEntry.COLUMN_NAME_ORIGINAL_IMAGE_LINK, image.getOriginalImageLink());
         values.put(ImageEntry.COLUMN_NAME_ANNOTATED_IMAGE_LINK, image.getAnnotatedImageLink());
-        values.put(ImageEntry.COLUMN_NAME_COMMENT, image.getComment());
+        values.put(ImageEntry.COLUMN_NAME_STUDENT_COMMENT, image.getStudentComment());
+        values.put(ImageEntry.COLUMN_NAME_TEACHER_COMMENT, image.getTeacherComment());
+        values.put(ImageEntry.COLUMN_NAME_USERNAME, image.getUsername());
 
         // selection
         String selection = ImageEntry._ID + " = ?";

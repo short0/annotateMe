@@ -34,24 +34,37 @@ import java.util.ArrayList;
 
 public class AnnotateActivity extends AppCompatActivity {
 
+    /**
+     * Hold the context
+     */
     final Context context = this;
 
-    DrawingView mDrawingView; // hold drawing board
+    /**
+     * Hold drawing board
+     */
+    DrawingView mDrawingView;
 
     /**
      * Image view to hold the image
      */
-    ImageView mImageView; // main image view
+    ImageView mImageView;
 
-    Bitmap mBitmap; // main bitmap
+    /**
+     * Hold the main bitmap
+     */
+    Bitmap mBitmap;
 
-    Canvas mCanvas; // canvas holds the bitmap
+    /**
+     * Hold the canvas to draw
+     */
+    Canvas mCanvas;
 
     /**
      * variable to store the current annotated image path
      */
     String mCurrentAnnotatedImagePath;
 
+    // hold the bottom menu buttons
     ImageView buttonWhiteArrow;
     ImageView buttonBlackArrow;
     ImageView buttonWhiteText;
@@ -59,11 +72,15 @@ public class AnnotateActivity extends AppCompatActivity {
     ImageView buttonWhiteScaleBar;
     ImageView buttonBlackScaleBar;
 
+    /**
+     * Mehtod called when activity created
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_annotate);
 
+        // get drawing view and image view
         mDrawingView = (DrawingView) findViewById(R.id.drawing_view);
         mImageView = (ImageView) findViewById(R.id.annotate_image_view);
 
@@ -75,6 +92,7 @@ public class AnnotateActivity extends AppCompatActivity {
 
         displayImage();
 
+        // find all bottom menu buttons
         buttonWhiteArrow = (ImageView) findViewById(R.id.button_white_arrow);
         buttonBlackArrow = (ImageView) findViewById(R.id.button_black_arrow);
         buttonWhiteText = (ImageView) findViewById(R.id.button_white_text);
@@ -131,6 +149,9 @@ public class AnnotateActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Display the main image
+     */
     private void displayImage() {
 //        // Get the dimensions of the View
 //        int targetW = mImageView.getWidth();
@@ -221,14 +242,18 @@ public class AnnotateActivity extends AppCompatActivity {
         }
     }
 
-    public void addArrow(int color)
-    {
+    /**
+     * Add arrow
+     */
+    public void addArrow(int color) {
         mDrawingView.addArrow(color);
         mDrawingView.invalidate();
     }
 
-    public void addText(final int color)
-    {
+    /**
+     * Add text
+     */
+    public void addText(final int color) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View textDiaglogView = layoutInflater.inflate(R.layout.text_dialog, null);
 
@@ -242,7 +267,7 @@ public class AnnotateActivity extends AppCompatActivity {
 //                                        .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 // get user input and set it to result edit text
                                 String textInput = editTextTextDialog.getText().toString();
                                 Log.d("aaaaaaaaaaaaaaaaaaaaaaa", textInput);
@@ -256,7 +281,7 @@ public class AnnotateActivity extends AppCompatActivity {
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
@@ -268,8 +293,10 @@ public class AnnotateActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void addScaleBar(final int color)
-    {
+    /**
+     * Add scale bar
+     */
+    public void addScaleBar(final int color) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View scaleBarDialogView = layoutInflater.inflate(R.layout.scale_bar_dialog, null);
 
@@ -284,7 +311,7 @@ public class AnnotateActivity extends AppCompatActivity {
 //                                        .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 String objectiveLensString = objectiveLens.getText().toString();
                                 String eyepieceString = eyepiece.getText().toString();
 
@@ -322,7 +349,7 @@ public class AnnotateActivity extends AppCompatActivity {
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                            public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }
                         });
@@ -334,6 +361,9 @@ public class AnnotateActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    /**
+     * Method call when top menu created
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu
@@ -342,6 +372,9 @@ public class AnnotateActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Action when a menu item is click
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -363,13 +396,17 @@ public class AnnotateActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(menuItem);
     }
 
-    public void drawOnBitmap()
-    {
+    /**
+     * Save all drawing items to main bitmap and display
+     */
+    public void drawOnBitmap() {
         Bitmap whiteArrowBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.white_arrow_with_tail);
         Bitmap blackArrowBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.black_arrow_with_tail);
 
+        // get current image Matrix
         Matrix imageMatrix = mImageView.getImageMatrix();
 
+        // get values from matrix and manipulate them
         float[] values = new float[9]; // get 9 values from imageMatrix
         imageMatrix.getValues(values);
 //                        Matrix c = new Matrix(imageMatrix);
@@ -387,26 +424,22 @@ public class AnnotateActivity extends AppCompatActivity {
         values[Matrix.MPERSP_1] = 0;
         values[Matrix.MPERSP_2] = 1;
 
+        // create new matrix to draw
         newMatrix.setValues(values);
 
         ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
-        for (DrawingItem item : drawingItemList)
-        {
-            if (item instanceof ArrowItem)
-            {
+        for (DrawingItem item : drawingItemList) {
+            if (item instanceof ArrowItem) {
                 Matrix concatMatrix = new Matrix(((ArrowItem) item).getMatrix());
                 concatMatrix.postConcat(newMatrix);
                 if (((ArrowItem) item).getColor() == Color.WHITE) {
                     mCanvas.drawBitmap(whiteArrowBitmap, concatMatrix, null);
-                }
-                else if (((ArrowItem) item).getColor() == Color.BLACK) {
+                } else if (((ArrowItem) item).getColor() == Color.BLACK) {
                     mCanvas.drawBitmap(blackArrowBitmap, concatMatrix, null);
                 }
             }
 
-            if (item instanceof TextBoxItem)
-            {
-
+            if (item instanceof TextBoxItem) {
                 float differenceX = values[Matrix.MTRANS_X];
                 float differenceY = values[Matrix.MTRANS_Y];
                 float scale_X = values[Matrix.MSCALE_X];
@@ -430,8 +463,7 @@ public class AnnotateActivity extends AppCompatActivity {
                 mCanvas.restore();
             }
 
-            if (item instanceof ScaleBarItem)
-            {
+            if (item instanceof ScaleBarItem) {
                 float differenceX = values[Matrix.MTRANS_X];
                 float differenceY = values[Matrix.MTRANS_Y];
                 float scale_X = values[Matrix.MSCALE_X];
@@ -445,7 +477,8 @@ public class AnnotateActivity extends AppCompatActivity {
                     paint.setColor(Color.WHITE);
                 } else if (((ScaleBarItem) item).getColor() == Color.BLACK) {
                     paint.setColor(Color.BLACK);
-                };
+                }
+                ;
 
                 mCanvas.drawRect(((ScaleBarItem) item).getLine(), paint);
 
@@ -453,6 +486,7 @@ public class AnnotateActivity extends AppCompatActivity {
             }
         }
 
+        // force to draw the view
         mImageView.invalidate();
     }
 

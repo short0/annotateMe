@@ -12,6 +12,9 @@ import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 
 import java.util.ArrayList;
 
+/**
+ * Database helper class
+ */
 public class ImageDbHelper extends SQLiteOpenHelper {
 
     /**
@@ -46,6 +49,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Method called when an instance is created
+     */
     @Override
     public void onCreate(SQLiteDatabase database) {
         // Create TABLE
@@ -278,6 +284,9 @@ public class ImageDbHelper extends SQLiteOpenHelper {
         return database.delete(ImageEntry.TABLE_NAME, selection, selectionArgs);
     }
 
+    /**
+     * Delete all images
+     */
     public void deleteAll() {
         // get writable database
         SQLiteDatabase database = this.getWritableDatabase();

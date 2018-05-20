@@ -14,37 +14,89 @@ import android.view.View;
 import com.example.user.mobilemicroscopy.MainActivity;
 import com.example.user.mobilemicroscopy.R;
 
-public class TextBoxItem extends DrawingItem{
+/**
+ * Class to for an text box
+ */
+public class TextBoxItem extends DrawingItem {
+    /**
+     * Default button size
+     */
     private static final float BUTTON_SIZE = 100;
 
+    /**
+     * Default text size
+     */
     private static final float DEFAULT_TEXT_SIZE = 50;
 
+    /**
+     * Deault height
+     */
     private static final float DEFAULT_HEIGHT = 50;
 
+    /**
+     * Default text size
+     */
     private float textSize = DEFAULT_TEXT_SIZE;
 
+    /**
+     * Text
+     */
     private String text;
 
     // initialize only once
+    /**
+     * Hold the bitmap of delete button
+     */
     private static Bitmap deleteBitmap;
+    /**
+     * Hold the bitmap of scale button
+     */
     private static Bitmap scaleBitmap;
 
+    /**
+     * Hold the matrix to do manipulation
+     */
     private Matrix matrix;
 
+    /**
+     * Hold area of the selection rectangle
+     */
     private RectF rectangle;
 
+    /**
+     * Hold area of the delete button
+     */
     private RectF deleteRectangle;
 
+    /**
+     * Hold area of the scale button
+     */
     private RectF scaleRectangle;
 
+    /**
+     * Hold the state of being selected
+     */
     private boolean haveButtons = false;
 
+    /**
+     * Hold color and text size
+     */
     private Paint mPaint;
 
+    /**
+     * Color of arrow to select which image to be used
+     */
     private int color = -1;
 
-    public TextBoxItem(Context context, String text, int color)
-    {
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param text
+     * @param color
+     */
+    public TextBoxItem(Context context, String text, int color) {
+        // Initialize required bitmap only once
         if (deleteBitmap == null) {
             deleteBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_delete);
         }
@@ -59,49 +111,75 @@ public class TextBoxItem extends DrawingItem{
         mPaint.setColor(color);
     }
 
-    public TextBoxItem(Context context)
-    {
+    /**
+     * Constructor
+     *
+     * @param context
+     */
+    public TextBoxItem(Context context) {
 
     }
 
-    public int getColor()
-    {
+    /**
+     * Accessor method
+     */
+    public int getColor() {
         return color;
     }
 
+    /**
+     * Accessor method
+     */
     public float getTextSize() {
         return textSize;
     }
 
+    /**
+     * Accessor method
+     */
     public String getText() {
         return text;
     }
 
-    public Matrix getMatrix()
-    {
+    /**
+     * Accessor method
+     */
+    public Matrix getMatrix() {
         return matrix;
     }
 
-    public RectF getRectangle()
-    {
+    /**
+     * Accessor method
+     */
+    public RectF getRectangle() {
         return rectangle;
     }
 
+    /**
+     * Accessor method
+     */
     public RectF getDeleteRectangle() {
         return deleteRectangle;
     }
 
+    /**
+     * Accessor method
+     */
     public RectF getScaleRectangle() {
         return scaleRectangle;
     }
 
-    public void setHaveButtons(boolean haveButtons)
-    {
+    /**
+     * Mutator method
+     */
+    public void setHaveButtons(boolean haveButtons) {
         this.haveButtons = haveButtons;
     }
 
-    public void initialize(View parentView)
-    {
+    /**
+     * Initialize the text when first created
+     */
+    public void initialize(View parentView) {
         haveButtons = true;
 
         Paint paint = new Paint();
@@ -111,24 +189,29 @@ public class TextBoxItem extends DrawingItem{
         float height = DEFAULT_HEIGHT;
 //        Log.d("ttttttttttttttttt", width + " " + paint.measureText(text));
 
+        // calculate the position of rectangle
         float left = (parentView.getWidth() - width) / 2;
         float top = (parentView.getHeight() - height) / 2;
         float right = left + width;
         float bottom = top + height;
 
+        // create rectangles for buttons
         rectangle = new RectF(left, top, left + width, top + height);
         deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
         scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
 
         matrix = new Matrix();
 
+        // move the text to position
         matrix.postTranslate(rectangle.left, rectangle.top);
 
         Log.d("aaaaaaaaaaaaaaaaaaaa", "" + width + " " + height + " " + left + " " + top);
     }
 
-    public void initializeForScaleBar(View parentView)
-    {
+    /**
+     * Initialize the text for scale bar when first created
+     */
+    public void initializeForScaleBar(View parentView) {
         haveButtons = true;
 
         Paint paint = new Paint();
@@ -138,11 +221,13 @@ public class TextBoxItem extends DrawingItem{
         float height = DEFAULT_HEIGHT;
 //        Log.d("ttttttttttttttttt", width + " " + paint.measureText(text));
 
+        // calculate the position of rectangle
         float left = parentView.getWidth() - 200;
         float top = parentView.getHeight() - 270;
         float right = left + width;
         float bottom = top + height;
 
+        // create rectangles for buttons
         rectangle = new RectF(left, top, left + width, top + height);
         deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
         scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
@@ -150,18 +235,20 @@ public class TextBoxItem extends DrawingItem{
 
         matrix = new Matrix();
 
+        // move the text to position
         matrix.postTranslate(rectangle.left, rectangle.top);
 
         Log.d("aaaaaaaaaaaaaaaaaaaa", "" + width + " " + height + " " + left + " " + top);
     }
 
-    public void draw(Canvas canvas)
-    {
+    /**
+     * Draw the text on specified canvas when called
+     */
+    public void draw(Canvas canvas) {
         canvas.save();
 
 //        Paint paint = new Paint();
-        if (haveButtons)
-        {
+        if (haveButtons) {
 
 //            paint.setColor(Color.WHITE);
 //            canvas.drawRect(rectangle, paint); // draw back ground to see layout
@@ -182,8 +269,10 @@ public class TextBoxItem extends DrawingItem{
         canvas.restore();
     }
 
-    public void updatePosition(float dx, float dy)
-    {
+    /**
+     * Update position when moved
+     */
+    public void updatePosition(float dx, float dy) {
         matrix.postTranslate(dx, dy);
 
         rectangle.offset(dx, dy);
@@ -191,8 +280,10 @@ public class TextBoxItem extends DrawingItem{
         scaleRectangle.offset(dx, dy);
     }
 
-    public void updateScalePosition(float dx, float dy)
-    {
+    /**
+     * Update position when scaled
+     */
+    public void updateScalePosition(float dx, float dy) {
         float centerX = rectangle.centerX();
         float centerY = rectangle.centerY();
 

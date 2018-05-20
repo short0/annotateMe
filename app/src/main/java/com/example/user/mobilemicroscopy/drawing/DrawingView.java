@@ -9,38 +9,85 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+/**
+ * Class the holds all the drawing items
+ */
 public class DrawingView extends View {
 
+    /**
+     * status move
+     */
     private static final int MOVING = 0;
 
+    /**
+     * status delete
+     */
     private static final int DELETING = 1;
 
+    /**
+     * status scale
+     */
     private static final int SCALING = 2;
 
+    /**
+     * status rotate
+     */
     private static final int ROTATING = 3;
 
+    /**
+     * status free
+     */
     private static final int FREE = 4;
 
+    /**
+     * default status
+     */
     private int status = -1;
 
+    /**
+     * list that hold all items
+     */
     private ArrayList<DrawingItem> drawingItemList = new ArrayList<DrawingItem>();
 
+    /**
+     * old coordinates
+     */
     private float oldX, oldY;
 
+    /**
+     * current item selected
+     */
     private DrawingItem currentItem;
 
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param attrs
+     */
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * Constructor
+     *
+     * @param context
+     */
     public DrawingView(Context context) {
         super(context);
     }
 
+    /**
+     * Accessor method
+     */
     public ArrayList<DrawingItem> getDrawingItemList() {
         return drawingItemList;
     }
 
+    /**
+     * Add an arrow
+     */
     public void addArrow(int color) {
         ArrowItem arrowItem = new ArrowItem(getContext(), color);
         arrowItem.initialize(this);
@@ -48,6 +95,9 @@ public class DrawingView extends View {
         invalidate();
     }
 
+    /**
+     * Add a text
+     */
     public void addText(String text, int color) {
         TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
         textBoxItem.initialize(this);
@@ -55,6 +105,9 @@ public class DrawingView extends View {
         invalidate();
     }
 
+    /**
+     * Add a scalebar
+     */
     public void addScaleBar(int color) {
         ScaleBarItem scaleBarItem = new ScaleBarItem(getContext(), color);
         scaleBarItem.initialize(this);
@@ -62,6 +115,9 @@ public class DrawingView extends View {
         invalidate();
     }
 
+    /**
+     * Add text for scalebar
+     */
     public void addTextForScaleBar(String text, int color) {
         TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
         textBoxItem.initializeForScaleBar(this);
@@ -69,11 +125,17 @@ public class DrawingView extends View {
         invalidate();
     }
 
+    /**
+     * Remove all items
+     */
     public void clear() {
         drawingItemList.clear();
         invalidate();
     }
 
+    /**
+     * Method called when inflated
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -83,6 +145,9 @@ public class DrawingView extends View {
         }
     }
 
+    /**
+     * React based on touch event
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean result = super.onTouchEvent(event);

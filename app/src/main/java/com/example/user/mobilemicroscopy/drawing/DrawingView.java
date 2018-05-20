@@ -1,4 +1,4 @@
-package com.example.user.testingapp;
+package com.example.user.mobilemicroscopy.drawing;
 
 import android.content.Context;
 import android.graphics.Canvas;

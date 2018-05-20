@@ -1,4 +1,4 @@
-package com.example.user.testingapp;
+package com.example.user.mobilemicroscopy.drawing;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,6 +11,9 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 import android.view.View;
+
+import com.example.user.mobilemicroscopy.MainActivity;
+import com.example.user.mobilemicroscopy.R;
 
 public class ArrowItem extends DrawingItem {
     private static final float BUTTON_SIZE = 100;

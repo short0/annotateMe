@@ -53,19 +53,10 @@ public class TextBoxItem extends DrawingItem{
             scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale);
         }
 
-        mPaint = new Paint();
-        if (color == MainActivity.COLOR_WHITE)
-        {
-            this.color = color;
-            mPaint.setColor(Color.WHITE);
-        }
-        else if (color == MainActivity.COLOR_BLACK)
-        {
-            this.color = color;
-            mPaint.setColor(Color.BLACK);
-        }
-
+        this.color = color;
         this.text = text;
+        mPaint = new Paint();
+        mPaint.setColor(color);
     }
 
     public TextBoxItem(Context context)

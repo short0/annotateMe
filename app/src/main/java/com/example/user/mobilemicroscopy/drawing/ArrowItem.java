@@ -51,11 +51,11 @@ public class ArrowItem extends DrawingItem {
         this.color = color;
 
         if (arrowBitmap == null) {
-            if (color == MainActivity.COLOR_WHITE)
+            if (color == Color.WHITE)
             {
                 arrowBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.white_arrow_with_tail);
             }
-            else if (color == MainActivity.COLOR_BLACK) {
+            else if (color == Color.BLACK) {
                 arrowBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.black_arrow_with_tail);
             }
         }

@@ -132,11 +132,7 @@ public class ScaleBarItem extends DrawingItem{
         }
 
         Paint paint = new Paint();
-        if (color == MainActivity.COLOR_WHITE) {
-            paint.setColor(Color.WHITE);
-        } else if (color == MainActivity.COLOR_BLACK) {
-            paint.setColor(Color.BLACK);
-        }
+        paint.setColor(color);
         canvas.drawRect(line, paint);
 
         canvas.restore();

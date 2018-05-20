@@ -46,10 +46,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static int COLOR_WHITE = 0;
-
-    public static int COLOR_BLACK = 1;
-
     // variable to hold annotated image file
     File mAnnotatedImageFile;
 

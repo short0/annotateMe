@@ -28,6 +28,9 @@ import com.example.user.mobilemicroscopy.drawing.DrawingView;
 import com.example.user.mobilemicroscopy.drawing.ScaleBarItem;
 import com.example.user.mobilemicroscopy.drawing.TextBoxItem;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -380,6 +383,8 @@ public class AnnotateActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.menu_save:
                 drawOnBitmap();
+                saveBitmap(mBitmap, mCurrentAnnotatedImagePath);
+                finish();
 
                 Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_SHORT).show();
                 return true;
@@ -490,4 +495,24 @@ public class AnnotateActivity extends AppCompatActivity {
         mImageView.invalidate();
     }
 
+    /**
+     * Save bitmap to file
+     */
+    public boolean saveBitmap(Bitmap bitmap, String filePath) {
+        File file = new File(filePath);
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

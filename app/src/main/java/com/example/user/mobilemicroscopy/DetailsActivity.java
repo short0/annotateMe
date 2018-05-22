@@ -396,10 +396,10 @@ public class DetailsActivity extends AppCompatActivity {
      *
      * TODO: not working due to the path is null when restart
      */
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        displayImage();
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        displayImage();
+    }
 
 }

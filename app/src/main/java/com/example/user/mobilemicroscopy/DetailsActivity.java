@@ -2,6 +2,7 @@ package com.example.user.mobilemicroscopy;
 
 import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -11,7 +12,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,8 +35,22 @@ import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
 import com.example.user.mobilemicroscopy.database.ImageContract;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -135,32 +153,39 @@ public class DetailsActivity extends AppCompatActivity {
         mGPSPositionEditText = (EditText) findViewById(R.id.details_gps_position_edit_text);
         mStudentCommentEditText = (EditText) findViewById(R.id.details_student_comment_edit_text);
 
+
+
+        // get the intent from MainActivity
+        Intent intent = getIntent();
+
+        mPassedType = intent.getStringExtra("passedType");
+//        mCurrentOriginalImagePath = intent.getStringExtra("originalImagePath");
+//        mCurrentAnnotatedImagePath = intent.getStringExtra("annotatedImagePath");
+//        mCurrentOriginalImageFileName = intent.getStringExtra("originalImageFileName");
+//        mCurrentAnnotatedImageFileName = intent.getStringExtra("annotatedImageFileName");
+
+        // extract the image object in the intent
+        mImage = (Image) intent.getSerializableExtra("image");
+
         mImageView = (ImageView) findViewById(R.id.details_image_view);
 
         // add click action on image view
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(DetailsActivity.this, AnnotateActivity.class);
-                i.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
-                startActivity(i);
+                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
+                // add the image to the intent to pass
+                intent.putExtra("image", mImage);
+//                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
+                startActivity(intent);
             }
         });
 
-        // get the intent from MainActivity
-        Intent intent = getIntent();
-
-        mPassedType = intent.getStringExtra("passedType");
-        mCurrentOriginalImagePath = intent.getStringExtra("originalImagePath");
-        mCurrentAnnotatedImagePath = intent.getStringExtra("annotatedImagePath");
-        mCurrentOriginalImageFileName = intent.getStringExtra("originalImageFileName");
-        mCurrentAnnotatedImageFileName = intent.getStringExtra("annotatedImageFileName");
-
         // display the image if the link is found in the intent
-        if (mPassedType.equals("annotatedImagePath")) {
+        if (mPassedType.equals("emptyObject")) {
             try {
                 // create exif interface object and extract useful data
-                mExifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
+                mExifInterface = new ExifInterface(mImage.getAnnotatedImageLink());
 
                 // extract and format date and time
                 String dateTimeTag = mExifInterface.getAttribute(ExifInterface.TAG_DATETIME);
@@ -187,8 +212,8 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-        // extract the image object in the intent
-        mImage = (Image) intent.getSerializableExtra("image");
+//        // extract the image object in the intent
+//        mImage = (Image) intent.getSerializableExtra("image");
 
         // set text for all views if the image is not null
         if (mPassedType.equals("imageObject")) {
@@ -253,6 +278,15 @@ public class DetailsActivity extends AppCompatActivity {
                 // Show text message
                 Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
                 return true;
+
+            case R.id.menu_upload:
+
+
+                uploadToRDS();
+
+                // Show text message
+                Toast.makeText(this, "Upload", Toast.LENGTH_SHORT).show();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -261,6 +295,41 @@ public class DetailsActivity extends AppCompatActivity {
      * methods to save an image to database
      */
     public void saveImage() {
+        // create a new Image object if no image is passed from MainActivity
+//        if (!mPassedType.equals("imageObject")) {
+//            mImage = new Image();
+//        }
+
+        if (mImage == null)
+        {
+            return;
+        }
+
+        // set the values to the object from the views
+        mImage.setDate(mDateEditText.getText().toString());
+        mImage.setTime(mTimeEditText.getText().toString());
+        mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
+        mImage.setMagnification(mMagnificationEditText.getText().toString());
+        mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
+        mImage.setStudentComment(mStudentCommentEditText.getText().toString());
+
+        // set the links and file names
+//        mImage.setOriginalImageLink(mCurrentOriginalImagePath);
+//        mImage.setAnnotatedImageLink(mCurrentAnnotatedImagePath);
+//        mImage.setOriginalFileName(mCurrentOriginalImageFileName);
+//        mImage.setAnnotatedFileName(mCurrentAnnotatedImageFileName);
+
+        // if the Image is null
+        if (mPassedType.equals("emptyObject")) {
+            // insert new image to the database
+            database.addImage(mImage);
+        } else {
+            // update existing image in database
+            database.updateImage(mImage);
+        }
+
+
+/*
         // create a new Image object if no image is passed from MainActivity
         if (!mPassedType.equals("imageObject")) {
             mImage = new Image();
@@ -291,6 +360,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         // end the activity
         finish();
+*/
     }
 
     /**
@@ -315,7 +385,7 @@ public class DetailsActivity extends AppCompatActivity {
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(mCurrentAnnotatedImagePath, bmOptions);
+        BitmapFactory.decodeFile(mImage.getAnnotatedImageLink(), bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -327,7 +397,7 @@ public class DetailsActivity extends AppCompatActivity {
         bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentAnnotatedImagePath, bmOptions);
+        Bitmap bitmap = BitmapFactory.decodeFile(mImage.getAnnotatedImageLink(), bmOptions);
         mImageView.setImageBitmap(rotateImage(bitmap));
     }
 
@@ -402,4 +472,184 @@ public class DetailsActivity extends AppCompatActivity {
         displayImage();
     }
 
+
+    /******************************************************************/
+
+    public void uploadToRDS()
+    {
+        // Get a reference to the ConnectivityManager to check state of network connectivity
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Get details on the currently active default data network
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        // If there is a network connection, fetch data
+        if (networkInfo != null && networkInfo.isConnected()) {
+
+            String webServerUrl = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/images.php";
+
+//                Uri imageUri = Uri.parse(webServerUrl);
+//                Intent webIntent = new Intent(Intent.ACTION_VIEW, imageUri);
+//
+//                startActivity(webIntent);
+            MyAsyncTask myAsyncTask = new MyAsyncTask();
+            myAsyncTask.execute(webServerUrl);
+        } else {
+            Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT).show();
+            Log.d("AAAAAAAAAAAAAAAAAAAA", "bbbbbbbbbbbbbbbbbb");
+        }
+    }
+
+
+    private class MyAsyncTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            String jsonResponse = "";
+            InputStream inputStream = null;
+            OutputStream outputStream = null;
+
+            mImage.setDate(mDateEditText.getText().toString());
+            mImage.setTime(mTimeEditText.getText().toString());
+            mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
+            mImage.setMagnification(mMagnificationEditText.getText().toString());
+            mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
+            mImage.setStudentComment(mStudentCommentEditText.getText().toString());
+
+            String date = mImage.getDate();
+            String time = mImage.getTime();
+            String specimenType = mImage.getSpecimenType();
+            String originalFileName = mImage.getOriginalFileName();
+            String annotatedFileName = mImage.getAnnotatedFileName();
+            String GPSposition = mImage.getGpsPosition();
+            String magnification = mImage.getMagnification();
+            String originalImageLink = mImage.getOriginalImageLink();
+            String annotattedImageLink = mImage.getAnnotatedImageLink();
+            String studentComment = mImage.getStudentComment();
+            String teacherComment = mImage.getTeacherComment();
+            String username = "n.zafra";
+
+            URL url = null;
+            try {
+                url = new URL(strings[0]);
+                Log.d("AAAAAAAAAAAAAAAAa", strings[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection connection = null;
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setReadTimeout(10000);
+                connection.setConnectTimeout(15000);
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("date", date)
+                        .appendQueryParameter("time", time)
+                        .appendQueryParameter("specimenType", specimenType)
+                        .appendQueryParameter("originalFileName", originalFileName)
+                        .appendQueryParameter("annotatedFileName", annotatedFileName)
+                        .appendQueryParameter("GPSposition", GPSposition)
+                        .appendQueryParameter("magnification", magnification)
+                        .appendQueryParameter("originalImageLink", originalImageLink)
+                        .appendQueryParameter("annotatedImageLink", annotattedImageLink)
+                        .appendQueryParameter("studentComment", studentComment)
+                        .appendQueryParameter("teacherComment", teacherComment)
+                        .appendQueryParameter("username", username);
+                String query = builder.build().getEncodedQuery();
+
+
+                outputStream = connection.getOutputStream();
+
+                BufferedWriter bufferedWriter = null;
+                try {
+                    bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                bufferedWriter.write(query);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+
+                outputStream.close();
+
+                connection.connect();
+                Log.d("AAAAAAAAAAAAAAAAAA", connection.getResponseCode() + "");
+
+                // If the request was successful (response code 200),
+                // then read the input stream and parse the response.
+                if (connection.getResponseCode() == 200) {
+                    inputStream = connection.getInputStream();
+                    jsonResponse = readInputStream(inputStream);
+                    Log.d("AAAAAAAAAAAAAAAAAAbbb", jsonResponse);
+//                    extractFeatureFromJson(jsonResponse);
+                } else {
+                    Log.e("AAAAAAAAAAAAA", "Error response code: " + connection.getResponseCode());
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+                if (inputStream != null) {
+                    // function must handle java.io.IOException here
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            return jsonResponse;
+        }
+
+        @Override
+        protected void onPostExecute(String jsonResponse) {
+            super.onPostExecute(jsonResponse);
+
+            extractStatus(jsonResponse);
+        }
+
+        private String readInputStream(InputStream inputStream) throws IOException {
+            StringBuilder output = new StringBuilder();
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+                BufferedReader reader = new BufferedReader(inputStreamReader);
+                String line = reader.readLine();
+                while (line != null) {
+                    output.append(line);
+                    line = reader.readLine();
+                }
+            }
+            return output.toString();
+        }
+
+
+        private void extractStatus(String jsonResponse) {
+            // If the JSON string is empty or null, then return early.
+            if (TextUtils.isEmpty(jsonResponse)) {
+                return;
+            }
+
+            try {
+                JSONObject root = new JSONObject(jsonResponse);
+                int status = root.getInt("status");
+                String message = root.getString("message");
+
+                if (status == 1) {
+                    Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                } else if (status == 0) {
+                    Toast.makeText(getApplicationContext(), "Failed. Please try again", Toast.LENGTH_SHORT).show();
+                }
+
+            } catch (JSONException e) {
+                Log.e("AAAAAAAAAAAAAAAAAAA", "Problem parsing the earthquake JSON results", e);
+            }
+        }
+    }
 }

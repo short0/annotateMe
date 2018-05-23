@@ -260,17 +260,30 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            Image image = new Image();
+            image.setOriginalImageLink(mOriginalImagePath);
+            image.setAnnotatedImageLink(mAnnotatedImagePath);
+            image.setOriginalFileName(mOriginalImageFileName);
+            image.setAnnotatedFileName(mAnnotatedImageFileName);
+
             Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
-            // send the original image path with the intent
-            intent.putExtra("originalImagePath", mOriginalImagePath);
-            // send the annotated image path with the intent
-            intent.putExtra("annotatedImagePath", mAnnotatedImagePath);
-            // send the original image file name
-            intent.putExtra("originalImageFileName", mOriginalImageFileName);
-            // send the annotated image file name
-            intent.putExtra("annotatedImageFileName", mAnnotatedImageFileName);
+
+            // add the image to the intent to pass
+            intent.putExtra("image", image);
+
             // declare what is passed in the intent
-            intent.putExtra("passedType", "annotatedImagePath");
+            intent.putExtra("passedType", "emptyObject");
+
+//            // send the original image path with the intent
+//            intent.putExtra("originalImagePath", mOriginalImagePath);
+//            // send the annotated image path with the intent
+//            intent.putExtra("annotatedImagePath", mAnnotatedImagePath);
+//            // send the original image file name
+//            intent.putExtra("originalImageFileName", mOriginalImageFileName);
+//            // send the annotated image file name
+//            intent.putExtra("annotatedImageFileName", mAnnotatedImageFileName);
+//            // declare what is passed in the intent
+//            intent.putExtra("passedType", "annotatedImagePath");
 
             startActivity(intent);
         }

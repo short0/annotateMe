@@ -91,7 +91,7 @@ public class AnnotateActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         // get the link
-        mCurrentAnnotatedImagePath = intent.getStringExtra("annotatedImagePath");
+        mCurrentAnnotatedImagePath = ((Image) intent.getSerializableExtra("image")).getAnnotatedImageLink();
 
         displayImage();
 

@@ -13,6 +13,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        getSupportActionBar().hide();
+
         // find workOfflineButton
         Button workOfflineButton = (Button) findViewById(R.id.work_offline_button);
 

@@ -8,14 +8,18 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
         tools:context=".DetailsActivity">
 
         <ImageView
             android:id="@+id/details_image_view"
             android:layout_width="300dp"
             android:layout_height="300dp"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,14 +30,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date" />
+                android:text="Date"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/details_date_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="dd/mm/yyyy" />
+                android:enabled="false"
+                android:hint="dd/mm/yyyy"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
@@ -47,14 +54,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Time" />
+                android:text="Time"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/details_time_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="hh:mm:ss" />
+                android:enabled="false"
+                android:hint="hh:mm:ss"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
@@ -67,14 +77,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Specimen Type" />
+                android:text="Specimen Type"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/details_specimen_type_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Specimen type" />
+                android:hint="Specimen type"
+                android:maxLength="254"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
@@ -87,14 +100,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Magnification" />
+                android:text="Magnification"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/details_magnification_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Magnification" />
+                android:hint="Magnification"
+                android:inputType="numberDecimal"
+                android:maxLength="7"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
@@ -107,14 +124,17 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="GPS Location" />
+                android:text="GPS Location"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/details_gps_position_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="GPS Position" />
+                android:enabled="false"
+                android:hint="GPS Position"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
 
@@ -127,7 +147,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Comment" />
+                android:text="Comment"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/details_student_comment_edit_text"
@@ -135,7 +156,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Comment"
-                android:maxLength="254" />
+                android:maxLength="254"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
     </LinearLayout>

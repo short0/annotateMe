@@ -12,6 +12,8 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        getSupportActionBar().hide();
+
         final int SPLASH_TIME = 1000;
 
         // use the Handler to go to LoginActivity after 1 second

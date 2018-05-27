@@ -14,13 +14,13 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/logo_annotate_me"
-        app:layout_constraintBottom_toTopOf="@+id/user_name_edit_text"
+        app:layout_constraintBottom_toTopOf="@+id/username_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/user_name_edit_text"
+        android:id="@+id/username_edit_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -28,6 +28,9 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/edit_text_username"
         android:hint="Username"
+        android:inputType="text"
+        android:maxLength="20"
+        android:maxLines="1"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/password_edit_text"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,6 +45,8 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/edit_text_password"
         android:hint="Password"
+        android:inputType="textPassword"
+        android:maxLength="20"
         android:textAlignment="center"
         app:layout_constraintBottom_toTopOf="@+id/login_button"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,12 +60,12 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/button_login"
-        app:layout_constraintBottom_toTopOf="@+id/work_offline_button"
+        app:layout_constraintBottom_toTopOf="@+id/guest_login_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/work_offline_button"
+        android:id="@+id/guest_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

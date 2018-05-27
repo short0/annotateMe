@@ -46,6 +46,11 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * hold the username
+     */
+    String username = "";
+
     // variable to hold annotated image file
     File mAnnotatedImageFile;
 
@@ -66,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    /**
+     * Take photo button
+     */
     FloatingActionButton fabTakePhoto;
 
     /**
@@ -87,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // get the username from LoginActivity
+        username = getIntent().getStringExtra("username");
 
         // check for CAMERA permission, if not granted, request it
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -144,6 +155,9 @@ public class MainActivity extends AppCompatActivity {
 
                 // declare what is passed in the intent
                 detailsIntent.putExtra("passedType", "imageObject");
+
+                // declare what is passed in the intent
+                detailsIntent.putExtra("username", username);
 
                 // send the intent
                 startActivity(detailsIntent);
@@ -218,6 +232,9 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    /**
+     * Use the existing camera app to take picture
+     */
     private void sendImageCaptureIntent() {
         // create an intent to capture image using camera app
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -246,6 +263,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method executed when the photo is taken
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("aaaaaaaaaaaaa", mOriginalImagePath);
@@ -274,6 +298,9 @@ public class MainActivity extends AppCompatActivity {
             // declare what is passed in the intent
             intent.putExtra("passedType", "emptyObject");
 
+            // declare what is passed in the intent
+            intent.putExtra("username", username);
+
 //            // send the original image path with the intent
 //            intent.putExtra("originalImagePath", mOriginalImagePath);
 //            // send the annotated image path with the intent
@@ -289,6 +316,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to create original image file
+     *
+     * @return
+     * @throws IOException
+     */
     private File createOriginalImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -311,6 +344,12 @@ public class MainActivity extends AppCompatActivity {
         return imageFile;
     }
 
+    /**
+     * Method to create annotated image file
+     *
+     * @return
+     * @throws IOException
+     */
     private File createAnnotatedImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -333,6 +372,13 @@ public class MainActivity extends AppCompatActivity {
         return imageFile;
     }
 
+    /**
+     * Method to copy file
+     *
+     * @param srcName
+     * @param dstName
+     * @throws IOException
+     */
     public void copy(String srcName, String dstName) throws IOException {
         File src = new File(srcName);
         File dst = new File(dstName);

@@ -30,6 +30,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.example.user.mobilemicroscopy.aws.Constants;
+import com.example.user.mobilemicroscopy.aws.Util;
 import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 import com.example.user.mobilemicroscopy.database.ImageDbHelper;
 
@@ -57,6 +61,26 @@ import java.util.Date;
 public class DetailsActivity extends AppCompatActivity {
     int x;
     int y;
+
+    /**
+     * Hold the URL to query the images
+     */
+    private static final String SIMPLE_IMAGE_WEB_API_URL = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/images.php";
+
+    /*
+     * Hold the username
+     */
+    String username = "";
+
+    /**
+     * The TransferUtility is the primary class for managing transfer to S3
+     */
+    private TransferUtility transferUtility;
+
+    /**
+     * Reference to the utility class
+     */
+    private Util util;
 
     /**
      * Image view to show the image
@@ -145,6 +169,10 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        // Initializes TransferUtility, always do this before using it.
+        util = new Util();
+        transferUtility = util.getTransferUtility(this);
+
         // initialize views
         mDateEditText = (EditText) findViewById(R.id.details_date_edit_text);
         mTimeEditText = (EditText) findViewById(R.id.details_time_edit_text);
@@ -154,9 +182,11 @@ public class DetailsActivity extends AppCompatActivity {
         mStudentCommentEditText = (EditText) findViewById(R.id.details_student_comment_edit_text);
 
 
-
         // get the intent from MainActivity
         Intent intent = getIntent();
+
+        username = getIntent().getStringExtra("username");
+        Log.d("USERNAME", username);
 
         mPassedType = intent.getStringExtra("passedType");
 //        mCurrentOriginalImagePath = intent.getStringExtra("originalImagePath");
@@ -209,7 +239,6 @@ public class DetailsActivity extends AppCompatActivity {
 
             displayImage();
         }
-
 
 
 //        // extract the image object in the intent
@@ -281,8 +310,22 @@ public class DetailsActivity extends AppCompatActivity {
 
             case R.id.menu_upload:
 
-
+                // upload to RDS
                 uploadToRDS();
+
+                Log.d("bbbbbbbbbbbbbbb", username);
+
+                // upload to S3 if the image is not null and username is valid
+                if (mImage != null && username != null && !username.equals("")) {
+                    beginUpload(mImage.getOriginalImageLink(), Constants.BUCKET_NAME + "/" + username + "/original");
+                    beginUpload(mImage.getAnnotatedImageLink(), Constants.BUCKET_NAME + "/" + username + "/annotated");
+                }
+
+                // save the image to database whether insert new image or update a image
+                saveImage();
+
+                // End the activity
+                finish();
 
                 // Show text message
                 Toast.makeText(this, "Upload", Toast.LENGTH_SHORT).show();
@@ -300,8 +343,7 @@ public class DetailsActivity extends AppCompatActivity {
 //            mImage = new Image();
 //        }
 
-        if (mImage == null)
-        {
+        if (mImage == null) {
             return;
         }
 
@@ -377,6 +419,9 @@ public class DetailsActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * method to display the main image
+     */
     private void displayImage() {
         // Get the dimensions of the View
         int targetW = 300; //mImageView.getMeasuredWidth();
@@ -390,7 +435,7 @@ public class DetailsActivity extends AppCompatActivity {
         int photoH = bmOptions.outHeight;
 
         // Determine how much to scale down the image
-        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
@@ -463,20 +508,22 @@ public class DetailsActivity extends AppCompatActivity {
 
     /**
      * display the image when the activity is resumed
-     *
+     * <p>
      * TODO: not working due to the path is null when restart
      */
     @Override
     protected void onResume() {
         super.onResume();
         displayImage();
+        Log.d("USERNAME", username);
     }
 
 
     /******************************************************************/
-
-    public void uploadToRDS()
-    {
+    /**
+     * Method to upload image details to AWS RDS using a simple web API
+     */
+    public void uploadToRDS() {
         // Get a reference to the ConnectivityManager to check state of network connectivity
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -486,28 +533,33 @@ public class DetailsActivity extends AppCompatActivity {
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
 
-            String webServerUrl = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/images.php";
+//            String webServerUrl = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/images.php";
 
 //                Uri imageUri = Uri.parse(webServerUrl);
 //                Intent webIntent = new Intent(Intent.ACTION_VIEW, imageUri);
 //
 //                startActivity(webIntent);
-            MyAsyncTask myAsyncTask = new MyAsyncTask();
-            myAsyncTask.execute(webServerUrl);
+
+            // start an async task to do in background
+            RdsAsyncTask rdsAsyncTask = new RdsAsyncTask();
+            rdsAsyncTask.execute(SIMPLE_IMAGE_WEB_API_URL);
         } else {
             Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT).show();
             Log.d("AAAAAAAAAAAAAAAAAAAA", "bbbbbbbbbbbbbbbbbb");
         }
     }
 
-
-    private class MyAsyncTask extends AsyncTask<String, Void, String> {
+    /**
+     * An AsyncTask to add a record to RDS
+     */
+    private class RdsAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... strings) {
             String jsonResponse = "";
             InputStream inputStream = null;
             OutputStream outputStream = null;
 
+            // get the details to upload
             mImage.setDate(mDateEditText.getText().toString());
             mImage.setTime(mTimeEditText.getText().toString());
             mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
@@ -522,12 +574,16 @@ public class DetailsActivity extends AppCompatActivity {
             String annotatedFileName = mImage.getAnnotatedFileName();
             String GPSposition = mImage.getGpsPosition();
             String magnification = mImage.getMagnification();
-            String originalImageLink = mImage.getOriginalImageLink();
-            String annotattedImageLink = mImage.getAnnotatedImageLink();
+//            String originalImageLink = mImage.getOriginalImageLink();
+//            String annotattedImageLink = mImage.getAnnotatedImageLink();
+            // assign the link to S3
+            String originalImageLink = "https://s3-ap-southeast-2.amazonaws.com/kiotmicroscopy/" + username + "/original/" + mImage.getOriginalFileName();
+            String annotattedImageLink = "https://s3-ap-southeast-2.amazonaws.com/kiotmicroscopy/" + username + "/annotated/" + mImage.getAnnotatedFileName();
             String studentComment = mImage.getStudentComment();
             String teacherComment = mImage.getTeacherComment();
-            String username = "n.zafra";
+//            String username = "n.zafra";
 
+            // parse the URL
             URL url = null;
             try {
                 url = new URL(strings[0]);
@@ -535,15 +591,17 @@ public class DetailsActivity extends AppCompatActivity {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
+            // make http connection
             HttpURLConnection connection = null;
             try {
                 connection = (HttpURLConnection) url.openConnection();
                 connection.setReadTimeout(10000);
                 connection.setConnectTimeout(15000);
-                connection.setRequestMethod("POST");
+                connection.setRequestMethod("POST"); // use POST method
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
 
+                // add the parameters
                 Uri.Builder builder = new Uri.Builder()
                         .appendQueryParameter("date", date)
                         .appendQueryParameter("time", time)
@@ -559,7 +617,7 @@ public class DetailsActivity extends AppCompatActivity {
                         .appendQueryParameter("username", username);
                 String query = builder.build().getEncodedQuery();
 
-
+                // write parameters to output stream
                 outputStream = connection.getOutputStream();
 
                 BufferedWriter bufferedWriter = null;
@@ -575,14 +633,14 @@ public class DetailsActivity extends AppCompatActivity {
 
                 outputStream.close();
 
-                connection.connect();
+                connection.connect(); // make the connection
                 Log.d("AAAAAAAAAAAAAAAAAA", connection.getResponseCode() + "");
 
                 // If the request was successful (response code 200),
                 // then read the input stream and parse the response.
                 if (connection.getResponseCode() == 200) {
                     inputStream = connection.getInputStream();
-                    jsonResponse = readInputStream(inputStream);
+                    jsonResponse = readInputStream(inputStream); // read the response
                     Log.d("AAAAAAAAAAAAAAAAAAbbb", jsonResponse);
 //                    extractFeatureFromJson(jsonResponse);
                 } else {
@@ -593,28 +651,36 @@ public class DetailsActivity extends AppCompatActivity {
                 e.printStackTrace();
             } finally {
                 if (connection != null) {
-                    connection.disconnect();
+                    connection.disconnect(); // disconnect
                 }
                 if (inputStream != null) {
                     // function must handle java.io.IOException here
                     try {
-                        inputStream.close();
+                        inputStream.close(); // close the input stream
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
 
-            return jsonResponse;
+            return jsonResponse; // return a JSON response
         }
 
         @Override
         protected void onPostExecute(String jsonResponse) {
             super.onPostExecute(jsonResponse);
 
+            // get info from the response
             extractStatus(jsonResponse);
         }
 
+        /**
+         * Read the information from input stream
+         *
+         * @param inputStream
+         * @return
+         * @throws IOException
+         */
         private String readInputStream(InputStream inputStream) throws IOException {
             StringBuilder output = new StringBuilder();
             if (inputStream != null) {
@@ -629,7 +695,11 @@ public class DetailsActivity extends AppCompatActivity {
             return output.toString();
         }
 
-
+        /**
+         * Extract information from a JSON Response
+         *
+         * @param jsonResponse
+         */
         private void extractStatus(String jsonResponse) {
             // If the JSON string is empty or null, then return early.
             if (TextUtils.isEmpty(jsonResponse)) {
@@ -641,6 +711,7 @@ public class DetailsActivity extends AppCompatActivity {
                 int status = root.getInt("status");
                 String message = root.getString("message");
 
+                // check the status and show result of operation
                 if (status == 1) {
                     Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 } else if (status == 0) {
@@ -652,4 +723,20 @@ public class DetailsActivity extends AppCompatActivity {
             }
         }
     }
+
+    /******************************************************************/
+    /*
+     * Begins to upload the file specified by the file path.
+     */
+    private void beginUpload(String filePath, String bucket) {
+        if (filePath == null) {
+            Toast.makeText(this, "Could not find the filepath of the selected file", Toast.LENGTH_LONG).show();
+            return;
+        }
+        File file = new File(filePath);
+        TransferObserver observer = transferUtility.upload(bucket, file.getName(), file);
+    }
+    /******************************************************************/
+
+
 }

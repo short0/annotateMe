@@ -98,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
 
         // get the username from LoginActivity
         username = getIntent().getStringExtra("username");
+        // set the username to empty string if null
+        if (username == null)
+        {
+            username = "";
+        }
 
         // check for CAMERA permission, if not granted, request it
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -181,6 +186,31 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Hide menu item depends on logged in or not
+     *
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        // hide login item if logged in
+        if (username != null && !username.equals(""))
+        {
+            MenuItem loginMenuItem = (MenuItem) menu.findItem(R.id.menu_login);
+            loginMenuItem.setVisible(false);
+        }
+        else // hide logout item if not logged in
+        {
+            MenuItem logoutMenuItem = (MenuItem) menu.findItem(R.id.menu_log_out);
+            logoutMenuItem.setVisible(false);
+        }
+
+        return true;
+    }
+
+    /**
      * Take action based on what menu item is selected
      */
     @Override
@@ -190,15 +220,26 @@ public class MainActivity extends AppCompatActivity {
                 // go to LoginActivity
 //                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 //                startActivity(intent);
+
+                // end activity
+                finish();
                 // Show text message
                 Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
                 return true;
 
-            case R.id.menu_delete_all:
-                // delete all images
-                deleteAll();
+//            case R.id.menu_delete_all:
+//                // delete all images
+//                deleteAll();
+//                // Show text message
+//                Toast.makeText(this, "Delete all", Toast.LENGTH_SHORT).show();
+//                return true;
+
+            case R.id.menu_log_out:
+                // end activity
+                finish();
+
                 // Show text message
-                Toast.makeText(this, "Delete all", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(menuItem);

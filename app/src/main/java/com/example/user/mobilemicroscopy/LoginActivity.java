@@ -96,6 +96,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        username = "";
+        usernameEditText.setText("");
+        passwordEditText.setText("");
+    }
+
     /**
      * Method to login using a query against AWS RDS through a simple web API
      */

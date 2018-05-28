@@ -10,12 +10,18 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_upload"
+        android:title="Upload"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_restore_original"
+        android:title="Restore original"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/menu_delete"
         android:title="Delete"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/menu_upload"
-        android:title="Upload"
-        app:showAsAction="never" />
 </menu>

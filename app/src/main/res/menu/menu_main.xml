@@ -8,8 +8,13 @@
         android:title="Login"
         app:showAsAction="never" />
 
+    <!--<item-->
+        <!--android:id="@+id/menu_delete_all"-->
+        <!--android:title="Delete all"-->
+        <!--app:showAsAction="never" />-->
+
     <item
-        android:id="@+id/menu_delete_all"
-        android:title="Delete all"
+        android:id="@+id/menu_log_out"
+        android:title="Log out"
         app:showAsAction="never" />
 </menu>

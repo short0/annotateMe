@@ -45,6 +45,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -54,6 +56,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -185,7 +188,13 @@ public class DetailsActivity extends AppCompatActivity {
         // get the intent from MainActivity
         Intent intent = getIntent();
 
+        // get the username from MainActivity
         username = getIntent().getStringExtra("username");
+        // set the username to empty string if null
+        if (username == null)
+        {
+            username = "";
+        }
         Log.d("USERNAME", username);
 
         mPassedType = intent.getStringExtra("passedType");
@@ -284,6 +293,26 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /**
+     * Hide menu item depends on logged in or not
+     *
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        // hide login item if logged in
+        if (username == null || username.equals(""))
+        {
+            MenuItem uploadMenuItem = (MenuItem) menu.findItem(R.id.menu_upload);
+            uploadMenuItem.setVisible(false);
+        }
+
+        return true;
+    }
+
+    /**
      * Take action based on what is selected
      */
     @Override
@@ -306,6 +335,20 @@ public class DetailsActivity extends AppCompatActivity {
 
                 // Show text message
                 Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.menu_restore_original:
+                // copy the original image to annotated image
+                try {
+                    copy(mImage.getOriginalImageLink(), mImage.getAnnotatedImageLink());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                displayImage();
+
+                // Show text message
+                Toast.makeText(this, "Restore original image", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.menu_upload:
@@ -738,5 +781,22 @@ public class DetailsActivity extends AppCompatActivity {
     }
     /******************************************************************/
 
-
+    /**
+     * Method to copy file
+     *
+     * @param srcName
+     * @param dstName
+     * @throws IOException
+     */
+    public void copy(String srcName, String dstName) throws IOException {
+        File src = new File(srcName);
+        File dst = new File(dstName);
+        FileInputStream inStream = new FileInputStream(src);
+        FileOutputStream outStream = new FileOutputStream(dst);
+        FileChannel inChannel = inStream.getChannel();
+        FileChannel outChannel = outStream.getChannel();
+        inChannel.transferTo(0, inChannel.size(), outChannel);
+        inStream.close();
+        outStream.close();
+    }
 }

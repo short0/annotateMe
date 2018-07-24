@@ -306,7 +306,9 @@ public class AnnotateActivity extends AppCompatActivity {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
-        final EditText eyepiece = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_eyepiece);
+        final EditText stageUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_stage_units);
+        final EditText ocularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_ocular_units);
+        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
 
         // set text_dialogalog.xml to alertdialog builder
         alertDialogBuilder
@@ -314,18 +316,22 @@ public class AnnotateActivity extends AppCompatActivity {
 //                                        .setCancelable(false)
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                            public void onClick(DialogInterface dialog,int id) {
                                 String objectiveLensString = objectiveLens.getText().toString();
-                                String eyepieceString = eyepiece.getText().toString();
+                                String stageUnitsString = stageUnits.getText().toString();
+                                String ocularUnitsString = ocularUnits.getText().toString();
+                                String objectSizeInOcularUnitsString = objectSizeInOcularUnits.getText().toString();
 
-                                if (!objectiveLensString.equals("") && !eyepieceString.equals("")) {
+                                if (!objectiveLensString.equals("") && !stageUnitsString.equals("") && !ocularUnitsString.equals("") && !objectSizeInOcularUnitsString.equals("")) {
                                     float objectiveLensFloat = Float.parseFloat(objectiveLensString);
-                                    float eyepieceFloat = Float.parseFloat(eyepieceString);
+                                    float stageUnitsFloat = Float.parseFloat(stageUnitsString);
+                                    float ocularUnitsFloat = Float.parseFloat(ocularUnitsString);
+                                    float objectSizeInOcularUnitsFloat = Float.parseFloat(objectSizeInOcularUnitsString);
 
-                                    if (objectiveLensFloat != 0 && eyepieceFloat != 0) {
-                                        float magnification = objectiveLensFloat * eyepieceFloat;
-                                        float realSize = 10000 / magnification;
-
+                                    if (objectiveLensFloat != 0 && stageUnitsFloat != 0 && ocularUnitsFloat != 0 && objectSizeInOcularUnitsFloat != 0) {
+//                                        float magnification = objectiveLensFloat * eyepieceFloat;
+//                                        float realSize = 10000 / magnification;
+                                        float realSize = stageUnitsFloat * 10 * objectSizeInOcularUnitsFloat / ocularUnitsFloat;
                                         String realSizeWithUnit = "";
                                         String formattedRealSize = "";
 
@@ -352,7 +358,7 @@ public class AnnotateActivity extends AppCompatActivity {
                         })
                 .setNegativeButton("Cancel",
                         new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                            public void onClick(DialogInterface dialog,int id) {
                                 dialog.cancel();
                             }
                         });

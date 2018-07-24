@@ -168,7 +168,7 @@ public class DrawingView extends View {
                         id = drawingItemList.indexOf(item);
                     }
 
-                    if (item instanceof ArrowItem || item instanceof TextBoxItem) {
+                    if (item instanceof ArrowItem || item instanceof TextBoxItem || item instanceof ScaleBarItem) {
                         if (item.getScaleRectangle().contains(x, y)) {
                             result = true;
                             currentItem = item;
@@ -237,7 +237,7 @@ public class DrawingView extends View {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
 
-                    if (currentItem instanceof ArrowItem || currentItem instanceof TextBoxItem) {
+                    if (currentItem instanceof ArrowItem || currentItem instanceof TextBoxItem || currentItem instanceof ScaleBarItem) {
                         if (currentItem != null) {
                             currentItem.updateScalePosition(differenceX, differenceY);
                             invalidate();

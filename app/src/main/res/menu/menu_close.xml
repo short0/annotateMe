@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+
+
+    <!--THIS PAGE No longer used-->
+
+
+
+
+
+    <item
+        android:id="@+id/menu_close_page"
+        android:icon="@drawable/baseline_close_white"
+        android:title="ClosePage"
+        app:showAsAction="always" />
+
+
+
+
+</menu>

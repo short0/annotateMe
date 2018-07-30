@@ -23,14 +23,16 @@
             android:id="@+id/file_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/speciment_type"
+            tools:layout_editor_absoluteX="0dp"
             tools:text="2018041700001_ann.jpg" />
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/file_name"
             tools:text="16/04/2018" />
@@ -39,31 +41,19 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/date"
             tools:text="11:53 PM" />
 
         <TextView
             android:id="@+id/speciment_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/time"
-            app:layout_constraintTop_toBottomOf="@+id/file_name"
+            android:layout_width="239dp"
+            android:layout_height="25dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="4dp"
             tools:text="Fungi" />
-
-        <TextView
-            android:id="@+id/gps_position"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            app:layout_constraintStart_toStartOf="@+id/speciment_type"
-            app:layout_constraintTop_toBottomOf="@+id/speciment_type"
-            tools:text="40.446° N 79.982° W." />
 
 
     </android.support.constraint.ConstraintLayout>

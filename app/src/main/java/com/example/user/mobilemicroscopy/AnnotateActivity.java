@@ -1,8 +1,10 @@
 package com.example.user.mobilemicroscopy;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -10,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +37,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AnnotateActivity extends AppCompatActivity {
 
@@ -74,6 +78,7 @@ public class AnnotateActivity extends AppCompatActivity {
     ImageView buttonBlackText;
     ImageView buttonWhiteScaleBar;
     ImageView buttonBlackScaleBar;
+
 
     /**
      * Mehtod called when activity created
@@ -151,6 +156,7 @@ public class AnnotateActivity extends AppCompatActivity {
             }
         });
     }
+
 
     /**
      * Display the main image
@@ -377,6 +383,7 @@ public class AnnotateActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu
         getMenuInflater().inflate(R.menu.menu_annotate, menu);
+ //       getMenuInflater().inflate(R.menu.menu_close, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -387,7 +394,8 @@ public class AnnotateActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.menu_save:
+
+             case R.id.menu_save:
                 drawOnBitmap();
                 saveBitmap(mBitmap, mCurrentAnnotatedImagePath);
                 finish();
@@ -489,7 +497,7 @@ public class AnnotateActivity extends AppCompatActivity {
                 } else if (((ScaleBarItem) item).getColor() == Color.BLACK) {
                     paint.setColor(Color.BLACK);
                 }
-                ;
+
 
                 mCanvas.drawRect(((ScaleBarItem) item).getLine(), paint);
 

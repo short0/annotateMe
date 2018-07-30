@@ -3,6 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+
+
+    <item
+        android:id="@+id/menu_zoom"
+        android:icon="@drawable/baseline_zoom_white"
+        android:title="Zoom"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_crop"
+        android:icon="@drawable/baseline_crop_white"
+        android:title="Crop"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/menu_save"
         android:icon="@drawable/baseline_save_white_48"

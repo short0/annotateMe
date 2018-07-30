@@ -49,7 +49,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         TextView dateView = (TextView) listItemView.findViewById(R.id.date);
         TextView timeView = (TextView) listItemView.findViewById(R.id.time);
         TextView specimenTypeView = (TextView) listItemView.findViewById(R.id.speciment_type);
-        TextView gpsPositionView = (TextView) listItemView.findViewById(R.id.gps_position);
+//        TextView gpsPositionView = (TextView) listItemView.findViewById(R.id.gps_position);
 
         // set the text to the views using data in currentImage
         imageView.setImageBitmap(rotateImage(BitmapFactory.decodeFile(currentImage.getAnnotatedImageLink()), currentImage.getAnnotatedImageLink()));
@@ -58,7 +58,7 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         dateView.setText(currentImage.getDate());
         timeView.setText(currentImage.getTime());
         specimenTypeView.setText(currentImage.getSpecimenType());
-        gpsPositionView.setText(currentImage.getGpsPosition());
+//        gpsPositionView.setText(currentImage.getGpsPosition());
 
         // return the view to display
         return listItemView;

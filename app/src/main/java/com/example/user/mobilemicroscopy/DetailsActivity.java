@@ -1,13 +1,7 @@
 package com.example.user.mobilemicroscopy;
 
-import android.app.LoaderManager;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -16,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -26,18 +19,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.example.user.mobilemicroscopy.aws.Constants;
 import com.example.user.mobilemicroscopy.aws.Util;
-import com.example.user.mobilemicroscopy.database.ImageContract.ImageEntry;
 import com.example.user.mobilemicroscopy.database.ImageDbHelper;
-
-import com.example.user.mobilemicroscopy.database.ImageContract;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,8 +46,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class DetailsActivity extends AppCompatActivity {
     int x;
@@ -149,7 +135,7 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      * store the image object passed by MainActivity
      */
-    private Image mImage;
+     Image mImage;
 
     /**
      * if the image object passed is null, the id will be default -100
@@ -280,6 +266,27 @@ public class DetailsActivity extends AppCompatActivity {
 
         // connect to the database
         database = new ImageDbHelper(getApplicationContext());
+
+
+
+
+//        ZoomButton zoomPhoto;
+//
+//
+//        // specify action when the button is clicked
+//        zoomPhoto = (ZoomButton) findViewById(R.id.menu_close_page);
+//        zoomPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
+//                startActivity(intent);
+////                sendImageCaptureIntent();
+//            }
+//        });
+
+
+
+
     }
 
     /**
@@ -312,12 +319,51 @@ public class DetailsActivity extends AppCompatActivity {
         return true;
     }
 
+
+
+
+
+
     /**
      * Take action based on what is selected
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+
+            case R.id.menu_zoom:
+                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
+//                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
+//                startActivity(zoomIntent);
+                zoomImage();
+
+                // Show text message
+                Toast.makeText(this, "Zoom", Toast.LENGTH_SHORT).show();
+                return true;
+
+
+            case R.id.menu_crop:        //******** WORKING ON *******  I HAVE NO IDEA!!! :'(
+                // crop the image
+
+//                imageView = (ImageView)findViewById(R.id.imageView);
+//
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_PICK);
+//                startActivityForResult(intent, PICK_FROM_CAMERA);
+
+                //            startActivityFo
+
+                // End the activity
+                //           finish();
+
+                // Show text message
+                Toast.makeText(this, "Crop Image", Toast.LENGTH_SHORT).show();
+                return true;
+
+
+
             case R.id.menu_save:
                 // save the image to database whether insert new image or update a image
                 saveImage();
@@ -376,6 +422,20 @@ public class DetailsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    /**
+     * method to Pinch Zoom an image
+     */
+    public void zoomImage()
+    {
+        ImageZoom img = new ImageZoom(this);
+        Bitmap bitmap = BitmapFactory.decodeFile(mImage.getAnnotatedImageLink());
+//        img.setImageBitmap(rotateImage(bitmap));
+        img.setImageBitmap(rotateImage(bitmap));
+        setContentView(img);
+    }
+
 
     /**
      * methods to save an image to database

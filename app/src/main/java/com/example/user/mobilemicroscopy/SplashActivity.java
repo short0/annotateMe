@@ -14,7 +14,7 @@ public class SplashActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        final int SPLASH_TIME = 1000;
+        final int SPLASH_TIME = 3000;
 
         // use the Handler to go to LoginActivity after 1 second
         new Handler().postDelayed(new Runnable() {

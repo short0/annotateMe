@@ -1,7 +1,9 @@
 package com.example.user.mobilemicroscopy;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -10,6 +12,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,8 +36,10 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,10 +52,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
     int x;
     int y;
+
+    private Uri mCropImagedUri;
+    private final int CROP_IMAGE = 100;
 
     /**
      * Hold the URL to query the images
@@ -358,6 +370,8 @@ public class DetailsActivity extends AppCompatActivity {
                 // End the activity
                 //           finish();
 
+                crop();
+
                 // Show text message
                 Toast.makeText(this, "Crop Image", Toast.LENGTH_SHORT).show();
                 return true;
@@ -421,6 +435,150 @@ public class DetailsActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) return;
+
+        switch (requestCode) {
+            case CROP_IMAGE:
+
+                if (data != null) {
+                    Log.d("ddddddddddd", "data not null");
+                    Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        Bitmap bitmap = extras.getParcelable("data");
+                        saveBitmap(bitmap, mImage.getAnnotatedImageLink());
+                    }
+                }
+
+                break;
+        }
+    }
+
+    public boolean saveBitmap(Bitmap bitmap, String filePath) {
+        File file = new File(filePath);
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void crop()
+    {
+//        Uri mFinalImageUri = Uri.parse("/storage/emulated/0/Android/data/com.example.user.mobilemicroscopy/files/Pictures/20180601_142609_annotated.jpg");
+//        try {
+//            if(mFinalImageUri!=null)
+//            {
+//                //call the standard crop action intent (the user device may not support it)
+//                Intent cropIntent = new Intent("com.android.camera.action.CROP");
+////                //indicate image type and Uri
+//                cropIntent.setDataAndType(mFinalImageUri, "image/*");
+//                //set crop properties
+//                cropIntent.putExtra("crop", "true");
+//                //indicate aspect of desired crop
+//                cropIntent.putExtra("aspectX", 1);
+//                cropIntent.putExtra("aspectY", 1);
+//                cropIntent.putExtra("scale", true);
+//                //indicate output X and Y
+//                cropIntent.putExtra("outputX", 3000);
+//                cropIntent.putExtra("outputY", 3000);
+//                //retrieve data on return
+//                cropIntent.putExtra("return-data", true);
+//
+//                File f = null;
+//                try {
+//                    f = createNewFile();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                try {
+//                    f.createNewFile();
+//                } catch (IOException ex) {
+//                    Log.d("io", ex.getMessage());
+//                }
+//
+//                mCropImagedUri = Uri.fromFile(f);
+//                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImagedUri);
+//                //start the activity - we handle returning in onActivityResult
+//                startActivityForResult(cropIntent, CROP_IMAGE);
+//                return true;
+//            }
+//        }
+//        catch(ActivityNotFoundException anfe){
+//            //display an error message
+//            String errorMessage = "Whoops - your device doesn't support the crop action!";
+//            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+//            toast.show();
+//            return false;
+//        }
+//        return false;
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setType("image/*");
+
+        List<ResolveInfo> list = getPackageManager().queryIntentActivities( intent, 0 );
+
+        int size = list.size();
+
+        if (size == 0) {
+            Toast.makeText(this, "Can not find image crop app", Toast.LENGTH_SHORT).show();
+
+            return;
+        } else {
+            Toast.makeText(this, "There are image crop app", Toast.LENGTH_SHORT).show();
+            Uri u = getImageUri(this, rotateImage(BitmapFactory.decodeFile(mImage.getAnnotatedImageLink())));
+            intent.setData(u);
+
+            intent.putExtra("outputX", 3000);
+            intent.putExtra("outputY", 3000);
+            intent.putExtra("aspectX", 1);
+            intent.putExtra("aspectY", 1);
+            intent.putExtra("scale", true);
+            intent.putExtra("return-data", true);
+
+            startActivityForResult(intent, CROP_IMAGE);
+            return;
+        }
+    }
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+    private File createNewFile() throws IOException {
+//        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String tempImageFileName = timeStamp + "temp";
+        File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                originalImageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                directory      /* directory */
+//        );
+
+        // make the file using the path
+        File imageFile = new File(directory + "/" + tempImageFileName + ".jpg");
+//        // save the path to pass to other activity
+//        mOriginalImagePath = imageFile.getAbsolutePath();
+//
+//        // get the file name
+//        mOriginalImageFileName = imageFile.getName();
+
+        return imageFile;
     }
 
 

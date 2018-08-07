@@ -60,7 +60,11 @@ public class DetailsActivity extends AppCompatActivity {
     int x;
     int y;
 
-    private Uri mCropImagedUri;
+//    private Uri mCropImagedUri;
+
+    /**
+     * The number for crop operation used in crop() and onActivityResult method
+     */
     private final int CROP_IMAGE = 100;
 
     /**
@@ -210,11 +214,21 @@ public class DetailsActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
-                // add the image to the intent to pass
-                intent.putExtra("image", mImage);
-//                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
-                startActivity(intent);
+//                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
+//                // add the image to the intent to pass
+//                intent.putExtra("image", mImage);
+////                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
+//                startActivity(intent);
+
+
+                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
+//                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
+//                startActivity(zoomIntent);
+                zoomImage();
+
+                // Show text message
+                Toast.makeText(DetailsActivity.this, "Zoom", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -344,14 +358,23 @@ public class DetailsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
 
-            case R.id.menu_zoom:
-                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
-//                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
-//                startActivity(zoomIntent);
-                zoomImage();
+            case R.id.menu_annotate:
+//                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
+////                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
+////                startActivity(zoomIntent);
+//                zoomImage();
+//
+//                // Show text message
+//                Toast.makeText(this, "Zoom", Toast.LENGTH_SHORT).show();
 
-                // Show text message
-                Toast.makeText(this, "Zoom", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
+                // add the image to the intent to pass
+                intent.putExtra("image", mImage);
+//                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
+                startActivity(intent);
+
+
                 return true;
 
 
@@ -437,6 +460,13 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Triggered when this activity received a value from other activity
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) return;
@@ -445,10 +475,12 @@ public class DetailsActivity extends AppCompatActivity {
             case CROP_IMAGE:
 
                 if (data != null) {
+                    // extract the crop image from the intent
                     Log.d("ddddddddddd", "data not null");
                     Bundle extras = data.getExtras();
                     if (extras != null) {
                         Bitmap bitmap = extras.getParcelable("data");
+                        // save the bitmap to the annotated image
                         saveBitmap(bitmap, mImage.getAnnotatedImageLink());
                     }
                 }
@@ -457,6 +489,12 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Save the bitmap to the filePath
+     *
+     * @param bitmap
+     * @param filePath
+     */
     public boolean saveBitmap(Bitmap bitmap, String filePath) {
         File file = new File(filePath);
 
@@ -475,6 +513,9 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Crop using installed apps
+     */
     public void crop()
     {
 //        Uri mFinalImageUri = Uri.parse("/storage/emulated/0/Android/data/com.example.user.mobilemicroscopy/files/Pictures/20180601_142609_annotated.jpg");
@@ -524,19 +565,24 @@ public class DetailsActivity extends AppCompatActivity {
 //            return false;
 //        }
 //        return false;
+
+        // Send an intent with action crop
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
 
+        // check if there are apps to handle this intent
         List<ResolveInfo> list = getPackageManager().queryIntentActivities( intent, 0 );
 
         int size = list.size();
 
-        if (size == 0) {
+        if (size == 0) // not found, exit
+        {
             Toast.makeText(this, "Can not find image crop app", Toast.LENGTH_SHORT).show();
 
             return;
-        } else {
+        } else { // this portion only work with Gallery app,
             Toast.makeText(this, "There are image crop app", Toast.LENGTH_SHORT).show();
+
             Uri u = getImageUri(this, rotateImage(BitmapFactory.decodeFile(mImage.getAnnotatedImageLink())));
             intent.setData(u);
 
@@ -552,33 +598,17 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Get the image URI of a bitmap
+     *
+     * @param inContext
+     * @param inImage
+     */
     public Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
-    }
-
-    private File createNewFile() throws IOException {
-//        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String tempImageFileName = timeStamp + "temp";
-        File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                originalImageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                directory      /* directory */
-//        );
-
-        // make the file using the path
-        File imageFile = new File(directory + "/" + tempImageFileName + ".jpg");
-//        // save the path to pass to other activity
-//        mOriginalImagePath = imageFile.getAbsolutePath();
-//
-//        // get the file name
-//        mOriginalImageFileName = imageFile.getName();
-
-        return imageFile;
     }
 
 

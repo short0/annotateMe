@@ -6,8 +6,8 @@
 
 
     <item
-        android:id="@+id/menu_zoom"
-        android:icon="@drawable/baseline_zoom_white"
+        android:id="@+id/menu_annotate"
+        android:icon="@drawable/baseline_annotate_image_white"
         android:title="Zoom"
         app:showAsAction="always" />
 

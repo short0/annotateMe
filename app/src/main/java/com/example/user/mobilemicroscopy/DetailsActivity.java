@@ -1047,4 +1047,12 @@ public class DetailsActivity extends AppCompatActivity {
         inStream.close();
         outStream.close();
     }
+
+    /****************************************************************/
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveImage();
+    }
 }

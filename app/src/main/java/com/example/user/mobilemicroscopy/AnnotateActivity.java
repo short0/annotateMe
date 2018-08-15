@@ -529,4 +529,36 @@ public class AnnotateActivity extends AppCompatActivity {
             return false;
         }
     }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save image");
+        builder.setMessage("Do you want to save this image?");
+// Add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                drawOnBitmap();
+                saveBitmap(mBitmap, mCurrentAnnotatedImagePath);
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                finish();
+            }
+        });
+// Set other dialog properties
+
+
+// Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+
+    }
 }

@@ -89,40 +89,48 @@ public class DrawingView extends View {
      * Add an arrow
      */
     public void addArrow(int color) {
-        ArrowItem arrowItem = new ArrowItem(getContext(), color);
-        arrowItem.initialize(this);
-        drawingItemList.add(arrowItem);
-        invalidate();
+        if (drawingItemList.size() < 20) {
+            ArrowItem arrowItem = new ArrowItem(getContext(), color);
+            arrowItem.initialize(this);
+            drawingItemList.add(arrowItem);
+            invalidate();
+        }
     }
 
     /**
      * Add a text
      */
     public void addText(String text, int color) {
-        TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
-        textBoxItem.initialize(this);
-        drawingItemList.add(textBoxItem);
-        invalidate();
+        if (drawingItemList.size() < 20) {
+            TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
+            textBoxItem.initialize(this);
+            drawingItemList.add(textBoxItem);
+            invalidate();
+        }
     }
 
     /**
      * Add a scalebar
      */
     public void addScaleBar(int color) {
-        ScaleBarItem scaleBarItem = new ScaleBarItem(getContext(), color);
-        scaleBarItem.initialize(this);
-        drawingItemList.add(scaleBarItem);
-        invalidate();
+        if (drawingItemList.size() < 20) {
+            ScaleBarItem scaleBarItem = new ScaleBarItem(getContext(), color);
+            scaleBarItem.initialize(this);
+            drawingItemList.add(scaleBarItem);
+            invalidate();
+        }
     }
 
     /**
      * Add text for scalebar
      */
     public void addTextForScaleBar(String text, int color) {
-        TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
-        textBoxItem.initializeForScaleBar(this);
-        drawingItemList.add(textBoxItem);
-        invalidate();
+        if (drawingItemList.size() < 20) {
+            TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
+            textBoxItem.initializeForScaleBar(this);
+            drawingItemList.add(textBoxItem);
+            invalidate();
+        }
     }
 
     /**

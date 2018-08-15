@@ -2,6 +2,7 @@ package com.example.user.mobilemicroscopy;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -14,10 +15,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -221,10 +224,16 @@ public class DetailsActivity extends AppCompatActivity {
 //                startActivity(intent);
 
 
-                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
-//                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
-//                startActivity(zoomIntent);
-                zoomImage();
+//                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
+////                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
+////                startActivity(zoomIntent);
+//                zoomImage();
+
+
+                Intent zoomIntent = new Intent(DetailsActivity.this, ZoomActivity.class);
+                // add the image to the intent to pass
+                zoomIntent.putExtra("image", mImage);
+                startActivity(zoomIntent);
 
                 // Show text message
                 Toast.makeText(DetailsActivity.this, "Zoom", Toast.LENGTH_SHORT).show();
@@ -1052,7 +1061,34 @@ public class DetailsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        saveImage();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Save record");
+        builder.setMessage("Do you want to save this record?");
+// Add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                saveImage();
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                finish();
+            }
+        });
+// Set other dialog properties
+
+
+// Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+
     }
+
+
 }

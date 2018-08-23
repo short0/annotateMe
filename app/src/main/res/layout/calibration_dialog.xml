@@ -25,10 +25,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Size of object (in ocular units): " />
+        android:text="Number of stage units: " />
 
     <EditText
-        android:id="@+id/edit_text_object_size_in_ocular_units"
+        android:id="@+id/edit_text_stage_units"
+        android:hint="10"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Number of ocular units: " />
+
+    <EditText
+        android:id="@+id/edit_text_ocular_units"
         android:hint="10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

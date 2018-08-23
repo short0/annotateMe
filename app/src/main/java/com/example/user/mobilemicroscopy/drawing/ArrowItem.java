@@ -115,7 +115,7 @@ public class ArrowItem extends DrawingItem {
         }
 
         if (scaleBitmap == null) {
-            scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale);
+            scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale_vert);
         }
 
         if (rotateBitmap == null) {

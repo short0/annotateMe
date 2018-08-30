@@ -334,34 +334,35 @@ public class AnnotateActivity extends AppCompatActivity {
                 String stageUnitsString = stageUnits.getText().toString();
                 String ocularUnitsString = ocularUnits.getText().toString();
 
-
+                if (!objectiveLensString.equals("") && !stageUnitsString.equals("") && !ocularUnitsString.equals("")) {
 //                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
-                double stageUnitsDouble = Double.parseDouble(stageUnitsString);
-                double ocularUnitsDouble = Double.parseDouble(ocularUnitsString);
+                    double stageUnitsDouble = Double.parseDouble(stageUnitsString);
+                    double ocularUnitsDouble = Double.parseDouble(ocularUnitsString);
+
+                    if (stageUnitsDouble != 0 && ocularUnitsDouble != 0) {
+                        // Calculate the correct size when compared to micros per division based on Object Lens used
+                        double micronSizePerOcularUnit = stageUnitsDouble * 10 / ocularUnitsDouble;
 
 
-                // Calculate the correct size when compared to micros per division based on Object Lens used
-                double micronSizePerOcularUnit = stageUnitsDouble * 10 / ocularUnitsDouble;
+                        // Places the Ocular's Micron Per Division result in the corresponding Obj Lens's place in the array
+                        switch (objectiveLensString) {
+                            case "4":
+                                micronPerDivisionArray[0] = micronSizePerOcularUnit;
+                                break;
+                            case "10":
+                                micronPerDivisionArray[1] = micronSizePerOcularUnit;
+                                break;
+                            case "40":
+                                micronPerDivisionArray[2] = micronSizePerOcularUnit;
+                                break;
+                            case "100":
+                                micronPerDivisionArray[3] = micronSizePerOcularUnit;
+                                break;
+                        }
 
-
-                // Places the Ocular's Micron Per Division result in the corresponding Obj Lens's place in the array
-                switch(objectiveLensString)
-                {
-                    case "4":
-                        micronPerDivisionArray[0] = micronSizePerOcularUnit;
-                        break;
-                    case "10":
-                        micronPerDivisionArray[1] = micronSizePerOcularUnit;
-                        break;
-                    case "40":
-                        micronPerDivisionArray[2] = micronSizePerOcularUnit;
-                        break;
-                    case "100":
-                        micronPerDivisionArray[3] = micronSizePerOcularUnit;
-                        break;
+                        mDrawingView.invalidate();
+                    }
                 }
-
-                mDrawingView.invalidate();
             }
 
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -399,7 +400,7 @@ public class AnnotateActivity extends AppCompatActivity {
                 String objectiveLensString = objectiveLens.getText().toString();
                 String objectSizeInOcularUnitsString = objectSizeInOcularUnits.getText().toString();
 
-
+            if (!objectiveLensString.equals("") && !objectSizeInOcularUnitsString.equals("")) {
 //                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
                 double objectSizeInOcularUnitsDouble = Double.parseDouble(objectSizeInOcularUnitsString);
 
@@ -407,8 +408,7 @@ public class AnnotateActivity extends AppCompatActivity {
 
 
                 // Calculate the correct size when compared to micros per division based on Object Lens used
-                switch(objectiveLensString)
-                {
+                switch (objectiveLensString) {
                     case "4":
                         realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[0];
                         break;
@@ -441,6 +441,7 @@ public class AnnotateActivity extends AppCompatActivity {
                 mDrawingView.addScaleBar(color);
 
                 mDrawingView.invalidate();
+            }
             }
 
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

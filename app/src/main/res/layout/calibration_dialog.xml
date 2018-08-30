@@ -8,6 +8,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Calibrate:\n" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Objective lens: (Must enter 4, 10, 40 or 100):" />
 
     <EditText

@@ -41,6 +41,8 @@ import java.util.List;
 
 public class AnnotateActivity extends AppCompatActivity {
 
+    public static double lengthPerPixel = -1.0;
+
     /**
      * Hold the context
      */
@@ -55,6 +57,11 @@ public class AnnotateActivity extends AppCompatActivity {
      * Image view to hold the image
      */
     ImageView mImageView;
+
+    /**
+     * store the image object passed by MainActivity
+     */
+    Image mImage;
 
     /**
      * Hold the main bitmap
@@ -95,8 +102,11 @@ public class AnnotateActivity extends AppCompatActivity {
         // get the intent passed in
         Intent intent = getIntent();
 
+        // extract the image object in the intent
+        mImage = (Image) intent.getSerializableExtra("image");
+
         // get the link
-        mCurrentAnnotatedImagePath = ((Image) intent.getSerializableExtra("image")).getAnnotatedImageLink();
+        mCurrentAnnotatedImagePath = mImage.getAnnotatedImageLink();
 
         displayImage();
 
@@ -386,76 +396,111 @@ public class AnnotateActivity extends AppCompatActivity {
      * Add scale bar
      */
     public void addScaleBar(final int color) {
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View scaleBarDialogView = layoutInflater.inflate(R.layout.scale_bar_dialog, null);
+        if (lengthPerPixel == -1)
+        {
+            Toast.makeText(this, "Please calibrate first", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+        float inches = 0.3937f; // convert 1cm to inches
 
-        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
-        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
+        // calculate the dots
+        float xdpi = getResources().getDisplayMetrics().xdpi;
+        float xDots = inches * xdpi;
 
-        // set scale_bar_dialogalog.xml to alert dialog builder
-        alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int id) {
-                String objectiveLensString = objectiveLens.getText().toString();
-                String objectSizeInOcularUnitsString = objectSizeInOcularUnits.getText().toString();
+        double realSize = lengthPerPixel * xDots;
 
-            if (!objectiveLensString.equals("") && !objectSizeInOcularUnitsString.equals("")) {
-//                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
-                double objectSizeInOcularUnitsDouble = Double.parseDouble(objectSizeInOcularUnitsString);
+        String realSizeWithUnit = "";
+        String formattedRealSize = "";
 
-                double realSize = 0;
+        DecimalFormat formatter = new DecimalFormat("#.##");
+        // if real size > 1000 µm
+        if (realSize > 1000) {
+            formattedRealSize = formatter.format(realSize / 1000);
+            realSizeWithUnit = formattedRealSize + " mm";
+        } else {
+            formattedRealSize = formatter.format(realSize);
+            realSizeWithUnit = formattedRealSize + " µm";
+        }
 
+        mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
+        mDrawingView.addScaleBar(color);
 
-                // Calculate the correct size when compared to micros per division based on Object Lens used
-                switch (objectiveLensString) {
-                    case "4":
-                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[0];
-                        break;
-                    case "10":
-                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[1];
-                        break;
-                    case "40":
-                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[2];
-                        break;
-                    case "100":
-                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[3];
-                        break;
-                }
+        mDrawingView.invalidate();
 
 
-                String realSizeWithUnit = "";
-                String formattedRealSize = "";
 
-                DecimalFormat formatter = new DecimalFormat("#.##");
-                // if real size > 1000 µm
-                if (realSize > 1000) {
-                    formattedRealSize = formatter.format(realSize / 1000);
-                    realSizeWithUnit = formattedRealSize + " mm";
-                } else {
-                    formattedRealSize = formatter.format(realSize);
-                    realSizeWithUnit = formattedRealSize + " µm";
-                }
 
-                mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
-                mDrawingView.addScaleBar(color);
-
-                mDrawingView.invalidate();
-            }
-            }
-
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog,int id) {
-                dialog.cancel();
-            }
-        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
+//        LayoutInflater layoutInflater = LayoutInflater.from(context);
+//        View scaleBarDialogView = layoutInflater.inflate(R.layout.scale_bar_dialog, null);
+//
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//
+//        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
+//        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
+//
+//        // set scale_bar_dialogalog.xml to alert dialog builder
+//        alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog,int id) {
+//                String objectiveLensString = objectiveLens.getText().toString();
+//                String objectSizeInOcularUnitsString = objectSizeInOcularUnits.getText().toString();
+//
+//            if (!objectiveLensString.equals("") && !objectSizeInOcularUnitsString.equals("")) {
+////                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
+//                double objectSizeInOcularUnitsDouble = Double.parseDouble(objectSizeInOcularUnitsString);
+//
+//                double realSize = 0;
+//
+//
+//                // Calculate the correct size when compared to micros per division based on Object Lens used
+//                switch (objectiveLensString) {
+//                    case "4":
+//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[0];
+//                        break;
+//                    case "10":
+//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[1];
+//                        break;
+//                    case "40":
+//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[2];
+//                        break;
+//                    case "100":
+//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[3];
+//                        break;
+//                }
+//
+//
+//                String realSizeWithUnit = "";
+//                String formattedRealSize = "";
+//
+//                DecimalFormat formatter = new DecimalFormat("#.##");
+//                // if real size > 1000 µm
+//                if (realSize > 1000) {
+//                    formattedRealSize = formatter.format(realSize / 1000);
+//                    realSizeWithUnit = formattedRealSize + " mm";
+//                } else {
+//                    formattedRealSize = formatter.format(realSize);
+//                    realSizeWithUnit = formattedRealSize + " µm";
+//                }
+//
+//                mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
+//                mDrawingView.addScaleBar(color);
+//
+//                mDrawingView.invalidate();
+//            }
+//            }
+//
+//        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog,int id) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        // create alert dialog
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//        // show it
+//        alertDialog.show();
     }
 
 
@@ -567,11 +612,32 @@ public class AnnotateActivity extends AppCompatActivity {
             //Calibration ADDED BY JON
             case R.id.menu_calibrate:
 
-                Toast.makeText(getApplicationContext(), "Calibration", Toast.LENGTH_SHORT).show();
+//            case R.id.menu_crop:        //******** WORKING ON *******  I HAVE NO IDEA!!! :'(
+                // crop the image
 
-                // clear all drawing item on view
-                addCalibration();
+//                imageView = (ImageView)findViewById(R.id.imageView);
+//
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_PICK);
+//                startActivityForResult(intent, PICK_FROM_CAMERA);
 
+                //            startActivityFo
+
+                // End the activity
+                //           finish();
+
+                Intent cropIntent = new Intent(AnnotateActivity.this, CropActivity.class);
+
+                // add the image to the intent to pass
+                cropIntent.putExtra("image", mImage);
+
+                startActivity(cropIntent);
+
+//                crop();
+
+                // Show text message
+                Toast.makeText(this, "Calibrate", Toast.LENGTH_SHORT).show();
                 return true;
 
              case R.id.menu_save:

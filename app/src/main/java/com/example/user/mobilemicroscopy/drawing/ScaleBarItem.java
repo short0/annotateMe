@@ -39,7 +39,7 @@ public class ScaleBarItem extends DrawingItem {
      * Hold the bitmap of delete button
      */
     private static Bitmap deleteBitmap;
-    private static Bitmap scaleBitmap;
+//    private static Bitmap scaleBitmap;
 
     /**
      * Hold the matrix to do manipulation
@@ -61,7 +61,7 @@ public class ScaleBarItem extends DrawingItem {
      */
     private RectF deleteRectangle;
 
-    private RectF scaleRectangle;
+//    private RectF scaleRectangle;
 
     /**
      * Hold the state of being selected
@@ -87,9 +87,9 @@ public class ScaleBarItem extends DrawingItem {
             deleteBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_delete);
         }
 
-        if (scaleBitmap == null) {
-            scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale);
-        }
+//        if (scaleBitmap == null) {
+//            scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale);
+//        }
     }
 
     /**
@@ -129,9 +129,9 @@ public class ScaleBarItem extends DrawingItem {
         return deleteRectangle;
     }
 
-    public RectF getScaleRectangle() {
-        return scaleRectangle;
-    }
+//    public RectF getScaleRectangle() {
+//        return scaleRectangle;
+//    }
 
     /**
      * Mutator method
@@ -165,7 +165,7 @@ public class ScaleBarItem extends DrawingItem {
         line = new RectF(left, top, left + width, top + height);
         rectangle = new RectF(left, top, left + width, top + EXTRA_SPACE); // make invisible box bigger to select
         deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
-        scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
+//        scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
 
         originalWidth = rectangle.width();
 
@@ -191,7 +191,7 @@ public class ScaleBarItem extends DrawingItem {
 //            canvas.drawRect(deleteRectangle, paint);
 
             canvas.drawBitmap(deleteBitmap, null, deleteRectangle, null);
-            canvas.drawBitmap(scaleBitmap, null, scaleRectangle, null);
+//            canvas.drawBitmap(scaleBitmap, null, scaleRectangle, null);
         }
 
         Paint paint = new Paint();
@@ -210,7 +210,7 @@ public class ScaleBarItem extends DrawingItem {
         // move the buttons along
         rectangle.offset(dx, dy);
         deleteRectangle.offset(dx, dy);
-        scaleRectangle.offset(dx, dy);
+//        scaleRectangle.offset(dx, dy);
 
         line.offset(dx, dy);
     }
@@ -237,7 +237,7 @@ public class ScaleBarItem extends DrawingItem {
 
 
 
-        scaleRectangle.offset(dx, 0);
+//        scaleRectangle.offset(dx, 0);
 
     }
 }

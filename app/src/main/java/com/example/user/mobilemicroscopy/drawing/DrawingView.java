@@ -89,48 +89,50 @@ public class DrawingView extends View {
      * Add an arrow
      */
     public void addArrow(int color) {
-        if (drawingItemList.size() < 20) {
-            ArrowItem arrowItem = new ArrowItem(getContext(), color);
-            arrowItem.initialize(this);
-            drawingItemList.add(arrowItem);
-            invalidate();
-        }
+        ArrowItem arrowItem = new ArrowItem(getContext(), color);
+        arrowItem.initialize(this);
+        drawingItemList.add(arrowItem);
+        invalidate();
+    }
+
+    /**
+     * Add a crop box
+     */
+    public void addCropBox(int color) {
+        CropBoxItem cropBoxItem = new CropBoxItem(getContext(), color);
+        cropBoxItem.initialize(this);
+        drawingItemList.add(cropBoxItem);
+        invalidate();
     }
 
     /**
      * Add a text
      */
     public void addText(String text, int color) {
-        if (drawingItemList.size() < 20) {
-            TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
-            textBoxItem.initialize(this);
-            drawingItemList.add(textBoxItem);
-            invalidate();
-        }
+        TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
+        textBoxItem.initialize(this);
+        drawingItemList.add(textBoxItem);
+        invalidate();
     }
 
     /**
      * Add a scalebar
      */
     public void addScaleBar(int color) {
-        if (drawingItemList.size() < 20) {
-            ScaleBarItem scaleBarItem = new ScaleBarItem(getContext(), color);
-            scaleBarItem.initialize(this);
-            drawingItemList.add(scaleBarItem);
-            invalidate();
-        }
+        ScaleBarItem scaleBarItem = new ScaleBarItem(getContext(), color);
+        scaleBarItem.initialize(this);
+        drawingItemList.add(scaleBarItem);
+        invalidate();
     }
 
     /**
      * Add text for scalebar
      */
     public void addTextForScaleBar(String text, int color) {
-        if (drawingItemList.size() < 20) {
-            TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
-            textBoxItem.initializeForScaleBar(this);
-            drawingItemList.add(textBoxItem);
-            invalidate();
-        }
+        TextBoxItem textBoxItem = new TextBoxItem(getContext(), text, color);
+        textBoxItem.initializeForScaleBar(this);
+        drawingItemList.add(textBoxItem);
+        invalidate();
     }
 
     /**
@@ -176,7 +178,7 @@ public class DrawingView extends View {
                         id = drawingItemList.indexOf(item);
                     }
 
-                    if (item instanceof ArrowItem || item instanceof TextBoxItem || item instanceof ScaleBarItem) {
+                    if (item instanceof ArrowItem || item instanceof CropBoxItem || item instanceof TextBoxItem) {
                         if (item.getScaleRectangle().contains(x, y)) {
                             result = true;
                             currentItem = item;
@@ -245,7 +247,7 @@ public class DrawingView extends View {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
 
-                    if (currentItem instanceof ArrowItem || currentItem instanceof TextBoxItem || currentItem instanceof ScaleBarItem) {
+                    if (currentItem instanceof ArrowItem || currentItem instanceof CropBoxItem || currentItem instanceof TextBoxItem) {
                         if (currentItem != null) {
                             currentItem.updateScalePosition(differenceX, differenceY);
                             invalidate();
@@ -259,7 +261,7 @@ public class DrawingView extends View {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
 
-                    if (currentItem instanceof ArrowItem) {
+                    if (currentItem instanceof ArrowItem || currentItem instanceof CropBoxItem) {
                         if (currentItem != null) {
                             currentItem.updateRotatePosition(x, y, differenceX, differenceY);
                             invalidate();

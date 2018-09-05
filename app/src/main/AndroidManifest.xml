@@ -28,7 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity" />
+        <activity
+            android:name=".DetailsActivity"
+            android:label="Details" />
         <activity android:name=".MainActivity" />
         <activity android:name=".LoginActivity" />
 
@@ -42,13 +44,20 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".AnnotateActivity" />
+        <activity
+            android:name=".AnnotateActivity"
+            android:label="Annotate" />
 
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
 
-        <activity android:name=".ZoomActivity"></activity>
+        <activity
+            android:name=".ZoomActivity"
+            android:label="Zoom" />
+        <activity
+            android:name=".CropActivity"
+            android:label="Calibrate" />
     </application>
 
 </manifest>

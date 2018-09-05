@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_save_crop"
+        android:icon="@drawable/baseline_save_white_48"
+        android:title="Save"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_add_point"
+        android:title="Add point"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_enter_real_size"
+        android:title="Enter real size"
+        app:showAsAction="never" />
+</menu>

@@ -65,6 +65,8 @@ public class DetailsActivity extends AppCompatActivity {
 
 //    private Uri mCropImagedUri;
 
+    Context context = this;
+
     /**
      * The number for crop operation used in crop() and onActivityResult method
      */
@@ -425,22 +427,14 @@ public class DetailsActivity extends AppCompatActivity {
                 // delete the image in database
                 deleteImage();
 
-                // Show text message
-                Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+
                 return true;
 
             case R.id.menu_restore_original:
-                // copy the original image to annotated image
-                try {
-                    copy(mImage.getOriginalImageLink(), mImage.getAnnotatedImageLink());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
-                displayImage();
 
-                // Show text message
-                Toast.makeText(this, "Restore original image", Toast.LENGTH_SHORT).show();
+                restoreOriginal();
+
                 return true;
 
             case R.id.menu_upload:
@@ -709,14 +703,80 @@ public class DetailsActivity extends AppCompatActivity {
      * method to delete an image in database
      */
     public void deleteImage() {
-        // If the image is not null
-        if (mPassedType.equals("imageObject")) {
-            // delete the image in database
-            database.deleteImage(mImage);
-        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete record");
+        builder.setMessage("Are you sure? Do you want to delete this record?");
+// Add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                // If the image is not null
+                if (mPassedType.equals("imageObject")) {
+                    // delete the image in database
+                    database.deleteImage(mImage);
+                }
 
-        // end the activity
-        finish();
+                // Show text message
+                Toast.makeText(context, "Delete", Toast.LENGTH_SHORT).show();
+
+                // end the activity
+                finish();
+
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+
+            }
+        });
+// Set other dialog properties
+
+
+// Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+
+
+    }
+
+    public void restoreOriginal()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Restore original image");
+        builder.setMessage("Are you sure? Do you want to restore the original image?");
+// Add the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                // copy the original image to annotated image
+                try {
+                    copy(mImage.getOriginalImageLink(), mImage.getAnnotatedImageLink());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                displayImage();
+
+                // Show text message
+                Toast.makeText(context, "Restore origianl image", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+
+            }
+        });
+// Set other dialog properties
+
+
+// Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
     }
 
     /**
@@ -1064,7 +1124,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save record");
-        builder.setMessage("Do you want to save this record?");
+        builder.setMessage("Do you want to save changes?");
 // Add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

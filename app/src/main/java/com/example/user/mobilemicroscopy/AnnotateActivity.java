@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.user.mobilemicroscopy.drawing.ArrowItem;
@@ -86,6 +87,14 @@ public class AnnotateActivity extends AppCompatActivity {
     ImageView buttonWhiteScaleBar;
     ImageView buttonBlackScaleBar;
 
+    ImageView imageViewArrowChoices;
+    LinearLayout arrowSubMenu;
+
+    ImageView imageViewTextChoices;
+    LinearLayout textSubMenu;
+
+    ImageView imageViewScaleBarChoices;
+    LinearLayout scaleBarSubMenu;
 
     /**
      * Mehtod called when activity created
@@ -118,9 +127,64 @@ public class AnnotateActivity extends AppCompatActivity {
         buttonWhiteScaleBar = (ImageView) findViewById(R.id.button_white_scale_bar);
         buttonBlackScaleBar = (ImageView) findViewById(R.id.button_black_scale_bar);
 
+        imageViewArrowChoices = (ImageView) findViewById(R.id.image_view_arrow_choices);
+        arrowSubMenu = (LinearLayout) findViewById(R.id.arrow_sub_menu);
+
+        imageViewTextChoices = (ImageView) findViewById(R.id.image_view_text_choices);
+        textSubMenu = (LinearLayout) findViewById(R.id.text_sub_menu);
+
+        imageViewScaleBarChoices = (ImageView) findViewById(R.id.image_view_scale_bar_choices);
+        scaleBarSubMenu = (LinearLayout) findViewById(R.id.scale_bar_sub_menu);
+
+        imageViewArrowChoices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (arrowSubMenu.getVisibility() == View.GONE) {
+                    arrowSubMenu.setVisibility(View.VISIBLE);
+                    textSubMenu.setVisibility(View.GONE);
+                    scaleBarSubMenu.setVisibility(View.GONE);
+                }
+                else
+                {
+                    arrowSubMenu.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        imageViewTextChoices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (textSubMenu.getVisibility() == View.GONE) {
+                    arrowSubMenu.setVisibility(View.GONE);
+                    textSubMenu.setVisibility(View.VISIBLE);
+                    scaleBarSubMenu.setVisibility(View.GONE);
+                }
+                else
+                {
+                    textSubMenu.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        imageViewScaleBarChoices.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (scaleBarSubMenu.getVisibility() == View.GONE) {
+                    arrowSubMenu.setVisibility(View.GONE);
+                    textSubMenu.setVisibility(View.GONE);
+                    scaleBarSubMenu.setVisibility(View.VISIBLE);
+                }
+                else
+                {
+                    scaleBarSubMenu.setVisibility(View.GONE);
+                }
+            }
+        });
+
         buttonWhiteArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 addArrow(Color.WHITE);
                 Toast.makeText(getApplicationContext(), "White arrow", Toast.LENGTH_SHORT).show();
             }
@@ -396,38 +460,53 @@ public class AnnotateActivity extends AppCompatActivity {
      * Add scale bar
      */
     public void addScaleBar(final int color) {
-        if (lengthPerPixel == -1)
+        int scaleBarCount = 0;
+        for (DrawingItem drawingItem : mDrawingView.getDrawingItemList())
         {
-            Toast.makeText(this, "Please calibrate first", Toast.LENGTH_SHORT).show();
+            if (drawingItem instanceof ScaleBarItem)
+            {
+                scaleBarCount++;
+            }
+        }
+
+        if (scaleBarCount == 0) {
+
+            if (lengthPerPixel == -1) {
+                Toast.makeText(this, "Please calibrate first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            float inches = 0.3937f; // convert 1cm to inches
+
+            // calculate the dots
+            float xdpi = getResources().getDisplayMetrics().xdpi;
+            float xDots = inches * xdpi;
+
+            double realSize = lengthPerPixel * xDots;
+
+            String realSizeWithUnit = "";
+            String formattedRealSize = "";
+
+            DecimalFormat formatter = new DecimalFormat("#");
+            // if real size > 1000 µm
+            if (realSize > 1000) {
+                formattedRealSize = formatter.format(realSize / 1000);
+                realSizeWithUnit = formattedRealSize + " mm";
+            } else {
+                formattedRealSize = formatter.format(realSize);
+                realSizeWithUnit = formattedRealSize + " µm";
+            }
+
+            mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
+            mDrawingView.addScaleBar(color);
+
+            mDrawingView.invalidate();
+        }
+        else
+        {
+            Toast.makeText(this, "Only one scale can be added", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        float inches = 0.3937f; // convert 1cm to inches
-
-        // calculate the dots
-        float xdpi = getResources().getDisplayMetrics().xdpi;
-        float xDots = inches * xdpi;
-
-        double realSize = lengthPerPixel * xDots;
-
-        String realSizeWithUnit = "";
-        String formattedRealSize = "";
-
-        DecimalFormat formatter = new DecimalFormat("#.##");
-        // if real size > 1000 µm
-        if (realSize > 1000) {
-            formattedRealSize = formatter.format(realSize / 1000);
-            realSizeWithUnit = formattedRealSize + " mm";
-        } else {
-            formattedRealSize = formatter.format(realSize);
-            realSizeWithUnit = formattedRealSize + " µm";
-        }
-
-        mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
-        mDrawingView.addScaleBar(color);
-
-        mDrawingView.invalidate();
-
 
 
 
@@ -612,7 +691,7 @@ public class AnnotateActivity extends AppCompatActivity {
             //Calibration ADDED BY JON
             case R.id.menu_calibrate:
 
-//            case R.id.menu_crop:        //******** WORKING ON *******  I HAVE NO IDEA!!! :'(
+//            case R.id.menu_calibrate:        //******** WORKING ON *******  I HAVE NO IDEA!!! :'(
                 // crop the image
 
 //                imageView = (ImageView)findViewById(R.id.imageView);
@@ -627,7 +706,7 @@ public class AnnotateActivity extends AppCompatActivity {
                 // End the activity
                 //           finish();
 
-                Intent cropIntent = new Intent(AnnotateActivity.this, CropActivity.class);
+                Intent cropIntent = new Intent(AnnotateActivity.this, CalibrateActivity.class);
 
                 // add the image to the intent to pass
                 cropIntent.putExtra("image", mImage);
@@ -780,7 +859,7 @@ public class AnnotateActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save image");
-        builder.setMessage("Do you want to save this image?");
+        builder.setMessage("Do you want to save changes?");
 // Add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

@@ -275,7 +275,7 @@ public class ArrowItem extends DrawingItem {
         }
 
         float ratio = width * scale / originalWidth;
-        if (ratio < 0.1 || ratio > 3) // don't let user scale too small or too big
+        if (ratio < 0.5 || ratio > 3) // don't let user scale too small or too big
         {
             return;
         }

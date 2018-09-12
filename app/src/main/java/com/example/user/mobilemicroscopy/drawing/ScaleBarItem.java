@@ -156,8 +156,8 @@ public class ScaleBarItem extends DrawingItem {
         float height = DEFAULT_HEIGHT;
 
         // calculate the position of rectangle
-        float left = parentView.getWidth() - 200;
-        float top = parentView.getHeight() - 200;
+        float left = parentView.getWidth() / 2;
+        float top = parentView.getHeight() / 2;
         float right = left + width;
         float bottom = top + height;
 

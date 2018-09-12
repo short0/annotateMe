@@ -12,7 +12,7 @@ import android.view.View;
 
 import com.example.user.mobilemicroscopy.R;
 
-public class CropBoxItem extends DrawingItem {
+public class PointItem extends DrawingItem {
     /**
      * Default button size
      */
@@ -29,7 +29,7 @@ public class CropBoxItem extends DrawingItem {
     /**
      * Hold the bitmap of actual arrow
      */
-    private Bitmap arrowBitmap;
+    private Bitmap pointBitmap;
     /**
      * Hold the bitmap of delete button
      */
@@ -78,44 +78,39 @@ public class CropBoxItem extends DrawingItem {
      */
     private int color = -1;
 
+//    /**
+//     * Constructor
+//     *
+//     * @param context
+//     */
+//    public CropBoxItem(Context context) {
+//
+//    }
+
     /**
      * Constructor
      *
      * @param context
      */
-    public CropBoxItem(Context context) {
-
-    }
-
-    /**
-     * Constructor
-     *
-     * @param context
-     * @param color
-     */
-    public CropBoxItem(Context context, int color) {
+    public PointItem(Context context) {
         this.color = color;
 
         // Initialize required bitmap only once
-        if (arrowBitmap == null) {
-            if (color == Color.WHITE) {
-                arrowBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.crop_box);
-            } else if (color == Color.BLACK) {
-                arrowBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.black_arrow_with_tail);
-            }
+        if (pointBitmap == null) {
+            pointBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.crop_box);
         }
 
         if (deleteBitmap == null) {
             deleteBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_delete);
         }
 
-        if (scaleBitmap == null) {
-            scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale);
-        }
+//        if (scaleBitmap == null) {
+//            scaleBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_scale);
+//        }
 
-        if (rotateBitmap == null) {
-            rotateBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_rotate);
-        }
+//        if (rotateBitmap == null) {
+//            rotateBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_rotate);
+//        }
     }
 
     /**
@@ -174,8 +169,8 @@ public class CropBoxItem extends DrawingItem {
         haveButtons = true;
 
         // scale the arrow down
-        float width = arrowBitmap.getWidth();
-        float height = arrowBitmap.getHeight();
+        float width = pointBitmap.getWidth();
+        float height = pointBitmap.getHeight();
         Log.d("wwwwwwwwwwwwwhhhhhhhhh", width + " " + height);
 
         // calculate the position of rectangle
@@ -187,7 +182,7 @@ public class CropBoxItem extends DrawingItem {
         // create rectangles for buttons
         rectangle = new RectF(left, top, left + width, top + height);
         deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
-        scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
+//        scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
 //        rotateRectangle = new RectF(right, bottom, right + BUTTON_SIZE, bottom + BUTTON_SIZE);
 
         // get the original width
@@ -225,11 +220,11 @@ public class CropBoxItem extends DrawingItem {
 //            canvas.drawRect(rotateRectangle, paint);
 
             canvas.drawBitmap(deleteBitmap, null, deleteRectangle, null);
-            canvas.drawBitmap(scaleBitmap, null, scaleRectangle, null);
+//            canvas.drawBitmap(scaleBitmap, null, scaleRectangle, null);
 //            canvas.drawBitmap(rotateBitmap, null, rotateRectangle, null);
         }
 
-        canvas.drawBitmap(arrowBitmap, matrix, null);
+        canvas.drawBitmap(pointBitmap, matrix, null);
 //        canvas.drawBitmap(arrowBitmap, null, rectangle, null);
 
         canvas.restore();
@@ -243,61 +238,61 @@ public class CropBoxItem extends DrawingItem {
 
         rectangle.offset(dx, dy);
         deleteRectangle.offset(dx, dy);
-        scaleRectangle.offset(dx, dy);
+//        scaleRectangle.offset(dx, dy);
 //        rotateRectangle.offset(dx, dy);
     }
 
     /**
      * Update position when scaled
      */
-    public void updateScalePosition(float dx, float dy) {
-
-        float centerX = rectangle.centerX();
-        float centerY = rectangle.centerY();
-
-        float width = rectangle.width();
-        float height = rectangle.height();
-
-        // scale based on diagonal line
-        float h1 = (float) Math.sqrt((rectangle.right - centerX) * (rectangle.right - centerX) + (rectangle.top - centerY) * (rectangle.top - centerY));
-        float h2 = (float) Math.sqrt((rectangle.right + dx - centerX) * (rectangle.right + dx - centerX) + (rectangle.top - dy - centerY) * (rectangle.top - dy - centerY));
-
-        float scale = h1 / h2;
-
-        if (scale < 0.1 || scale > 1.5) // safe guard for sudden scale
-        {
-            return;
-        }
-
-        float ratio = width * scale / originalWidth;
-        if (ratio < 0.1 || ratio > 3) // don't let user scale too small or too big
-        {
-            return;
-        }
-
-        Log.d("aaaaaaaaaaaaaaaaaaaaaas", "" + scale);
-
-        // scale using centre point of the rectangle
-        matrix.postScale(scale, scale, rectangle.centerX(), rectangle.centerY());
-        Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + width + " " + height);
-
-        float newWidth = width * scale;
-        float newHeight = height * scale;
-
-        float differenceX = (newWidth - width) / 2;
-        float differenceY = (newHeight - height) / 2;
-
-        // scale the rectangle
-        rectangle.left -= differenceX;
-        rectangle.right += differenceX;
-        rectangle.top -= differenceY;
-        rectangle.bottom += differenceY;
-
-        // move the buttons along
-        deleteRectangle.offset(-differenceX, -differenceY);
-        scaleRectangle.offset(differenceX, -differenceY);
+//    public void updateScalePosition(float dx, float dy) {
+//
+//        float centerX = rectangle.centerX();
+//        float centerY = rectangle.centerY();
+//
+//        float width = rectangle.width();
+//        float height = rectangle.height();
+//
+//        // scale based on diagonal line
+//        float h1 = (float) Math.sqrt((rectangle.right - centerX) * (rectangle.right - centerX) + (rectangle.top - centerY) * (rectangle.top - centerY));
+//        float h2 = (float) Math.sqrt((rectangle.right + dx - centerX) * (rectangle.right + dx - centerX) + (rectangle.top - dy - centerY) * (rectangle.top - dy - centerY));
+//
+//        float scale = h1 / h2;
+//
+//        if (scale < 0.1 || scale > 1.5) // safe guard for sudden scale
+//        {
+//            return;
+//        }
+//
+//        float ratio = width * scale / originalWidth;
+//        if (ratio < 0.1 || ratio > 3) // don't let user scale too small or too big
+//        {
+//            return;
+//        }
+//
+//        Log.d("aaaaaaaaaaaaaaaaaaaaaas", "" + scale);
+//
+//        // scale using centre point of the rectangle
+//        matrix.postScale(scale, scale, rectangle.centerX(), rectangle.centerY());
+//        Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + width + " " + height);
+//
+//        float newWidth = width * scale;
+//        float newHeight = height * scale;
+//
+//        float differenceX = (newWidth - width) / 2;
+//        float differenceY = (newHeight - height) / 2;
+//
+//        // scale the rectangle
+//        rectangle.left -= differenceX;
+//        rectangle.right += differenceX;
+//        rectangle.top -= differenceY;
+//        rectangle.bottom += differenceY;
+//
+//        // move the buttons along
+//        deleteRectangle.offset(-differenceX, -differenceY);
+//        scaleRectangle.offset(differenceX, -differenceY);
 //        rotateRectangle.offset(differenceX, differenceY);
-    }
+//    }
 
     /**
      * Update position when rotated

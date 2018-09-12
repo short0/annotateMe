@@ -21,7 +21,9 @@
         android:roundIcon="@mipmap/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashActivity">
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,9 +32,14 @@
         </activity>
         <activity
             android:name=".DetailsActivity"
-            android:label="Details" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
+            android:label="Details"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -46,7 +53,8 @@
 
         <activity
             android:name=".AnnotateActivity"
-            android:label="Annotate" />
+            android:label="Annotate"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
@@ -54,10 +62,14 @@
 
         <activity
             android:name=".ZoomActivity"
-            android:label="Zoom" />
+            android:label="Zoom"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".CropActivity"
-            android:label="Calibrate" />
+            android:name=".CalibrateActivity"
+            android:label="Calibrate"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UserSelectionActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

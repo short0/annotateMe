@@ -26,12 +26,12 @@ public class TextBoxItem extends DrawingItem {
     /**
      * Default text size
      */
-    private static final float DEFAULT_TEXT_SIZE = 50;
+    private static final float DEFAULT_TEXT_SIZE = 100;
 
     /**
      * Deault height
      */
-    private static final float DEFAULT_HEIGHT = 50;
+    private static final float DEFAULT_HEIGHT = 100;
 
     /**
      * Default text size
@@ -222,8 +222,8 @@ public class TextBoxItem extends DrawingItem {
 //        Log.d("ttttttttttttttttt", width + " " + paint.measureText(text));
 
         // calculate the position of rectangle
-        float left = parentView.getWidth() - 200;
-        float top = parentView.getHeight() - 270;
+        float left = parentView.getWidth() / 2;
+        float top = parentView.getHeight() / 2 + 50;
         float right = left + width;
         float bottom = top + height;
 
@@ -301,7 +301,7 @@ public class TextBoxItem extends DrawingItem {
         Log.d("aaaaaaaaaaaaaaaaaaaaaas", "" + scale);
 
         float newTextSize = textSize * scale;
-        if (newTextSize < 20 || newTextSize > 200) // don't let user scale too big or small
+        if (newTextSize < 70 || newTextSize > 200) // don't let user scale too big or small
         {
             return;
         }

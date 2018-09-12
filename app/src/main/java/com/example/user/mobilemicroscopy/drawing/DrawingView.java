@@ -98,8 +98,8 @@ public class DrawingView extends View {
     /**
      * Add a crop box
      */
-    public void addCropBox(int color) {
-        CropBoxItem cropBoxItem = new CropBoxItem(getContext(), color);
+    public void addCropBox() {
+        PointItem cropBoxItem = new PointItem(getContext());
         cropBoxItem.initialize(this);
         drawingItemList.add(cropBoxItem);
         invalidate();
@@ -178,7 +178,7 @@ public class DrawingView extends View {
                         id = drawingItemList.indexOf(item);
                     }
 
-                    if (item instanceof ArrowItem || item instanceof CropBoxItem || item instanceof TextBoxItem) {
+                    if (item instanceof ArrowItem || item instanceof TextBoxItem) {
                         if (item.getScaleRectangle().contains(x, y)) {
                             result = true;
                             currentItem = item;
@@ -247,7 +247,7 @@ public class DrawingView extends View {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
 
-                    if (currentItem instanceof ArrowItem || currentItem instanceof CropBoxItem || currentItem instanceof TextBoxItem) {
+                    if (currentItem instanceof ArrowItem || currentItem instanceof PointItem || currentItem instanceof TextBoxItem) {
                         if (currentItem != null) {
                             currentItem.updateScalePosition(differenceX, differenceY);
                             invalidate();
@@ -261,7 +261,7 @@ public class DrawingView extends View {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
 
-                    if (currentItem instanceof ArrowItem || currentItem instanceof CropBoxItem) {
+                    if (currentItem instanceof ArrowItem || currentItem instanceof PointItem) {
                         if (currentItem != null) {
                             currentItem.updateRotatePosition(x, y, differenceX, differenceY);
                             invalidate();

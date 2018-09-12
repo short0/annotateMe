@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.RectF;
 import android.media.ExifInterface;
@@ -18,12 +17,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.user.mobilemicroscopy.drawing.ArrowItem;
-import com.example.user.mobilemicroscopy.drawing.CropBoxItem;
+import com.example.user.mobilemicroscopy.drawing.PointItem;
 import com.example.user.mobilemicroscopy.drawing.DrawingItem;
 import com.example.user.mobilemicroscopy.drawing.DrawingView;
 
@@ -31,12 +33,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class CropActivity extends AppCompatActivity {
+public class CalibrateActivity extends AppCompatActivity {
 
     final Context context = this;
+
+    Integer toMicron = 1;
+
 
     /**
      * Hold drawing board
@@ -68,16 +72,57 @@ public class CropActivity extends AppCompatActivity {
      */
     Canvas mCanvas;
 
+    TextView textViewAddAPoint;
+    TextView textViewEnterRealSize;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_crop);
+        setContentView(R.layout.activity_calibrate);
 
         Toast.makeText(this, "Please add 2 points, then enter real size", Toast.LENGTH_LONG).show();
 
         // get drawing view and image view
         mDrawingView = (DrawingView) findViewById(R.id.crop_drawing_view);
         mImageView = (ImageView) findViewById(R.id.crop_image_view);
+
+        textViewAddAPoint = (TextView) findViewById(R.id.text_view_add_a_point);
+        textViewEnterRealSize = (TextView) findViewById(R.id.text_view_enter_real_size);
+
+        textViewAddAPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
+
+                if (drawingItemList.size() < 2) {
+
+                    mDrawingView.addCropBox();
+
+                    mDrawingView.invalidate();
+
+                    // Show text message
+                    Toast.makeText(getApplicationContext(), "Add point", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        textViewEnterRealSize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
+
+                if (drawingItemList.size() == 2) {
+                    enterRealSize();
+
+                    // Show text message
+                    Toast.makeText(getApplicationContext(), "Enter real size", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         // get the intent passed in
         Intent intent = getIntent();
@@ -95,7 +140,7 @@ public class CropActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_crop, menu);
+        getMenuInflater().inflate(R.menu.menu_calibrate, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -106,7 +151,7 @@ public class CropActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
 
-            case R.id.menu_save_crop:
+            case R.id.menu_save_calibrate:
 
 //                crop();
                 finish();
@@ -116,36 +161,36 @@ public class CropActivity extends AppCompatActivity {
 
                 return true;
 
-            case R.id.menu_add_point:
-
-
-                if (drawingItemList.size() < 2) {
-
-                    mDrawingView.addCropBox(Color.WHITE);
-
-                    mDrawingView.invalidate();
-
-                    // Show text message
-                    Toast.makeText(this, "Add point", Toast.LENGTH_SHORT).show();
-                }
-
-                return true;
-
-            case R.id.menu_enter_real_size:
-//                ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
-
-                if (drawingItemList.size() == 2) {
-                    enterRealSize();
-
-                    // Show text message
-                    Toast.makeText(this, "Enter real size", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
-                    Toast.makeText(this, "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
-                }
-
-                return true;
+//            case R.id.menu_add_point:
+//
+//
+//                if (drawingItemList.size() < 2) {
+//
+//                    mDrawingView.addCropBox();
+//
+//                    mDrawingView.invalidate();
+//
+//                    // Show text message
+//                    Toast.makeText(this, "Add point", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                return true;
+//
+//            case R.id.menu_enter_real_size:
+////                ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
+//
+//                if (drawingItemList.size() == 2) {
+//                    enterRealSize();
+//
+//                    // Show text message
+//                    Toast.makeText(this, "Enter real size", Toast.LENGTH_SHORT).show();
+//                }
+//                else
+//                {
+//                    Toast.makeText(this, "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -178,8 +223,8 @@ public class CropActivity extends AppCompatActivity {
 
         ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
         for (DrawingItem item : drawingItemList) {
-            if (item instanceof CropBoxItem) {
-                RectF cropRect = ((CropBoxItem) item).getRectangle();
+            if (item instanceof PointItem) {
+                RectF cropRect = ((PointItem) item).getRectangle();
                 newMatrix.mapRect(cropRect);
                 Bitmap resultBit = Bitmap.createBitmap(mBitmap, (int) cropRect.left, (int) cropRect.top, (int) cropRect.width(), (int) cropRect.height());
 
@@ -318,6 +363,42 @@ public class CropActivity extends AppCompatActivity {
         final EditText realSizeEditText = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_enter_real_size);
 //        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
 
+        final Spinner spinner = (Spinner) scaleBarDialogView.findViewById(R.id.units_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.units_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d("ccccccccccccccccc", "" + i);
+                if (i == 0)
+                {
+                    toMicron = 1;
+                }
+                else if (i == 1)
+                {
+                    toMicron = 1000;
+                }
+                else if (i == 2)
+                {
+                    toMicron = 1000000;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        
+        });
+
         // set scale_bar_dialogalog.xml to alert dialog builder
         alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
@@ -349,7 +430,7 @@ public class CropActivity extends AppCompatActivity {
                         Log.d("ssssssssssssssss", "" + pixels);
 
                         // length per pixel in µm
-                        double lengthPerPixel = realSizeDouble / pixels;
+                        double lengthPerPixel = realSizeDouble / pixels * toMicron;
 
 
                         // set the value to AnnotateActivity

@@ -39,6 +39,120 @@
             android:id="@+id/drawing_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimaryDark"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/arrow_sub_menu"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/button_arrow_white"
+                    android:id="@+id/button_white_arrow"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/button_arrow_black"
+                    android:id="@+id/button_black_arrow"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimaryDark"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/text_sub_menu"
+            android:visibility="gone"
+            >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/button_text_white"
+                    android:id="@+id/button_white_text"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/button_text_black"
+                    android:id="@+id/button_black_text"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimaryDark"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/scale_bar_sub_menu"
+            android:visibility="gone"
+            >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/button_scale_bar_white"
+                    android:id="@+id/button_white_scale_bar"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/button_scale_bar_black"
+                    android:id="@+id/button_black_scale_bar"/>
+            </RelativeLayout>
+
+        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
@@ -57,22 +171,10 @@
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/button_arrow_white"
-                android:id="@+id/button_white_arrow"/>
+                android:id="@+id/image_view_arrow_choices"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/button_arrow_black"
-                android:id="@+id/button_black_arrow"/>
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -84,21 +186,10 @@
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/button_text_white"
-                android:id="@+id/button_white_text"/>
+                android:id="@+id/image_view_text_choices"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/button_text_black"
-                android:id="@+id/button_black_text"/>
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -110,20 +201,10 @@
                 android:layout_height="40dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/button_scale_bar_white"
-                android:id="@+id/button_white_scale_bar"/>
+                android:id="@+id/image_view_scale_bar_choices"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:src="@drawable/button_scale_bar_black"
-                android:id="@+id/button_black_scale_bar"/>
-        </RelativeLayout>
+
     </LinearLayout>
 </LinearLayout>

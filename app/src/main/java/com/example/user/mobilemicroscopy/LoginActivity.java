@@ -83,17 +83,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // find guest login button
-        guestLoginButton = (Button) findViewById(R.id.guest_login_button);
-
-        // specify the action when the button is clicked
-        guestLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+//        // find guest login button
+//        guestLoginButton = (Button) findViewById(R.id.guest_login_button);
+//
+//        // specify the action when the button is clicked
+//        guestLoginButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     @Override

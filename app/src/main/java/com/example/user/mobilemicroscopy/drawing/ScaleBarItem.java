@@ -215,6 +215,7 @@ public class ScaleBarItem extends DrawingItem {
         line.offset(dx, dy);
     }
 
+    /*
     public void updateScalePosition(float dx, float dy) {
 
 
@@ -240,4 +241,5 @@ public class ScaleBarItem extends DrawingItem {
 //        scaleRectangle.offset(dx, 0);
 
     }
+    */
 }

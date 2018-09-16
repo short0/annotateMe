@@ -760,7 +760,7 @@ public class DetailsActivity extends AppCompatActivity {
                 displayImage();
 
                 // Show text message
-                Toast.makeText(context, "Restore origianl image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Restore original image", Toast.LENGTH_SHORT).show();
 
             }
         });

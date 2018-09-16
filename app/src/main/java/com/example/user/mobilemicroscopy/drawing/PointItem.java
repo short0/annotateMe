@@ -30,14 +30,17 @@ public class PointItem extends DrawingItem {
      * Hold the bitmap of actual arrow
      */
     private Bitmap pointBitmap;
+
     /**
      * Hold the bitmap of delete button
      */
     private static Bitmap deleteBitmap;
+
     /**
      * Hold the bitmap of scale button
      */
     private static Bitmap scaleBitmap;
+
     /**
      * Hold the bitmap of rotate button
      */
@@ -58,15 +61,15 @@ public class PointItem extends DrawingItem {
      */
     private RectF deleteRectangle;
 
-    /**
-     * Hold area of the scale button
-     */
-    private RectF scaleRectangle;
+//    /**
+//     * Hold area of the scale button
+//     */
+//    private RectF scaleRectangle;
 
-    /**
-     * Hold area of the rotate button
-     */
-    private RectF rotateRectangle;
+//    /**
+//     * Hold area of the rotate button
+//     */
+//    private RectF rotateRectangle;
 
     /**
      * Hold the state of being selected
@@ -141,19 +144,19 @@ public class PointItem extends DrawingItem {
         return deleteRectangle;
     }
 
-    /**
-     * Accessor method
-     */
-    public RectF getScaleRectangle() {
-        return scaleRectangle;
-    }
+//    /**
+//     * Accessor method
+//     */
+//    public RectF getScaleRectangle() {
+//        return scaleRectangle;
+//    }
 
-    /**
-     * Accessor method
-     */
-    public RectF getRotateRectangle() {
-        return rotateRectangle;
-    }
+//    /**
+//     * Accessor method
+//     */
+//    public RectF getRotateRectangle() {
+//        return rotateRectangle;
+//    }
 
     /**
      * Mutator method
@@ -163,12 +166,12 @@ public class PointItem extends DrawingItem {
     }
 
     /**
-     * Initialize the arrow when first created
+     * Initialize the point when first created
      */
     public void initialize(View parentView) {
         haveButtons = true;
 
-        // scale the arrow down
+        // scale the point down
         float width = pointBitmap.getWidth();
         float height = pointBitmap.getHeight();
         Log.d("wwwwwwwwwwwwwhhhhhhhhh", width + " " + height);
@@ -191,17 +194,17 @@ public class PointItem extends DrawingItem {
         // create new matrix
         matrix = new Matrix();
 
-        // scale the arrow down
+        // scale the point down
 //        matrix.postScale(0.25f, 0.25f);
 
-        // move the arrow to position
+        // move the point to position
         matrix.postTranslate(rectangle.left, rectangle.top);
 
         Log.d("aaaaaaaaaaaaaaaaaaaa", "" + width + " " + height + " " + left + " " + top);
     }
 
     /**
-     * Draw the arrow on specified canvas when called
+     * Draw the point on specified canvas when called
      */
     public void draw(Canvas canvas) {
         canvas.save();

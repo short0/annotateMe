@@ -39,6 +39,9 @@ public class CalibrateActivity extends AppCompatActivity {
 
     final Context context = this;
 
+    /**
+     * unit selection used to convert to micron
+     */
     Integer toMicron = 1;
 
 
@@ -72,7 +75,14 @@ public class CalibrateActivity extends AppCompatActivity {
      */
     Canvas mCanvas;
 
+    /**
+     * Add a point button
+     */
     TextView textViewAddAPoint;
+
+    /**
+     * Enter real size button
+     */
     TextView textViewEnterRealSize;
 
     @Override
@@ -80,12 +90,14 @@ public class CalibrateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibrate);
 
-        Toast.makeText(this, "Please add 2 points, then enter real size", Toast.LENGTH_LONG).show();
+        // instruction message
+        Toast.makeText(getApplicationContext(), "Please add 2 points, then enter real size", Toast.LENGTH_LONG).show();
 
         // get drawing view and image view
         mDrawingView = (DrawingView) findViewById(R.id.crop_drawing_view);
         mImageView = (ImageView) findViewById(R.id.crop_image_view);
 
+        // get the buttons
         textViewAddAPoint = (TextView) findViewById(R.id.text_view_add_a_point);
         textViewEnterRealSize = (TextView) findViewById(R.id.text_view_enter_real_size);
 
@@ -138,12 +150,22 @@ public class CalibrateActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Create menu
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_calibrate, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Set action for menu items
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
@@ -157,7 +179,7 @@ public class CalibrateActivity extends AppCompatActivity {
                 finish();
 
                 // Show text message
-                Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_SHORT).show();
 
                 return true;
 
@@ -195,48 +217,48 @@ public class CalibrateActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void crop()
-    {
-        // get current image Matrix
-        Matrix imageMatrix = mImageView.getImageMatrix();
-
-        // get values from matrix and manipulate them
-        float[] values = new float[9]; // get 9 values from imageMatrix
-        imageMatrix.getValues(values);
-//                        Matrix c = new Matrix(imageMatrix);
-        Matrix newMatrix = new Matrix(); // make new matrix to draw on image
-
-        float scaleX = values[Matrix.MSCALE_X];
-        float scaleY = values[Matrix.MSCALE_Y];
-        values[Matrix.MSCALE_X] = 1 / scaleX;
-        values[Matrix.MSKEW_X] = 0;
-        values[Matrix.MTRANS_X] = -1 * (values[Matrix.MTRANS_X] / scaleX);
-        values[Matrix.MSKEW_Y] = 0;
-        values[Matrix.MSCALE_Y] = 1 / scaleY;
-        values[Matrix.MTRANS_Y] = (-1) * (values[Matrix.MTRANS_Y] / scaleY);
-        values[Matrix.MPERSP_0] = 0;
-        values[Matrix.MPERSP_1] = 0;
-        values[Matrix.MPERSP_2] = 1;
-
-        // create new matrix to draw
-        newMatrix.setValues(values);
-
-        ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
-        for (DrawingItem item : drawingItemList) {
-            if (item instanceof PointItem) {
-                RectF cropRect = ((PointItem) item).getRectangle();
-                newMatrix.mapRect(cropRect);
-                Bitmap resultBit = Bitmap.createBitmap(mBitmap, (int) cropRect.left, (int) cropRect.top, (int) cropRect.width(), (int) cropRect.height());
-
-                saveBitmap(resultBit, mCurrentAnnotatedImagePath);
-
-                finish();
-            }
-
-
-
-        }
-    }
+//    private void crop()
+//    {
+//        // get current image Matrix
+//        Matrix imageMatrix = mImageView.getImageMatrix();
+//
+//        // get values from matrix and manipulate them
+//        float[] values = new float[9]; // get 9 values from imageMatrix
+//        imageMatrix.getValues(values);
+////                        Matrix c = new Matrix(imageMatrix);
+//        Matrix newMatrix = new Matrix(); // make new matrix to draw on image
+//
+//        float scaleX = values[Matrix.MSCALE_X];
+//        float scaleY = values[Matrix.MSCALE_Y];
+//        values[Matrix.MSCALE_X] = 1 / scaleX;
+//        values[Matrix.MSKEW_X] = 0;
+//        values[Matrix.MTRANS_X] = -1 * (values[Matrix.MTRANS_X] / scaleX);
+//        values[Matrix.MSKEW_Y] = 0;
+//        values[Matrix.MSCALE_Y] = 1 / scaleY;
+//        values[Matrix.MTRANS_Y] = (-1) * (values[Matrix.MTRANS_Y] / scaleY);
+//        values[Matrix.MPERSP_0] = 0;
+//        values[Matrix.MPERSP_1] = 0;
+//        values[Matrix.MPERSP_2] = 1;
+//
+//        // create new matrix to draw
+//        newMatrix.setValues(values);
+//
+//        ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
+//        for (DrawingItem item : drawingItemList) {
+//            if (item instanceof PointItem) {
+//                RectF cropRect = ((PointItem) item).getRectangle();
+//                newMatrix.mapRect(cropRect);
+//                Bitmap resultBit = Bitmap.createBitmap(mBitmap, (int) cropRect.left, (int) cropRect.top, (int) cropRect.width(), (int) cropRect.height());
+//
+//                saveBitmap(resultBit, mCurrentAnnotatedImagePath);
+//
+//                finish();
+//            }
+//
+//
+//
+//        }
+//    }
 
     /**
      * Display the main image
@@ -331,26 +353,26 @@ public class CalibrateActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Save bitmap to file
-     */
-    public boolean saveBitmap(Bitmap bitmap, String filePath) {
-        File file = new File(filePath);
-
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.flush();
-            out.close();
-            return true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return false;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+//    /**
+//     * Save bitmap to file
+//     */
+//    public boolean saveBitmap(Bitmap bitmap, String filePath) {
+//        File file = new File(filePath);
+//
+//        try {
+//            FileOutputStream out = new FileOutputStream(file);
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+//            out.flush();
+//            out.close();
+//            return true;
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            return false;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
 
 
@@ -373,7 +395,7 @@ public class CalibrateActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
 
-
+        // Add action to when spinner (drop-down menu) option change
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -400,6 +422,7 @@ public class CalibrateActivity extends AppCompatActivity {
         });
 
         // set scale_bar_dialogalog.xml to alert dialog builder
+        // calculate the length per pixel
         alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog,int id) {
                 String realSizeString = realSizeEditText.getText().toString();

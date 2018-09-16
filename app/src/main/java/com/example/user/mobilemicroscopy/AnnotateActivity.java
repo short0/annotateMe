@@ -41,7 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnnotateActivity extends AppCompatActivity {
-
+    /**
+     * The length per pixel
+     */
     public static double lengthPerPixel = -1.0;
 
     /**
@@ -87,12 +89,11 @@ public class AnnotateActivity extends AppCompatActivity {
     ImageView buttonWhiteScaleBar;
     ImageView buttonBlackScaleBar;
 
+    // Submenus
     ImageView imageViewArrowChoices;
     LinearLayout arrowSubMenu;
-
     ImageView imageViewTextChoices;
     LinearLayout textSubMenu;
-
     ImageView imageViewScaleBarChoices;
     LinearLayout scaleBarSubMenu;
 
@@ -127,6 +128,7 @@ public class AnnotateActivity extends AppCompatActivity {
         buttonWhiteScaleBar = (ImageView) findViewById(R.id.button_white_scale_bar);
         buttonBlackScaleBar = (ImageView) findViewById(R.id.button_black_scale_bar);
 
+        // find all submenus
         imageViewArrowChoices = (ImageView) findViewById(R.id.image_view_arrow_choices);
         arrowSubMenu = (LinearLayout) findViewById(R.id.arrow_sub_menu);
 
@@ -472,7 +474,7 @@ public class AnnotateActivity extends AppCompatActivity {
         if (scaleBarCount == 0) {
 
             if (lengthPerPixel == -1) {
-                Toast.makeText(this, "Please calibrate first", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Please calibrate first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -504,7 +506,7 @@ public class AnnotateActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(this, "Only one scale can be added", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Only one scale can be added", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -706,17 +708,17 @@ public class AnnotateActivity extends AppCompatActivity {
                 // End the activity
                 //           finish();
 
-                Intent cropIntent = new Intent(AnnotateActivity.this, CalibrateActivity.class);
+                Intent calibrateIntent = new Intent(AnnotateActivity.this, CalibrateActivity.class);
 
                 // add the image to the intent to pass
-                cropIntent.putExtra("image", mImage);
+                calibrateIntent.putExtra("image", mImage);
 
-                startActivity(cropIntent);
+                startActivity(calibrateIntent);
 
 //                crop();
 
                 // Show text message
-                Toast.makeText(this, "Calibrate", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Calibrate", Toast.LENGTH_SHORT).show();
                 return true;
 
              case R.id.menu_save:

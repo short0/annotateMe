@@ -20,20 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <!--<com.example.user.testingapp.ArrowView-->
-        <!--android:id="@+id/arrow_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
-        <!--<com.example.user.testingapp.TextBoxView-->
-        <!--android:id="@+id/text_box_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
-        <!--<com.example.user.testingapp.ScaleBarView-->
-        <!--android:id="@+id/scale_bar_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
 
         <com.example.user.mobilemicroscopy.drawing.DrawingView
             android:id="@+id/drawing_view"

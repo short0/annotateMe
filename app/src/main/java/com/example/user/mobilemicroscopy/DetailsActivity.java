@@ -1,6 +1,5 @@
 package com.example.user.mobilemicroscopy;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,14 +12,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +30,7 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.example.user.mobilemicroscopy.aws.Constants;
 import com.example.user.mobilemicroscopy.aws.Util;
 import com.example.user.mobilemicroscopy.database.ImageDbHelper;
+import com.example.user.mobilemicroscopy.help.HelpDetailsActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,8 +53,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -179,6 +175,7 @@ public class DetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+
         // Initializes TransferUtility, always do this before using it.
         util = new Util();
         transferUtility = util.getTransferUtility(this);
@@ -205,10 +202,6 @@ public class DetailsActivity extends AppCompatActivity {
         Log.d("USERNAME", username);
 
         mPassedType = intent.getStringExtra("passedType");
-//        mCurrentOriginalImagePath = intent.getStringExtra("originalImagePath");
-//        mCurrentAnnotatedImagePath = intent.getStringExtra("annotatedImagePath");
-//        mCurrentOriginalImageFileName = intent.getStringExtra("originalImageFileName");
-//        mCurrentAnnotatedImageFileName = intent.getStringExtra("annotatedImageFileName");
 
         // extract the image object in the intent
         mImage = (Image) intent.getSerializableExtra("image");
@@ -219,18 +212,6 @@ public class DetailsActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
-//                // add the image to the intent to pass
-//                intent.putExtra("image", mImage);
-////                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
-//                startActivity(intent);
-
-
-//                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
-////                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
-////                startActivity(zoomIntent);
-//                zoomImage();
-
 
                 Intent zoomIntent = new Intent(DetailsActivity.this, ZoomActivity.class);
                 // add the image to the intent to pass
@@ -304,27 +285,8 @@ public class DetailsActivity extends AppCompatActivity {
         // connect to the database
         database = new ImageDbHelper(getApplicationContext());
 
-
-
-
-//        ZoomButton zoomPhoto;
-//
-//
-//        // specify action when the button is clicked
-//        zoomPhoto = (ZoomButton) findViewById(R.id.menu_close_page);
-//        zoomPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
-//                startActivity(intent);
-////                sendImageCaptureIntent();
-//            }
-//        });
-
-
-
-
     }
+
 
     /**
      * Create menu
@@ -335,6 +297,7 @@ public class DetailsActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_details, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     /**
      * Hide menu item depends on logged in or not
@@ -369,41 +332,28 @@ public class DetailsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
 
-            case R.id.menu_annotate:
-//                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
-////                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
-////                startActivity(zoomIntent);
-//                zoomImage();
-//
-//                // Show text message
-//                Toast.makeText(this, "Zoom", Toast.LENGTH_SHORT).show();
+            case R.id.menu_help:
 
+                Intent intentHelp = new Intent(DetailsActivity.this, HelpDetailsActivity.class);
+                startActivity(intentHelp);
 
-                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
-                // add the image to the intent to pass
-                intent.putExtra("image", mImage);
-//                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
-                startActivity(intent);
-
-
+                // Show text message
+                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
                 return true;
 
 
-            case R.id.menu_crop:        //******** WORKING ON *******  I HAVE NO IDEA!!! :'(
+            case R.id.menu_annotate:
+
+                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
+
+                // add the image to the intent to pass
+                intent.putExtra("image", mImage);
+                startActivity(intent);
+                return true;
+
+
+            case R.id.menu_crop:
                 // crop the image
-
-//                imageView = (ImageView)findViewById(R.id.imageView);
-//
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_PICK);
-//                startActivityForResult(intent, PICK_FROM_CAMERA);
-
-                //            startActivityFo
-
-                // End the activity
-                //           finish();
-
                 crop();
 
                 // Show text message
@@ -416,7 +366,7 @@ public class DetailsActivity extends AppCompatActivity {
                 // save the image to database whether insert new image or update a image
                 saveImage();
 
-                // End the activity
+                // end activity
                 finish();
 
                 // Show text message
@@ -426,12 +376,9 @@ public class DetailsActivity extends AppCompatActivity {
             case R.id.menu_delete:
                 // delete the image in database
                 deleteImage();
-
-
                 return true;
 
             case R.id.menu_restore_original:
-
 
                 restoreOriginal();
 
@@ -463,6 +410,7 @@ public class DetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     /**
      * Triggered when this activity received a value from other activity
      *
@@ -475,6 +423,7 @@ public class DetailsActivity extends AppCompatActivity {
         if (resultCode != RESULT_OK) return;
 
         switch (requestCode) {
+
             case CROP_IMAGE:
 
                 if (data != null) {
@@ -491,6 +440,7 @@ public class DetailsActivity extends AppCompatActivity {
                 break;
         }
     }
+
 
     /**
      * Save the bitmap to the filePath
@@ -515,6 +465,7 @@ public class DetailsActivity extends AppCompatActivity {
             return false;
         }
     }
+
 
     /**
      * Crop using installed apps
@@ -622,7 +573,6 @@ public class DetailsActivity extends AppCompatActivity {
     {
         ImageZoom img = new ImageZoom(this);
         Bitmap bitmap = BitmapFactory.decodeFile(mImage.getAnnotatedImageLink());
-//        img.setImageBitmap(rotateImage(bitmap));
         img.setImageBitmap(rotateImage(bitmap));
         setContentView(img);
     }
@@ -649,12 +599,6 @@ public class DetailsActivity extends AppCompatActivity {
         mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
         mImage.setStudentComment(mStudentCommentEditText.getText().toString());
 
-        // set the links and file names
-//        mImage.setOriginalImageLink(mCurrentOriginalImagePath);
-//        mImage.setAnnotatedImageLink(mCurrentAnnotatedImagePath);
-//        mImage.setOriginalFileName(mCurrentOriginalImageFileName);
-//        mImage.setAnnotatedFileName(mCurrentAnnotatedImageFileName);
-
         // if the Image is null
         if (mPassedType.equals("emptyObject")) {
             // insert new image to the database
@@ -663,41 +607,8 @@ public class DetailsActivity extends AppCompatActivity {
             // update existing image in database
             database.updateImage(mImage);
         }
-
-
-/*
-        // create a new Image object if no image is passed from MainActivity
-        if (!mPassedType.equals("imageObject")) {
-            mImage = new Image();
-        }
-
-        // set the values to the object from the views
-        mImage.setDate(mDateEditText.getText().toString());
-        mImage.setTime(mTimeEditText.getText().toString());
-        mImage.setSpecimenType(mSpecimenTypeEditText.getText().toString());
-        mImage.setMagnification(mMagnificationEditText.getText().toString());
-        mImage.setGpsPosition(mGPSPositionEditText.getText().toString());
-        mImage.setStudentComment(mStudentCommentEditText.getText().toString());
-
-        // set the links and file names
-        mImage.setOriginalImageLink(mCurrentOriginalImagePath);
-        mImage.setAnnotatedImageLink(mCurrentAnnotatedImagePath);
-        mImage.setOriginalFileName(mCurrentOriginalImageFileName);
-        mImage.setAnnotatedFileName(mCurrentAnnotatedImageFileName);
-
-        // if the Image is null
-        if (!mPassedType.equals("imageObject")) {
-            // insert new image to the database
-            database.addImage(mImage);
-        } else {
-            // update existing image in database
-            database.updateImage(mImage);
-        }
-
-        // end the activity
-        finish();
-*/
     }
+
 
     /**
      * method to delete an image in database
@@ -706,7 +617,8 @@ public class DetailsActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete record");
         builder.setMessage("Are you sure? Do you want to delete this record?");
-// Add the buttons
+
+        // Add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
@@ -730,10 +642,8 @@ public class DetailsActivity extends AppCompatActivity {
 
             }
         });
-// Set other dialog properties
 
-
-// Create the AlertDialog
+        // Create the AlertDialog
         AlertDialog dialog = builder.create();
 
         dialog.show();
@@ -746,7 +656,8 @@ public class DetailsActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Restore original image");
         builder.setMessage("Are you sure? Do you want to restore the original image?");
-// Add the buttons
+
+        // Add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
@@ -770,14 +681,13 @@ public class DetailsActivity extends AppCompatActivity {
 
             }
         });
-// Set other dialog properties
 
-
-// Create the AlertDialog
+        // Create the AlertDialog
         AlertDialog dialog = builder.create();
 
         dialog.show();
     }
+
 
     /**
      * method to display the main image
@@ -806,22 +716,12 @@ public class DetailsActivity extends AppCompatActivity {
         mImageView.setImageBitmap(rotateImage(bitmap));
     }
 
+
     /**
      * rotate image using ExifInterface
      */
     public Bitmap rotateImage(Bitmap bitmap) {
-//        ExifInterface exifInterface = null;
-//        try
-//        {
-//            exifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
-//            float[] latLong = new float[2];
-//            exifInterface.getLatLong(latLong);
-//            Log.d("aaaaaaaaaaaaaaaaaaaaaaa", exifInterface.getAttribute(ExifInterface.TAG_DATETIME));
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
+
         int orientation = mExifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
         Matrix matrix = new Matrix();
@@ -893,13 +793,6 @@ public class DetailsActivity extends AppCompatActivity {
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
 
-//            String webServerUrl = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/images.php";
-
-//                Uri imageUri = Uri.parse(webServerUrl);
-//                Intent webIntent = new Intent(Intent.ACTION_VIEW, imageUri);
-//
-//                startActivity(webIntent);
-
             // start an async task to do in background
             RdsAsyncTask rdsAsyncTask = new RdsAsyncTask();
             rdsAsyncTask.execute(SIMPLE_IMAGE_WEB_API_URL);
@@ -934,14 +827,12 @@ public class DetailsActivity extends AppCompatActivity {
             String annotatedFileName = mImage.getAnnotatedFileName();
             String GPSposition = mImage.getGpsPosition();
             String magnification = mImage.getMagnification();
-//            String originalImageLink = mImage.getOriginalImageLink();
-//            String annotattedImageLink = mImage.getAnnotatedImageLink();
+
             // assign the link to S3
             String originalImageLink = "https://s3-ap-southeast-2.amazonaws.com/kiotmicroscopy/" + username + "/original/" + mImage.getOriginalFileName();
             String annotattedImageLink = "https://s3-ap-southeast-2.amazonaws.com/kiotmicroscopy/" + username + "/annotated/" + mImage.getAnnotatedFileName();
             String studentComment = mImage.getStudentComment();
             String teacherComment = mImage.getTeacherComment();
-//            String username = "n.zafra";
 
             // parse the URL
             URL url = null;
@@ -1119,13 +1010,23 @@ public class DetailsActivity extends AppCompatActivity {
 
     /****************************************************************/
 
+
+
+    /**
+     *   DetailsActivity Messages
+     */
+
+    /**
+     *    On Back Button Press
+     */
+
     @Override
     public void onBackPressed() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save record");
         builder.setMessage("Do you want to save changes?");
-// Add the buttons
+        // Add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
@@ -1139,15 +1040,11 @@ public class DetailsActivity extends AppCompatActivity {
                 finish();
             }
         });
-// Set other dialog properties
 
-
-// Create the AlertDialog
+        // Create the AlertDialog
         AlertDialog dialog = builder.create();
 
         dialog.show();
-
-
     }
 
 

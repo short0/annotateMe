@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+       <string name="topic_details">
+        <![CDATA[
+
+        <h1>Details Screen Help</h1>
+        <p>The details screen is design for you to be able to get a quick run down about your specimen.</p>
+        <h2>Entering Information</h2>
+        <p>You are able to enter the following details:</p>
+        <p><strong>Specimen Type<br />
+        </strong><strong>Objective Lens<br />
+        </strong><strong>Comments</strong></p>
+        <p>Date, Time and GPS data are retrieved from the image"'"s Meta data. </p>
+        <p><strong>Date</strong> is recorded as YYYY:MM:DD (eg: 2018:12:31 - this would be th 31st of December 2018)</p>
+        <p><strong>Time</strong> is recorded in 24 hours time HH:MM:SS (eg: 20:50:15 - this would be 8.50pm and 15 seconds)</p>
+        <p>If you do not wish for the <strong>GPS</strong> to mark the position please turn it off in you phone settings. </p>
+        <p><strong>Please be aware</strong> that some phone cameras have GPS set to ON.
+            Be sure it is unchecked here to if you do not wish for GPS to be added to the images meta data. <br />
+            Also there are time if you are located in a building the GPS co-ordinates may not register with the phone.</p>
+        <p><strong>Note:</strong> In the case of the objective lens - if  you are not using a microscope to document specimens - you can enter a value of 0</p>
+        <hr />
+        <br>
+        <h2>High Resolution Preview &amp; Zoom</h2>
+        <p><strong>1.</strong> Click on the image preview<br />
+        <strong>2.</strong> The High Resolution page will open<br />
+        <strong>3.</strong> Using Pinch Zoom (ie: two fingers) you are able to enlarge and move the image around for a better inspection of the image<br />
+        <strong>4.</strong> Press you Back button on your phone to exit this screen</p>
+        <p><strong>Note: </strong>On some phones you will have to pinch zoom 3 to 4 times before it will zoom in and out </p>
+        <hr />
+        <br>
+        <h2>Using the menu</h2>
+        <p>In the menu you have a number of options:</p>
+        <p><strong>Annotate<br />
+            Crop<br />
+            Save<br />
+            Upload
+        <br />
+        Restore original<br />
+        Delete </strong></p>
+        <p><strong>Annotate</strong> - Access the Annotation part of the app. Here you can add arrows, text and scales to your image. To find out more, you can enter the annotation screen and click on the help button.</p>
+        <p><strong>Crop</strong> - Here you can crop your image.</p>
+        <p><strong>Save</strong> - Save any details you have entered.</p>
+        <p><strong>Upload</strong> - If you have logged in with your account you will see this option. If you are using the app as a Guest you will not see this option.</p>
+        <p><strong>Restore</strong> <strong>original</strong> - For any reason you want to clear all annotation made, this will restore your image to the original version.</p>
+        <p><strong>Delete</strong> - If you want to delete this image and related information. Warning - once deleted from the phone it cannot be retrieved. However of you have uploaded the image and data to your account, you can access it from the web portal. </p>
+        <p><b>Return to the previous screen by touching the Back button.</b>
+
+      ]]>
+    </string>
+
+
+
+    <string name="topic_section2">
+    <![CDATA[
+      <p>
+        <h1>Text To Come</h1>
+       </p>
+      ]]>
+    </string>
+
+
+
+
+
+
+
+
+
+
+
+</resources>

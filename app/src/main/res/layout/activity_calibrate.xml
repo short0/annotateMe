@@ -40,14 +40,14 @@
             android:id="@+id/text_view_add_a_point"/>
 
         <TextView
+            android:id="@+id/text_view_enter_real_size"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:textSize="20dp"
-            android:text="Enter real size"
+            android:text="Enter specimen's real size"
             android:textColor="#FFFFFF"
-            android:id="@+id/text_view_enter_real_size"/>
+            android:textSize="20dp" />
 
     </LinearLayout>
 

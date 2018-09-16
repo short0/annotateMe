@@ -36,6 +36,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
+            android:label="Gallery"
             android:screenOrientation="portrait" />
         <activity
             android:name=".LoginActivity"
@@ -70,6 +71,13 @@
             android:screenOrientation="portrait" />
         <activity android:name=".UserSelectionActivity"
             android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".help.HelpDetailsActivity"
+            android:label="Help"
+            android:screenOrientation="portrait"/>
+
+
     </application>
 
 </manifest>

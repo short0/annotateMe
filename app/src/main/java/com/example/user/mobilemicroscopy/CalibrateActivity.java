@@ -123,11 +123,13 @@ public class CalibrateActivity extends AppCompatActivity {
                     enterRealSize();
 
                     // Show text message
+//                    onAddRealSizeMsg();
                     Toast.makeText(getApplicationContext(), "Enter real size", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
+                    onAddPointsMsg();
+//                    Toast.makeText(getApplicationContext(), "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -329,7 +331,8 @@ public class CalibrateActivity extends AppCompatActivity {
 
                     if (centerX1 == centerX2 && centerY1 == centerY2)
                     {
-                        Toast.makeText(getApplicationContext(), "Please move 2 points apart", Toast.LENGTH_SHORT).show();
+                        onCalibrationPointsMsg();
+//                        Toast.makeText(getApplicationContext(), "Please move 2 points apart", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -344,7 +347,8 @@ public class CalibrateActivity extends AppCompatActivity {
                         AnnotateActivity.lengthPerPixel = lengthPerPixel;
                         Log.d("ssssssssssssssss", "" + AnnotateActivity.lengthPerPixel);
 
-                        Toast.makeText(getApplicationContext(), "Done calibrating", Toast.LENGTH_SHORT).show();
+                        onCalibrationDoneMsg();
+//                        Toast.makeText(getApplicationContext(), "Done calibrating", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -364,9 +368,11 @@ public class CalibrateActivity extends AppCompatActivity {
     }
 
 
+
     /**
      *   CALIBRATION MESSAGES
      */
+
 
     /**
      *   Calibration Help Msg
@@ -381,6 +387,94 @@ public class CalibrateActivity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    /**
+     *   Calibration Move the Points Msg
+     */
+
+    public void onAddPointsMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Help");
+        builder.setMessage("Please add 2 points on the screen");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    /**
+     *   Calibration Move the Points Msg
+     */
+
+    public void onCalibrationPointsMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Points Error");
+        builder.setMessage("Please move the 2 points apart");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+//    /**
+//     *   Calibration Add real size Msg
+//     */
+//
+//    public void onAddRealSizeMsg() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Calibration Help");
+//        builder.setMessage("Please enter the real size of the specimen");
+//        // Add the buttons
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                // User clicked OK button
+//            }
+//        });
+//
+//        // Create the AlertDialog
+//        AlertDialog dialog = builder.create();
+//
+//        dialog.show();
+//    }
+
+    /**
+     *   Calibration Done Msg
+     */
+
+    public void onCalibrationDoneMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Completed");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                finish();
             }
         });
 

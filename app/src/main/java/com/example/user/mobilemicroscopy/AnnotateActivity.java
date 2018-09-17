@@ -28,6 +28,7 @@ import com.example.user.mobilemicroscopy.drawing.DrawingItem;
 import com.example.user.mobilemicroscopy.drawing.DrawingView;
 import com.example.user.mobilemicroscopy.drawing.ScaleBarItem;
 import com.example.user.mobilemicroscopy.drawing.TextBoxItem;
+import com.example.user.mobilemicroscopy.help.HelpAnnotateActivity;
 import com.example.user.mobilemicroscopy.help.HelpDetailsActivity;
 
 import java.io.File;
@@ -582,11 +583,11 @@ public class AnnotateActivity extends AppCompatActivity {
 
             case R.id.menu_help:
 
-                Intent intentHelp = new Intent(AnnotateActivity.this, HelpDetailsActivity.class);
-                startActivity(intentHelp);
+                Intent helpIntent = new Intent(AnnotateActivity.this, HelpAnnotateActivity.class);
+                startActivity(helpIntent);
 
                 // Show text message
-                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Annotate Page Help", Toast.LENGTH_SHORT).show();
                 return true;
 
             case R.id.menu_calibrate:

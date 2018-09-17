@@ -16,21 +16,21 @@
         <p><strong>Time</strong> is recorded in 24 hours time HH:MM:SS (eg: 20:50:15 - this would be 8.50pm and 15 seconds)</p>
         <p>If you do not wish for the <strong>GPS</strong> to mark the position please turn it off in you phone settings. </p>
         <p><strong>Please be aware</strong> that some phone cameras have GPS set to ON.
-            Be sure it is unchecked here to if you do not wish for GPS to be added to the images meta data. <br />
-            Also there are time if you are located in a building the GPS co-ordinates may not register with the phone.</p>
+            Be sure it is unchecked if you do not wish for GPS to be added to the images meta data. <br />
+            Also if you are located in a building the GPS co-ordinates may not register with the phone due to no GPS signal reaching your phone.</p>
         <p><strong>Note:</strong> In the case of the objective lens - if  you are not using a microscope to document specimens - you can enter a value of 0</p>
-        <hr />
+        <br>
         <br>
         <h2>High Resolution Preview &amp; Zoom</h2>
-        <p><strong>1.</strong> Click on the image preview<br />
-        <strong>2.</strong> The High Resolution page will open<br />
-        <strong>3.</strong> Using Pinch Zoom (ie: two fingers) you are able to enlarge and move the image around for a better inspection of the image<br />
-        <strong>4.</strong> Press you Back button on your phone to exit this screen</p>
+        <p><strong>Step 1.</strong> Click on the image preview<br />
+        <strong>Step 2.</strong> The High Resolution page will open<br />
+        <strong>Step 3.</strong> Using Pinch Zoom (ie: two fingers) you are able to enlarge and move the image around for a better inspection of the image<br />
+        <strong>Step 4.</strong> Press you Back button on your phone to exit this screen</p>
         <p><strong>Note: </strong>On some phones you will have to pinch zoom 3 to 4 times before it will zoom in and out </p>
-        <hr />
         <br>
-        <h2>Using the menu</h2>
-        <p>In the menu you have a number of options:</p>
+        <br>
+        <h2>Using the Side Menu</h2>
+        <p>In the side menu (three dots in the top right) you have a number of options:</p>
         <p><strong>Annotate<br />
             Crop<br />
             Save<br />
@@ -51,11 +51,35 @@
 
 
 
-    <string name="topic_section2">
+    <string name="topic_annotate">
     <![CDATA[
+
+      <h1>Annotate Screen Help
+        </h1>
+        <p>Here you are able add annotations your image.</p>
+        <h2>Using the Side Menu</h2>
+        <p>In the side menu (three&#32;dots&#32;in&#32;the&#32;top&#32;right) you have a number of options:</p>
+        <p>  <strong>Calibration<br />
+            Save<br />
+            Clear</strong></p>
+        <p><strong>Calibration</strong> - Before you are able to place a scale bar and messurement you are required to calibrate the scale.<br />
+        By selecting the calibration you are able to calibrate your scale (more information given on the calibration screen).</p>
+        <p><strong>Save</strong> - This will save any annotations you make on the image. Be aware that once saved the only way to clear the annotations is to restore your image to the original one taken.</p>
+        <p><strong>Clear</strong> - This will clear any annotations you have made that have not been saved to the image. Be aware this will clear all annotations that are not saved!</p>
+        <p><br />
+        </p>
+        <h2>Adding Arrows, Text and Scale</h2>
+        <p><strong>Arrows -</strong> You can place arrows to point to parts of your specimen.You have a choice of white and black. Just press on the arrow icon to view your choice.</p>
+        <p><strong>Text -</strong> You can place text to describe parts of your specimen that arrows points to. You have a choice of white and black. Just press on the arrow icon to view your choice.</p>
+        <p><strong>Scale Bar and Measurement -</strong> You can place a scale bar and measurement. You have a choice of white and black. Just press on the arrow icon to view your choice.<br />
+        <strong>Please note: </strong>that you must  calibrate first before you can use this. If you have not done the calibration you will get an error message instructing you to do so. Only one scale bar can be placed on the image at any one time.</p>
+        <p>When adding arrows and text you will see a <strong>red cross icon</strong> , <strong>red rotate icon</strong> and <strong>red arrow icon</strong>. These are there to assist you while using these features.<br />
+        <strong>Red Cross icon</strong> - this will delete the asset you have placed on the image.<br />
+        <strong>Red rotate icon</strong> - press and move to rotate the asset.<br />
+        <strong>Red Arrow icon</strong> - press and move in either direction of the red arrows to increase or decrease the size of the asset. </p>
+        <p><b>Return to the previous screen by touching the Back button.</b>
       <p>
-        <h1>Text To Come</h1>
-       </p>
+
       ]]>
     </string>
 

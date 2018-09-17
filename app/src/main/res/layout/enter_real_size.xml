@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter real size: " />
+        android:text="Please enter the real size of the specimen:" />
 
     <LinearLayout
         android:layout_width="wrap_content"

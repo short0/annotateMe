@@ -77,6 +77,10 @@
             android:label="Help"
             android:screenOrientation="portrait"/>
 
+        <activity
+            android:name=".help.HelpAnnotateActivity"
+            android:label="Help"
+            android:screenOrientation="portrait"/>
 
     </application>
 

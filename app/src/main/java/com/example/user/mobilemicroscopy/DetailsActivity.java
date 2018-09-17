@@ -338,7 +338,7 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(intentHelp);
 
                 // Show text message
-                Toast.makeText(this, "Help", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Details Page Help", Toast.LENGTH_SHORT).show();
                 return true;
 
 

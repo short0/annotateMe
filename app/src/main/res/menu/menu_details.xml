@@ -4,24 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
+    <item
+        android:id="@+id/menu_help"
+        android:title="Help"
+        android:icon="@drawable/ic_help"
+        app:showAsAction="always" />
+
 
     <item
         android:id="@+id/menu_annotate"
-        android:icon="@drawable/baseline_annotate_image_white"
-        android:title="Zoom"
-        app:showAsAction="always" />
+        android:title="Annotate"
+        app:showAsAction="never" />
+
 
     <item
         android:id="@+id/menu_crop"
-        android:icon="@drawable/baseline_crop_white"
         android:title="Crop"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_save"
-        android:icon="@drawable/baseline_save_white_48"
         android:title="Save"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/menu_upload"

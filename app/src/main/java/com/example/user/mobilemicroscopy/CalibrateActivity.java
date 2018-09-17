@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,13 +24,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.user.mobilemicroscopy.drawing.PointItem;
 import com.example.user.mobilemicroscopy.drawing.DrawingItem;
 import com.example.user.mobilemicroscopy.drawing.DrawingView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -85,13 +80,14 @@ public class CalibrateActivity extends AppCompatActivity {
      */
     TextView textViewEnterRealSize;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calibrate);
 
         // instruction message
-        Toast.makeText(getApplicationContext(), "Please add 2 points, then enter real size", Toast.LENGTH_LONG).show();
+        onCalibrationMsg();
 
         // get drawing view and image view
         mDrawingView = (DrawingView) findViewById(R.id.crop_drawing_view);
@@ -127,11 +123,13 @@ public class CalibrateActivity extends AppCompatActivity {
                     enterRealSize();
 
                     // Show text message
+//                    onAddRealSizeMsg();
                     Toast.makeText(getApplicationContext(), "Enter real size", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
+                    onAddPointsMsg();
+//                    Toast.makeText(getApplicationContext(), "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -161,6 +159,7 @@ public class CalibrateActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     /**
      * Set action for menu items
      * @param item
@@ -168,124 +167,29 @@ public class CalibrateActivity extends AppCompatActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
 
         switch (item.getItemId()) {
 
-
             case R.id.menu_save_calibrate:
-
-//                crop();
                 finish();
-
                 // Show text message
                 Toast.makeText(getApplicationContext(), "Save", Toast.LENGTH_SHORT).show();
-
                 return true;
 
-//            case R.id.menu_add_point:
-//
-//
-//                if (drawingItemList.size() < 2) {
-//
-//                    mDrawingView.addCropBox();
-//
-//                    mDrawingView.invalidate();
-//
-//                    // Show text message
-//                    Toast.makeText(this, "Add point", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                return true;
-//
-//            case R.id.menu_enter_real_size:
-////                ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
-//
-//                if (drawingItemList.size() == 2) {
-//                    enterRealSize();
-//
-//                    // Show text message
-//                    Toast.makeText(this, "Enter real size", Toast.LENGTH_SHORT).show();
-//                }
-//                else
-//                {
-//                    Toast.makeText(this, "Please add 2 points on the screen", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                return true;
+
+
+
         }
         return super.onOptionsItemSelected(item);
     }
 
-//    private void crop()
-//    {
-//        // get current image Matrix
-//        Matrix imageMatrix = mImageView.getImageMatrix();
-//
-//        // get values from matrix and manipulate them
-//        float[] values = new float[9]; // get 9 values from imageMatrix
-//        imageMatrix.getValues(values);
-////                        Matrix c = new Matrix(imageMatrix);
-//        Matrix newMatrix = new Matrix(); // make new matrix to draw on image
-//
-//        float scaleX = values[Matrix.MSCALE_X];
-//        float scaleY = values[Matrix.MSCALE_Y];
-//        values[Matrix.MSCALE_X] = 1 / scaleX;
-//        values[Matrix.MSKEW_X] = 0;
-//        values[Matrix.MTRANS_X] = -1 * (values[Matrix.MTRANS_X] / scaleX);
-//        values[Matrix.MSKEW_Y] = 0;
-//        values[Matrix.MSCALE_Y] = 1 / scaleY;
-//        values[Matrix.MTRANS_Y] = (-1) * (values[Matrix.MTRANS_Y] / scaleY);
-//        values[Matrix.MPERSP_0] = 0;
-//        values[Matrix.MPERSP_1] = 0;
-//        values[Matrix.MPERSP_2] = 1;
-//
-//        // create new matrix to draw
-//        newMatrix.setValues(values);
-//
-//        ArrayList<DrawingItem> drawingItemList = mDrawingView.getDrawingItemList();
-//        for (DrawingItem item : drawingItemList) {
-//            if (item instanceof PointItem) {
-//                RectF cropRect = ((PointItem) item).getRectangle();
-//                newMatrix.mapRect(cropRect);
-//                Bitmap resultBit = Bitmap.createBitmap(mBitmap, (int) cropRect.left, (int) cropRect.top, (int) cropRect.width(), (int) cropRect.height());
-//
-//                saveBitmap(resultBit, mCurrentAnnotatedImagePath);
-//
-//                finish();
-//            }
-//
-//
-//
-//        }
-//    }
 
     /**
      * Display the main image
      */
     private void displayImage() {
-//        // Get the dimensions of the View
-//        int targetW = mImageView.getWidth();
-//        int targetH = mImageView.getHeight();
-//
-//        // Get the dimensions of the bitmap
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        int photoW = bmOptions.outWidth;
-//        int photoH = bmOptions.outHeight;
-//
-//        // Determine how much to scale down the image
-//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-//
-//        // Decode the image file into a Bitmap sized to fill the View
-//        bmOptions.inJustDecodeBounds = false;
-//        bmOptions.inSampleSize = scaleFactor;
-//        bmOptions.inPurgeable = true;
-
-//        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentAnnotatedImagePath/*, bmOptions*/);
-//        mImageView.setImageBitmap(rotateImage(bitmap));
-
         // create mutable bitmap
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inMutable = true;
@@ -298,6 +202,7 @@ public class CalibrateActivity extends AppCompatActivity {
 
         mImageView.setImageBitmap(mBitmap);
     }
+
 
     /**
      * rotate image using ExifInterface
@@ -353,52 +258,33 @@ public class CalibrateActivity extends AppCompatActivity {
         }
     }
 
-//    /**
-//     * Save bitmap to file
-//     */
-//    public boolean saveBitmap(Bitmap bitmap, String filePath) {
-//        File file = new File(filePath);
-//
-//        try {
-//            FileOutputStream out = new FileOutputStream(file);
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-//            out.flush();
-//            out.close();
-//            return true;
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//            return false;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
-
-
 
     public void enterRealSize() {
+
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View scaleBarDialogView = layoutInflater.inflate(R.layout.enter_real_size, null);
 
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 
         final EditText realSizeEditText = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_enter_real_size);
-//        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
-
         final Spinner spinner = (Spinner) scaleBarDialogView.findViewById(R.id.units_spinner);
+
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.units_array, android.R.layout.simple_spinner_item);
+
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-
         // Add action to when spinner (drop-down menu) option change
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
                 Log.d("ccccccccccccccccc", "" + i);
                 if (i == 0)
                 {
@@ -445,7 +331,8 @@ public class CalibrateActivity extends AppCompatActivity {
 
                     if (centerX1 == centerX2 && centerY1 == centerY2)
                     {
-                        Toast.makeText(getApplicationContext(), "Please move 2 points apart", Toast.LENGTH_SHORT).show();
+                        onCalibrationPointsMsg();
+//                        Toast.makeText(getApplicationContext(), "Please move 2 points apart", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
@@ -460,7 +347,8 @@ public class CalibrateActivity extends AppCompatActivity {
                         AnnotateActivity.lengthPerPixel = lengthPerPixel;
                         Log.d("ssssssssssssssss", "" + AnnotateActivity.lengthPerPixel);
 
-                        Toast.makeText(getApplicationContext(), "Done calibrating", Toast.LENGTH_SHORT).show();
+                        onCalibrationDoneMsg();
+//                        Toast.makeText(getApplicationContext(), "Done calibrating", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -478,4 +366,123 @@ public class CalibrateActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
     }
+
+
+
+    /**
+     *   CALIBRATION MESSAGES
+     */
+
+
+    /**
+     *   Calibration Help Msg
+     */
+
+    public void onCalibrationMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Help");
+        builder.setMessage("Please set calibration by following these two steps: \n\nStep 1: Add 2 points \n\nStep 2: Enter the real size of the object");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    /**
+     *   Calibration Move the Points Msg
+     */
+
+    public void onAddPointsMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Help");
+        builder.setMessage("Please add 2 points on the screen");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+    /**
+     *   Calibration Move the Points Msg
+     */
+
+    public void onCalibrationPointsMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Points Error");
+        builder.setMessage("Please move the 2 points apart");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+//    /**
+//     *   Calibration Add real size Msg
+//     */
+//
+//    public void onAddRealSizeMsg() {
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("Calibration Help");
+//        builder.setMessage("Please enter the real size of the specimen");
+//        // Add the buttons
+//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog, int id) {
+//                // User clicked OK button
+//            }
+//        });
+//
+//        // Create the AlertDialog
+//        AlertDialog dialog = builder.create();
+//
+//        dialog.show();
+//    }
+
+    /**
+     *   Calibration Done Msg
+     */
+
+    public void onCalibrationDoneMsg() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Completed");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                finish();
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
 }

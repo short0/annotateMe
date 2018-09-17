@@ -1,10 +1,8 @@
 package com.example.user.mobilemicroscopy;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -12,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.ExifInterface;
-import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +28,8 @@ import com.example.user.mobilemicroscopy.drawing.DrawingItem;
 import com.example.user.mobilemicroscopy.drawing.DrawingView;
 import com.example.user.mobilemicroscopy.drawing.ScaleBarItem;
 import com.example.user.mobilemicroscopy.drawing.TextBoxItem;
+import com.example.user.mobilemicroscopy.help.HelpAnnotateActivity;
+import com.example.user.mobilemicroscopy.help.HelpDetailsActivity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -38,7 +37,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AnnotateActivity extends AppCompatActivity {
     /**
@@ -238,28 +236,6 @@ public class AnnotateActivity extends AppCompatActivity {
      * Display the main image
      */
     private void displayImage() {
-//        // Get the dimensions of the View
-//        int targetW = mImageView.getWidth();
-//        int targetH = mImageView.getHeight();
-//
-//        // Get the dimensions of the bitmap
-//        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-//        bmOptions.inJustDecodeBounds = true;
-//        BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-//        int photoW = bmOptions.outWidth;
-//        int photoH = bmOptions.outHeight;
-//
-//        // Determine how much to scale down the image
-//        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-//
-//        // Decode the image file into a Bitmap sized to fill the View
-//        bmOptions.inJustDecodeBounds = false;
-//        bmOptions.inSampleSize = scaleFactor;
-//        bmOptions.inPurgeable = true;
-
-//        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentAnnotatedImagePath/*, bmOptions*/);
-//        mImageView.setImageBitmap(rotateImage(bitmap));
-
         // create mutable bitmap
         BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
         bitmapOptions.inMutable = true;
@@ -381,83 +357,83 @@ public class AnnotateActivity extends AppCompatActivity {
 
 
 
-    //Added by Jon
+//
+//
+//    //Array holds -> Best case scenario figures (for microns per division for x4, x10, x40, x100)
+//    double[] micronPerDivisionArray = new double[] {25, 10, 2.5, 1};
+//
+//
+//    //Added by Jon
+//    /**
+//     * Calibration activity gets inputs from user
+//     */
+//
+//    public void addCalibration(){
+//
+//        LayoutInflater layoutInflater = LayoutInflater.from(context);
+//        View scaleBarDialogView = layoutInflater.inflate(R.layout.calibration_dialog, null);
+//
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+//
+//        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
+//        final EditText stageUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_stage_units);
+//        final EditText ocularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_ocular_units);
+//
+//        // set scale_bar_dialogalog.xml to alert dialog builder
+//        alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            public void onClick(DialogInterface dialog,int id) {
+//                String objectiveLensString = objectiveLens.getText().toString();
+//                String stageUnitsString = stageUnits.getText().toString();
+//                String ocularUnitsString = ocularUnits.getText().toString();
+//
+//                if (!objectiveLensString.equals("") && !stageUnitsString.equals("") && !ocularUnitsString.equals("")) {
+////                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
+//                    double stageUnitsDouble = Double.parseDouble(stageUnitsString);
+//                    double ocularUnitsDouble = Double.parseDouble(ocularUnitsString);
+//
+//                    if (stageUnitsDouble != 0 && ocularUnitsDouble != 0) {
+//                        // Calculate the correct size when compared to micros per division based on Object Lens used
+//                        double micronSizePerOcularUnit = stageUnitsDouble * 10 / ocularUnitsDouble;
+//
+//
+//                        // Places the Ocular's Micron Per Division result in the corresponding Obj Lens's place in the array
+//                        switch (objectiveLensString) {
+//                            case "4":
+//                                micronPerDivisionArray[0] = micronSizePerOcularUnit;
+//                                break;
+//                            case "10":
+//                                micronPerDivisionArray[1] = micronSizePerOcularUnit;
+//                                break;
+//                            case "40":
+//                                micronPerDivisionArray[2] = micronSizePerOcularUnit;
+//                                break;
+//                            case "100":
+//                                micronPerDivisionArray[3] = micronSizePerOcularUnit;
+//                                break;
+//                        }
+//
+//                        mDrawingView.invalidate();
+//                    }
+//                }
+//            }
+//
+//        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog,int id) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        // create alert dialog
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//
+//        // show it
+//        alertDialog.show();
+//    }
 
-    //Array holds -> Best case scenario figures (for microns per division for x4, x10, x40, x100)
-    double[] micronPerDivisionArray = new double[] {25, 10, 2.5, 1};
-
-
-    //Added by Jon
-    /**
-     * Calibration activity gets inputs from user
-     */
-
-    public void addCalibration(){
-
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        View scaleBarDialogView = layoutInflater.inflate(R.layout.calibration_dialog, null);
-
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-
-        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
-        final EditText stageUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_stage_units);
-        final EditText ocularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_ocular_units);
-
-        // set scale_bar_dialogalog.xml to alert dialog builder
-        alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int id) {
-                String objectiveLensString = objectiveLens.getText().toString();
-                String stageUnitsString = stageUnits.getText().toString();
-                String ocularUnitsString = ocularUnits.getText().toString();
-
-                if (!objectiveLensString.equals("") && !stageUnitsString.equals("") && !ocularUnitsString.equals("")) {
-//                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
-                    double stageUnitsDouble = Double.parseDouble(stageUnitsString);
-                    double ocularUnitsDouble = Double.parseDouble(ocularUnitsString);
-
-                    if (stageUnitsDouble != 0 && ocularUnitsDouble != 0) {
-                        // Calculate the correct size when compared to micros per division based on Object Lens used
-                        double micronSizePerOcularUnit = stageUnitsDouble * 10 / ocularUnitsDouble;
-
-
-                        // Places the Ocular's Micron Per Division result in the corresponding Obj Lens's place in the array
-                        switch (objectiveLensString) {
-                            case "4":
-                                micronPerDivisionArray[0] = micronSizePerOcularUnit;
-                                break;
-                            case "10":
-                                micronPerDivisionArray[1] = micronSizePerOcularUnit;
-                                break;
-                            case "40":
-                                micronPerDivisionArray[2] = micronSizePerOcularUnit;
-                                break;
-                            case "100":
-                                micronPerDivisionArray[3] = micronSizePerOcularUnit;
-                                break;
-                        }
-
-                        mDrawingView.invalidate();
-                    }
-                }
-            }
-
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog,int id) {
-                dialog.cancel();
-            }
-        });
-
-        // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-
-        // show it
-        alertDialog.show();
-    }
 
 
 
-    // Updated by Jon
     /**
      * Add scale bar
      */
@@ -474,7 +450,8 @@ public class AnnotateActivity extends AppCompatActivity {
         if (scaleBarCount == 0) {
 
             if (lengthPerPixel == -1) {
-                Toast.makeText(getApplicationContext(), "Please calibrate first", Toast.LENGTH_SHORT).show();
+                onCalibrationError();
+//                Toast.makeText(getApplicationContext(), "Please calibrate first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -506,7 +483,8 @@ public class AnnotateActivity extends AppCompatActivity {
         }
         else
         {
-            Toast.makeText(getApplicationContext(), "Only one scale can be added", Toast.LENGTH_SHORT).show();
+            onScaleBarError();
+//            Toast.makeText(getApplicationContext(), "Only one scale can be added", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -586,90 +564,6 @@ public class AnnotateActivity extends AppCompatActivity {
 
 
 
-
-
-
-//    /**
-//     * Add scale bar
-//     */
-//    public void addScaleBar(final int color) {
-//        LayoutInflater layoutInflater = LayoutInflater.from(context);
-//        View scaleBarDialogView = layoutInflater.inflate(R.layout.scale_bar_dialog, null);
-//
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//
-//        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
-//        final EditText stageUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_stage_units);
-//        final EditText ocularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_ocular_units);
-//        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
-//
-//        // set text_dialogalog.xml to alertdialog builder
-//        alertDialogBuilder
-//                .setView(scaleBarDialogView)
-////                                        .setCancelable(false)
-//                .setPositiveButton("OK",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog,int id) {
-//                                String objectiveLensString = objectiveLens.getText().toString();
-//                                String stageUnitsString = stageUnits.getText().toString();
-//                                String ocularUnitsString = ocularUnits.getText().toString();
-//                                String objectSizeInOcularUnitsString = objectSizeInOcularUnits.getText().toString();
-//
-//                                if (!objectiveLensString.equals("") && !stageUnitsString.equals("") && !ocularUnitsString.equals("") && !objectSizeInOcularUnitsString.equals("")) {
-//                                    float objectiveLensFloat = Float.parseFloat(objectiveLensString);
-//                                    float stageUnitsFloat = Float.parseFloat(stageUnitsString);
-//                                    float ocularUnitsFloat = Float.parseFloat(ocularUnitsString);
-//                                    float objectSizeInOcularUnitsFloat = Float.parseFloat(objectSizeInOcularUnitsString);
-//
-//                                    if (objectiveLensFloat != 0 && stageUnitsFloat != 0 && ocularUnitsFloat != 0 && objectSizeInOcularUnitsFloat != 0) {
-////                                        float magnification = objectiveLensFloat * eyepieceFloat;
-////                                        float realSize = 10000 / magnification;
-//                                        float realSize = stageUnitsFloat * 10 * objectSizeInOcularUnitsFloat / ocularUnitsFloat;
-//                                        String realSizeWithUnit = "";
-//                                        String formattedRealSize = "";
-//
-//                                        DecimalFormat formatter = new DecimalFormat("#.##");
-//                                        // if real size > 1000 µm
-//                                        if (realSize > 1000) {
-//                                            formattedRealSize = formatter.format(realSize / 1000);
-//                                            realSizeWithUnit = formattedRealSize + " mm";
-//                                        } else {
-//                                            formattedRealSize = formatter.format(realSize);
-//                                            realSizeWithUnit = formattedRealSize + " µm";
-//                                        }
-//
-////                                        Log.d("aaaaaaaaaaaaaaaaaaaaaaa", result1 + " " + result2);
-//
-//                                        mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
-//                                        mDrawingView.addScaleBar(color);
-//
-//                                        mDrawingView.invalidate();
-//                                    }
-//                                }
-//
-//                            }
-//                        })
-//                .setNegativeButton("Cancel",
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog,int id) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//
-//        // create alert dialog
-//        AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//        // show it
-//        alertDialog.show();
-//    }
-
-
-
-
-
-
-
-
     /**
      * Method call when top menu created
      */
@@ -677,8 +571,6 @@ public class AnnotateActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate menu
         getMenuInflater().inflate(R.menu.menu_annotate, menu);
- //       getMenuInflater().inflate(R.menu.menu_close, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -689,24 +581,16 @@ public class AnnotateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
 
+            case R.id.menu_help:
 
-            //Calibration ADDED BY JON
+                Intent helpIntent = new Intent(AnnotateActivity.this, HelpAnnotateActivity.class);
+                startActivity(helpIntent);
+
+                // Show text message
+                Toast.makeText(this, "Annotate Page Help", Toast.LENGTH_SHORT).show();
+                return true;
+
             case R.id.menu_calibrate:
-
-//            case R.id.menu_calibrate:        //******** WORKING ON *******  I HAVE NO IDEA!!! :'(
-                // crop the image
-
-//                imageView = (ImageView)findViewById(R.id.imageView);
-//
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_PICK);
-//                startActivityForResult(intent, PICK_FROM_CAMERA);
-
-                //            startActivityFo
-
-                // End the activity
-                //           finish();
 
                 Intent calibrateIntent = new Intent(AnnotateActivity.this, CalibrateActivity.class);
 
@@ -714,8 +598,6 @@ public class AnnotateActivity extends AppCompatActivity {
                 calibrateIntent.putExtra("image", mImage);
 
                 startActivity(calibrateIntent);
-
-//                crop();
 
                 // Show text message
                 Toast.makeText(getApplicationContext(), "Calibrate", Toast.LENGTH_SHORT).show();
@@ -732,9 +614,10 @@ public class AnnotateActivity extends AppCompatActivity {
             case R.id.menu_clear:
 
                 Toast.makeText(getApplicationContext(), "Clear", Toast.LENGTH_SHORT).show();
+                onClearAction();
 
                 // clear all drawing item on view
-                mDrawingView.clear();
+//                mDrawingView.clear();
 
                 return true;
         }
@@ -802,9 +685,7 @@ public class AnnotateActivity extends AppCompatActivity {
                     paint.setColor(Color.BLACK);
                 }
                 paint.setTextSize(((TextBoxItem) item).getTextSize());
-
                 mCanvas.drawText(((TextBoxItem) item).getText(), item.getRectangle().left, item.getRectangle().bottom, paint);
-
                 mCanvas.restore();
             }
 
@@ -824,9 +705,7 @@ public class AnnotateActivity extends AppCompatActivity {
                     paint.setColor(Color.BLACK);
                 }
 
-
                 mCanvas.drawRect(((ScaleBarItem) item).getLine(), paint);
-
                 mCanvas.restore();
             }
         }
@@ -834,6 +713,7 @@ public class AnnotateActivity extends AppCompatActivity {
         // force to draw the view
         mImageView.invalidate();
     }
+
 
     /**
      * Save bitmap to file
@@ -856,13 +736,19 @@ public class AnnotateActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     *   ANNOTATE MESSAGES
+     */
+
+
     @Override
     public void onBackPressed() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Save image");
         builder.setMessage("Do you want to save changes?");
-// Add the buttons
+        // Add the buttons
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
@@ -877,16 +763,86 @@ public class AnnotateActivity extends AppCompatActivity {
                 finish();
             }
         });
-// Set other dialog properties
 
-
-// Create the AlertDialog
+        // Create the AlertDialog
         AlertDialog dialog = builder.create();
 
         dialog.show();
 
 
     }
+
+
+    public void onClearAction() {
+
+        //warning on clearing annotations on image
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning!");
+        builder.setMessage("Are you sure you want to clear your annotations?");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                //clears annotations
+                mDrawingView.clear();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                // No = annotations stay and user returned to image withh annotations in place
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
+    /**
+     *     ERROR MESSAGES
+     **/
+
+    public void onCalibrationError() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Calibration Error");
+        builder.setMessage("Please Calibrate First");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
+
+    public void onScaleBarError() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Request Denied");
+        builder.setMessage("Only one Scale bar can be added");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
 
 }
 

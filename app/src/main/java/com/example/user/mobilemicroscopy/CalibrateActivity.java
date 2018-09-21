@@ -111,6 +111,12 @@ public class CalibrateActivity extends AppCompatActivity {
                     // Show text message
                     Toast.makeText(getApplicationContext(), "Add point", Toast.LENGTH_SHORT).show();
                 }
+
+                if (drawingItemList.size() == 2)
+                {
+                    // Show text message
+                    Toast.makeText(getApplicationContext(), "2 points has been added, please enter the length between the points", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -382,7 +388,7 @@ public class CalibrateActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Calibration Help");
-        builder.setMessage("Please set calibration by following these two steps: \n\nStep 1: Add 2 points \n\nStep 2: Enter the real size of the object");
+        builder.setMessage("Please set calibration by following these two steps: \n\nStep 1: Add 2 points \n\nStep 2: Enter the real length between the points");
         // Add the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

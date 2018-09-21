@@ -29,7 +29,7 @@
 
     <item
         android:id="@+id/menu_upload"
-        android:title="Upload"
+        android:title="Save and Upload"
         app:showAsAction="never" />
 
     <item

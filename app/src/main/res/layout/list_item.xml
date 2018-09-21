@@ -27,21 +27,38 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@+id/speciment_type"
             tools:layout_editor_absoluteX="0dp"
-            tools:text="2018041700001_ann.jpg" />
+            tools:text="2018041700001_ann.jpg"
+            android:visibility="invisible"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/file_name"
+            android:text="Date: "
+            android:id="@+id/text_view_date"/>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_view_date"
             app:layout_constraintTop_toBottomOf="@+id/file_name"
             tools:text="16/04/2018" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            android:text="Time: "
+            android:id="@+id/text_view_time"/>
 
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/text_view_time"
             app:layout_constraintTop_toBottomOf="@+id/date"
             tools:text="11:53 PM" />
 

@@ -69,19 +69,17 @@
             android:name=".CalibrateActivity"
             android:label="Calibrate"
             android:screenOrientation="portrait" />
-        <activity android:name=".UserSelectionActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".UserSelectionActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".help.HelpDetailsActivity"
             android:label="Help"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".help.HelpAnnotateActivity"
             android:label="Help"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

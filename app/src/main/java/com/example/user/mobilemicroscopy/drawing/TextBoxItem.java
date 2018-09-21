@@ -301,7 +301,7 @@ public class TextBoxItem extends DrawingItem {
         Log.d("aaaaaaaaaaaaaaaaaaaaaas", "" + scale);
 
         float newTextSize = textSize * scale;
-        if (newTextSize < 70 || newTextSize > 200) // don't let user scale too big or small
+        if (newTextSize < 50 || newTextSize > 200) // don't let user scale too big or small
         {
             return;
         }

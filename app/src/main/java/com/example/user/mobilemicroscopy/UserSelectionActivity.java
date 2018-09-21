@@ -17,6 +17,8 @@ public class UserSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_selection);
 
+        getSupportActionBar().hide();
+
         selectLoginButton = (ImageView) findViewById(R.id.select_login_button);
         selectGuestButton = (ImageView) findViewById(R.id.select_guest_button);
 

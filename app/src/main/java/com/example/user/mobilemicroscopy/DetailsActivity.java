@@ -315,6 +315,11 @@ public class DetailsActivity extends AppCompatActivity {
             MenuItem uploadMenuItem = (MenuItem) menu.findItem(R.id.menu_upload);
             uploadMenuItem.setVisible(false);
         }
+        else
+        {
+            MenuItem uploadMenuItem = (MenuItem) menu.findItem(R.id.menu_save);
+            uploadMenuItem.setVisible(false);
+        }
 
         return true;
     }
@@ -363,14 +368,20 @@ public class DetailsActivity extends AppCompatActivity {
 
 
             case R.id.menu_save:
-                // save the image to database whether insert new image or update a image
-                saveImage();
+                if (mSpecimenTypeEditText.getText().toString() == null || mSpecimenTypeEditText.getText().toString().equals(""))
+                {
+                    showEmptySpecimenMessage();
+                }
+                else {
+                    // save the image to database whether insert new image or update a image
+                    saveImage();
 
-                // end activity
-                finish();
+                    // end activity
+                    finish();
 
-                // Show text message
-                Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+                    // Show text message
+                    Toast.makeText(this, "Save", Toast.LENGTH_SHORT).show();
+                }
                 return true;
 
             case R.id.menu_delete:
@@ -385,26 +396,32 @@ public class DetailsActivity extends AppCompatActivity {
                 return true;
 
             case R.id.menu_upload:
-
-                // upload to RDS
-                uploadToRDS();
-
-                Log.d("bbbbbbbbbbbbbbb", username);
-
-                // upload to S3 if the image is not null and username is valid
-                if (mImage != null && username != null && !username.equals("")) {
-                    beginUpload(mImage.getOriginalImageLink(), Constants.BUCKET_NAME + "/" + username + "/original");
-                    beginUpload(mImage.getAnnotatedImageLink(), Constants.BUCKET_NAME + "/" + username + "/annotated");
+                if (mSpecimenTypeEditText.getText().toString() == null || mSpecimenTypeEditText.getText().toString().equals(""))
+                {
+                    showEmptySpecimenMessage();
                 }
+                else {
 
-                // save the image to database whether insert new image or update a image
-                saveImage();
+                    // upload to RDS
+                    uploadToRDS();
 
-                // End the activity
-                finish();
+                    Log.d("bbbbbbbbbbbbbbb", username);
 
-                // Show text message
-                Toast.makeText(this, "Upload", Toast.LENGTH_SHORT).show();
+                    // upload to S3 if the image is not null and username is valid
+                    if (mImage != null && username != null && !username.equals("")) {
+                        beginUpload(mImage.getOriginalImageLink(), Constants.BUCKET_NAME + "/" + username + "/original");
+                        beginUpload(mImage.getAnnotatedImageLink(), Constants.BUCKET_NAME + "/" + username + "/annotated");
+                    }
+
+                    // save the image to database whether insert new image or update a image
+                    saveImage();
+
+                    // End the activity
+                    finish();
+
+                    // Show text message
+                    Toast.makeText(this, "Save and upload", Toast.LENGTH_SHORT).show();
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -1019,7 +1036,6 @@ public class DetailsActivity extends AppCompatActivity {
     /**
      *    On Back Button Press
      */
-
     @Override
     public void onBackPressed() {
 
@@ -1030,8 +1046,14 @@ public class DetailsActivity extends AppCompatActivity {
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
-                saveImage();
-                finish();
+                if (mSpecimenTypeEditText.getText().toString() == null || mSpecimenTypeEditText.getText().toString().equals(""))
+                {
+                    showEmptySpecimenMessage();
+                }
+                else {
+                    saveImage();
+                    finish();
+                }
             }
         });
         builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -1048,4 +1070,21 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
 
+    public void showEmptySpecimenMessage() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning");
+        builder.setMessage("Please enter specimen type");
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
 }

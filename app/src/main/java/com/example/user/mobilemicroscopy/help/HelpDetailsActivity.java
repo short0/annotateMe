@@ -6,10 +6,16 @@ import android.text.Html;
 import android.widget.TextView;
 import com.example.user.mobilemicroscopy.R;
 
-
+/**
+ * Help page in DetailsActivity
+ */
 public class HelpDetailsActivity extends AppCompatActivity {
 
-
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);

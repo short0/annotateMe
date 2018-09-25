@@ -28,8 +28,19 @@ import com.amazonaws.services.s3.AmazonS3Client;
  */
 public class Util {
 
+    /**
+     * Amazon S3 Client
+     */
     private AmazonS3Client sS3Client;
+
+    /**
+     * Cognito Caching Credentials Provider
+     */
     private CognitoCachingCredentialsProvider sCredProvider;
+
+    /**
+     * Transfer Utility
+     */
     private TransferUtility sTransferUtility;
 
     /**

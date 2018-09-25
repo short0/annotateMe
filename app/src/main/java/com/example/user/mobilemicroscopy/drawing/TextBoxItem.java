@@ -187,7 +187,6 @@ public class TextBoxItem extends DrawingItem {
 
         float width = paint.measureText(text);
         float height = DEFAULT_HEIGHT;
-//        Log.d("ttttttttttttttttt", width + " " + paint.measureText(text));
 
         // calculate the position of rectangle
         float left = (parentView.getWidth() - width) / 2;
@@ -205,7 +204,7 @@ public class TextBoxItem extends DrawingItem {
         // move the text to position
         matrix.postTranslate(rectangle.left, rectangle.top);
 
-        Log.d("aaaaaaaaaaaaaaaaaaaa", "" + width + " " + height + " " + left + " " + top);
+        Log.d(getClass().getName(), "" + width + " " + height + " " + left + " " + top);
     }
 
     /**
@@ -219,7 +218,6 @@ public class TextBoxItem extends DrawingItem {
 
         float width = paint.measureText(text);
         float height = DEFAULT_HEIGHT;
-//        Log.d("ttttttttttttttttt", width + " " + paint.measureText(text));
 
         // calculate the position of rectangle
         float left = parentView.getWidth() / 2;
@@ -231,7 +229,6 @@ public class TextBoxItem extends DrawingItem {
         rectangle = new RectF(left, top, left + width, top + height);
         deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
         scaleRectangle = new RectF(right, top - BUTTON_SIZE, right + BUTTON_SIZE, top);
-//        rotateRectangle = new RectF(right, bottom, right + 100, bottom + 100);
 
         matrix = new Matrix();
 
@@ -247,21 +244,11 @@ public class TextBoxItem extends DrawingItem {
     public void draw(Canvas canvas) {
         canvas.save();
 
-//        Paint paint = new Paint();
         if (haveButtons) {
-
-//            paint.setColor(Color.WHITE);
-//            canvas.drawRect(rectangle, paint); // draw back ground to see layout
-//            paint.setColor(Color.RED);
-//            canvas.drawRect(deleteRectangle, paint);
-//            paint.setColor(Color.BLUE);
-//            canvas.drawRect(scaleRectangle, paint);
-
             canvas.drawBitmap(deleteBitmap, null, deleteRectangle, null);
             canvas.drawBitmap(scaleBitmap, null, scaleRectangle, null);
         }
 
-//        paint.setColor(Color.BLACK);
         mPaint.setTextSize(textSize);
 
         canvas.drawText(text, rectangle.left, rectangle.bottom, mPaint);

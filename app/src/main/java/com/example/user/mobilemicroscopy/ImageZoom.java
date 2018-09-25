@@ -21,7 +21,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-
+/**
+ * Class implementing the zoom
+ */
 public class ImageZoom extends AppCompatImageView
 {
     Matrix matrix;
@@ -42,14 +44,23 @@ public class ImageZoom extends AppCompatImageView
     Context context;
 
 
-
-
+    /**
+     * Constructor
+     *
+     * @param context
+     */
     public ImageZoom(Context context)
     {
         super(context);
         sharedConstructing(context);
     }
 
+    /**
+     * Constructor
+     *
+     * @param context
+     * @param attrs
+     */
     public ImageZoom(Context context, AttributeSet attrs)
     {
         super(context, attrs);
@@ -57,7 +68,11 @@ public class ImageZoom extends AppCompatImageView
     }
 
 
-
+    /**
+     * sharedConstructing method
+     *
+     * @param context
+     */
     private void sharedConstructing(Context context)
     {
         super.setClickable(true);
@@ -117,39 +132,21 @@ public class ImageZoom extends AppCompatImageView
         });
     }
 
-
-
-
-//****************************************************************************
-//*******  FROM OLD Pinch to Zoom
-//****************************************************************************
-//
-//    @Override
-//    public boolean onTouchEvent(MotionEvent motionEvent)
-//    {
-//        mScaleGestureDetector.onTouchEvent(motionEvent);
-//        return true;
-//    }
-//
-//    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
-//    {
-//        @Override
-//        public boolean onScale(ScaleGestureDetector scaleGestureDetector)
-//        {
-//            mScaleFactor *= scaleGestureDetector.getScaleFactor();
-//            mScaleFactor = Math.max(1.0f, Math.min(mScaleFactor, 1000.0f));
-//            mImageView.setScaleX(mScaleFactor);
-//            mImageView.setScaleY(mScaleFactor);
-//            return true;
-//        }
-//    }
-
-
+    /**
+     * ScaleListener inner class
+     */
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
     {
 
         //Responds to the beginning of a scaling gesture. Reported by new pointers going down
         //In this case mode = 2 (Which is for ZOOM action)
+
+        /**
+         * onScaleBegin method
+         *
+         * @param scaleGestureDetector
+         * @return
+         */
         @Override
         public boolean onScaleBegin(ScaleGestureDetector scaleGestureDetector)
         {
@@ -157,7 +154,12 @@ public class ImageZoom extends AppCompatImageView
             return true;
         }
 
-
+        /**
+         * onScale method
+         *
+         * @param scaleGestureDetector
+         * @return
+         */
         @Override
         public boolean onScale(ScaleGestureDetector scaleGestureDetector)
         {
@@ -187,6 +189,9 @@ public class ImageZoom extends AppCompatImageView
         }
     }
 
+    /**
+     * fixTrans method
+     */
     void fixTrans()
     {
         matrix.getValues(m);
@@ -200,7 +205,14 @@ public class ImageZoom extends AppCompatImageView
     }
 
 
-
+    /**
+     * getFixTrans method
+     *
+     * @param trans
+     * @param viewSize
+     * @param contentSize
+     * @return
+     */
     float getFixTrans(float trans, float viewSize, float contentSize) {
 
         float minTrans, maxTrans;
@@ -224,6 +236,14 @@ public class ImageZoom extends AppCompatImageView
         return 0;
     }
 
+    /**
+     * getFixDragTrans method
+     *
+     * @param delta
+     * @param viewSize
+     * @param contentSize
+     * @return
+     */
     float getFixDragTrans(float delta, float viewSize, float contentSize)
     {
         if (contentSize <= viewSize)
@@ -233,6 +253,12 @@ public class ImageZoom extends AppCompatImageView
         return delta;
     }
 
+    /**
+     * onMeasure method
+     *
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {

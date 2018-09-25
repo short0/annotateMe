@@ -51,32 +51,59 @@ public class MainActivity extends AppCompatActivity {
      */
     String username = "";
 
-    // variable to hold annotated image file
+    /**
+     * variable to hold annotated image file
+     */
     File mAnnotatedImageFile;
 
-    // variable to hold original image file
+    /**
+     * variable to hold original image file
+     */
     File mOriginalImageFile;
 
+    /**
+     * variable to hold calibrate image file
+     */
     File mCalibrateImageFile;
 
-    // store original image file name
+    /**
+     * store original image file name
+     */
     static String mOriginalImageFileName;
 
-    // store annotated image file name
+    /**
+     * store annotated image file name
+     */
     static String mAnnotatedImageFileName;
 
+    /**
+     * stor calibrate image file name
+     */
     static String mCalibrateImageFileName;
 
-    // store original image path
+    /**
+     * store original image path
+     */
     static String mOriginalImagePath;
 
-    // store annotated image path
+    /**
+     * store annotated image path
+     */
     static String mAnnotatedImagePath;
 
+    /**
+     * store calibrate image path
+     */
     static String mCalibrateImagePath;
 
+    /**
+     * take photo request
+     */
     static final int REQUEST_TAKE_PHOTO = 1;
 
+    /**
+     * calibrate request
+     */
     static final int REQUEST_CALIBRATE = 2;
 
     /**
@@ -84,6 +111,9 @@ public class MainActivity extends AppCompatActivity {
      */
     FloatingActionButton fabTakePhoto;
 
+    /**
+     * Calibrate button
+     */
     FloatingActionButton fabCalibrate;
 
     /**
@@ -101,6 +131,11 @@ public class MainActivity extends AppCompatActivity {
      */
     ImageAdapter adapter;
 
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,6 +225,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * onStart method
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -246,13 +284,6 @@ public class MainActivity extends AppCompatActivity {
                 // Show text message
                 Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
                 return true;
-
-//            case R.id.menu_delete_all:
-//                // delete all images
-//                deleteAll();
-//                // Show text message
-//                Toast.makeText(this, "Delete all", Toast.LENGTH_SHORT).show();
-//                return true;
 
             case R.id.menu_log_out:
                 // end activity
@@ -324,6 +355,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Taking photo for calibrating
+     */
     private void sendImageCaptureIntent2() {
         // create an intent to capture image using camera app
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -361,9 +395,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        Log.d("aaaaaaaaaaaaa", mOriginalImagePath);
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            mImageView.setImageBitmap(imageBitmap);
 
             try {
                 copy(mOriginalImagePath, mAnnotatedImagePath);
@@ -388,59 +419,20 @@ public class MainActivity extends AppCompatActivity {
             // declare what is passed in the intent
             intent.putExtra("username", username);
 
-//            // send the original image path with the intent
-//            intent.putExtra("originalImagePath", mOriginalImagePath);
-//            // send the annotated image path with the intent
-//            intent.putExtra("annotatedImagePath", mAnnotatedImagePath);
-//            // send the original image file name
-//            intent.putExtra("originalImageFileName", mOriginalImageFileName);
-//            // send the annotated image file name
-//            intent.putExtra("annotatedImageFileName", mAnnotatedImageFileName);
-//            // declare what is passed in the intent
-//            intent.putExtra("passedType", "annotatedImagePath");
-
             startActivity(intent);
         }
 
         /////////////////////////////////////////////////////////////
         if (requestCode == REQUEST_CALIBRATE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            mImageView.setImageBitmap(imageBitmap);
-
-//            try {
-//                copy(mOriginalImagePath, mAnnotatedImagePath);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
 
             Image image = new Image();
-//            image.setOriginalImageLink(mOriginalImagePath);
+
             image.setAnnotatedImageLink(mCalibrateImagePath);
-//            image.setOriginalFileName(mOriginalImageFileName);
-//            image.setAnnotatedFileName(mAnnotatedImageFileName);
 
             Intent intent = new Intent(MainActivity.this, CalibrateActivity.class);
 
             // add the image to the intent to pass
             intent.putExtra("image", image);
-
-            // declare what is passed in the intent
-//            intent.putExtra("passedType", "emptyObject");
-
-            // declare what is passed in the intent
-//            intent.putExtra("username", username);
-
-//            // send the original image path with the intent
-//            intent.putExtra("originalImagePath", mOriginalImagePath);
-//            // send the annotated image path with the intent
-//            intent.putExtra("annotatedImagePath", mAnnotatedImagePath);
-//            // send the original image file name
-//            intent.putExtra("originalImageFileName", mOriginalImageFileName);
-//            // send the annotated image file name
-//            intent.putExtra("annotatedImageFileName", mAnnotatedImageFileName);
-//            // declare what is passed in the intent
-//            intent.putExtra("passedType", "annotatedImagePath");
 
             startActivity(intent);
         }
@@ -457,11 +449,6 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String originalImageFileName = timeStamp + "_original";
         File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                originalImageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                directory      /* directory */
-//        );
 
         // make the file using the path
         File imageFile = new File(directory + "/" + originalImageFileName + ".jpg");
@@ -485,11 +472,6 @@ public class MainActivity extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String annotatedImageFileName = timeStamp + "_annotated";
         File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                originalImageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                directory      /* directory */
-//        );
 
         // make the file using the path
         File imageFile = new File(directory + "/" + annotatedImageFileName + ".jpg");
@@ -502,16 +484,17 @@ public class MainActivity extends AppCompatActivity {
         return imageFile;
     }
 
+    /**
+     * Method to create calibrate image file
+     *
+     * @return
+     * @throws IOException
+     */
     private File createCalibrateImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String calibrateImageFileName = timeStamp + "_calibrate";
         File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                originalImageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                directory      /* directory */
-//        );
 
         // make the file using the path
         File imageFile = new File(directory + "/" + calibrateImageFileName + ".jpg");

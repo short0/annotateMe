@@ -181,7 +181,7 @@ public class ArrowItem extends DrawingItem {
         // scale the arrow down
         float width = arrowBitmap.getWidth() / 4;
         float height = arrowBitmap.getHeight() / 4;
-        Log.d("wwwwwwwwwwwwwhhhhhhhhh", width + " " + height);
+        Log.d(getClass().getName(), width + " " + height);
 
         // calculate the position of rectangle
         float left = (parentView.getWidth() - width) / 2;
@@ -207,7 +207,7 @@ public class ArrowItem extends DrawingItem {
         // move the arrow to position
         matrix.postTranslate(rectangle.left, rectangle.top);
 
-        Log.d("aaaaaaaaaaaaaaaaaaaa", "" + width + " " + height + " " + left + " " + top);
+        Log.d(getClass().getName(), "" + width + " " + height + " " + left + " " + top);
     }
 
     /**
@@ -216,26 +216,13 @@ public class ArrowItem extends DrawingItem {
     public void draw(Canvas canvas) {
         canvas.save();
 
-//        canvas.rotate(rotateAngle, rectangle.centerX(), rectangle.centerY());
-
         if (haveButtons) {
-//            Paint paint = new Paint();
-//            paint.setColor(Color.WHITE);
-//            canvas.drawRect(rectangle, paint);
-//            paint.setColor(Color.RED);
-//            canvas.drawRect(deleteRectangle, paint);
-//            paint.setColor(Color.BLUE);
-//            canvas.drawRect(scaleRectangle, paint);
-//            paint.setColor(Color.GREEN);
-//            canvas.drawRect(rotateRectangle, paint);
-
             canvas.drawBitmap(deleteBitmap, null, deleteRectangle, null);
             canvas.drawBitmap(scaleBitmap, null, scaleRectangle, null);
             canvas.drawBitmap(rotateBitmap, null, rotateRectangle, null);
         }
 
         canvas.drawBitmap(arrowBitmap, matrix, null);
-//        canvas.drawBitmap(arrowBitmap, null, rectangle, null);
 
         canvas.restore();
     }
@@ -280,11 +267,11 @@ public class ArrowItem extends DrawingItem {
             return;
         }
 
-        Log.d("aaaaaaaaaaaaaaaaaaaaaas", "" + scale);
+        Log.d(getClass().getName(), "" + scale);
 
         // scale using centre point of the rectangle
         matrix.postScale(scale, scale, rectangle.centerX(), rectangle.centerY());
-        Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + width + " " + height);
+        Log.d(getClass().getName(), "" + width + " " + height);
 
         float newWidth = width * scale;
         float newHeight = height * scale;
@@ -312,14 +299,6 @@ public class ArrowItem extends DrawingItem {
         float centerX = rectangle.centerX();
         float centerY = rectangle.centerY();
 
-//        float r1 = (float) Math.sqrt((rotateRectangle.left - centerX) * (rotateRectangle.left - centerX) + (rotateRectangle.top - centerY) * (rotateRectangle.top - centerY));
-//        float temp1 = rotateRectangle.left - centerX;
-//        float angle1 = (float) Math.toDegrees(Math.acos(temp1/r1));
-//
-//        float r2 = (float) Math.sqrt((oldX - centerX) * (oldX - centerX) + (oldY - centerY) * (oldY - centerY));
-//        float temp2 = oldX - centerX;
-//        float angle2 = (float) Math.toDegrees(Math.acos(temp2/r2));
-
         // calculate old and new angle using linear equation: y = mx +c
         float m1 = (rotateRectangle.top - centerY) / (rotateRectangle.left - centerX);
         float m2 = (oldY - centerY) / (oldX - centerX);
@@ -332,9 +311,7 @@ public class ArrowItem extends DrawingItem {
             angle = angle2 + angle1;
         }
 
-//        rotateAngle += angle;
-
-        Log.d("aaaaaaaaaaaaaaaaaaaaaaa", "" + angle2 + " " + angle1 + " " + angle);
+        Log.d(getClass().getName(), "" + angle2 + " " + angle1 + " " + angle);
 
         // rotate the arrow using the center of rectangle
         matrix.postRotate(angle, rectangle.centerX(), rectangle.centerY());
@@ -342,7 +319,6 @@ public class ArrowItem extends DrawingItem {
         float sin = (float) Math.sin(Math.toRadians(angle));
         float cos = (float) Math.cos(Math.toRadians(angle));
 
-//        rotateRectangle.offset(dx, dy);
         float x = rotateRectangle.centerX();
         float y = rotateRectangle.centerY();
         float newX = centerX + (x - centerX) * cos - (y - centerY) * sin;

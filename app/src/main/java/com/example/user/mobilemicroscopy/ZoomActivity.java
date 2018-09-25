@@ -13,6 +13,9 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+/**
+ * Activity to handle the zoom function
+ */
 public class ZoomActivity extends AppCompatActivity {
 
     /**
@@ -30,6 +33,11 @@ public class ZoomActivity extends AppCompatActivity {
      */
     ExifInterface mExifInterface;
 
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,20 +62,11 @@ public class ZoomActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(DetailsActivity.this, AnnotateActivity.class);
-//                // add the image to the intent to pass
-//                intent.putExtra("image", mImage);
-////                intent.putExtra("annotatedImagePath", mCurrentAnnotatedImagePath);
-//                startActivity(intent);
 
-
-                // Zoom the image   //****  SORTA WORKS  ****  ITS ZOOMS :)
-//                Intent zoomIntent = new Intent(DetailsActivity.this, ImageZoomActivity.class);
-//                startActivity(zoomIntent);
                 zoomImage();
 
-//                // Show text message
-//                Toast.makeText(ZoomActivity.this, "Zoom", Toast.LENGTH_SHORT).show();
+                // Show text message
+//                Toast.makeText(getApplicationContext(), "Zoom", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -118,18 +117,7 @@ public class ZoomActivity extends AppCompatActivity {
      * rotate image using ExifInterface
      */
     public Bitmap rotateImage(Bitmap bitmap) {
-//        ExifInterface exifInterface = null;
-//        try
-//        {
-//            exifInterface = new ExifInterface(mCurrentAnnotatedImagePath);
-//            float[] latLong = new float[2];
-//            exifInterface.getLatLong(latLong);
-//            Log.d("aaaaaaaaaaaaaaaaaaaaaaa", exifInterface.getAttribute(ExifInterface.TAG_DATETIME));
-//        }
-//        catch (IOException e)
-//        {
-//            e.printStackTrace();
-//        }
+
         int orientation = mExifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
         Matrix matrix = new Matrix();

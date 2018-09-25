@@ -169,7 +169,11 @@ public class DetailsActivity extends AppCompatActivity {
      */
     ExifInterface mExifInterface;
 
-
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,7 +203,7 @@ public class DetailsActivity extends AppCompatActivity {
         {
             username = "";
         }
-        Log.d("USERNAME", username);
+        Log.d(getClass().getName(), username);
 
         mPassedType = intent.getStringExtra("passedType");
 
@@ -323,11 +327,6 @@ public class DetailsActivity extends AppCompatActivity {
 
         return true;
     }
-
-
-
-
-
 
     /**
      * Take action based on what is selected
@@ -489,54 +488,6 @@ public class DetailsActivity extends AppCompatActivity {
      */
     public void crop()
     {
-//        Uri mFinalImageUri = Uri.parse("/storage/emulated/0/Android/data/com.example.user.mobilemicroscopy/files/Pictures/20180601_142609_annotated.jpg");
-//        try {
-//            if(mFinalImageUri!=null)
-//            {
-//                //call the standard crop action intent (the user device may not support it)
-//                Intent cropIntent = new Intent("com.android.camera.action.CROP");
-////                //indicate image type and Uri
-//                cropIntent.setDataAndType(mFinalImageUri, "image/*");
-//                //set crop properties
-//                cropIntent.putExtra("crop", "true");
-//                //indicate aspect of desired crop
-//                cropIntent.putExtra("aspectX", 1);
-//                cropIntent.putExtra("aspectY", 1);
-//                cropIntent.putExtra("scale", true);
-//                //indicate output X and Y
-//                cropIntent.putExtra("outputX", 3000);
-//                cropIntent.putExtra("outputY", 3000);
-//                //retrieve data on return
-//                cropIntent.putExtra("return-data", true);
-//
-//                File f = null;
-//                try {
-//                    f = createNewFile();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    f.createNewFile();
-//                } catch (IOException ex) {
-//                    Log.d("io", ex.getMessage());
-//                }
-//
-//                mCropImagedUri = Uri.fromFile(f);
-//                cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCropImagedUri);
-//                //start the activity - we handle returning in onActivityResult
-//                startActivityForResult(cropIntent, CROP_IMAGE);
-//                return true;
-//            }
-//        }
-//        catch(ActivityNotFoundException anfe){
-//            //display an error message
-//            String errorMessage = "Whoops - your device doesn't support the crop action!";
-//            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
-//            toast.show();
-//            return false;
-//        }
-//        return false;
-
         // Send an intent with action crop
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
@@ -668,6 +619,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Restore original image
+     */
     public void restoreOriginal()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -823,6 +777,12 @@ public class DetailsActivity extends AppCompatActivity {
      * An AsyncTask to add a record to RDS
      */
     private class RdsAsyncTask extends AsyncTask<String, Void, String> {
+        /**
+         * Execute the action
+         *
+         * @param strings
+         * @return
+         */
         @Override
         protected String doInBackground(String... strings) {
             String jsonResponse = "";
@@ -934,6 +894,11 @@ public class DetailsActivity extends AppCompatActivity {
             return jsonResponse; // return a JSON response
         }
 
+        /**
+         * Execute after executing action
+         *
+         * @param jsonResponse
+         */
         @Override
         protected void onPostExecute(String jsonResponse) {
             super.onPostExecute(jsonResponse);
@@ -1069,7 +1034,9 @@ public class DetailsActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
+    /**
+     * showEmptySpecimenMessage
+     */
     public void showEmptySpecimenMessage() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

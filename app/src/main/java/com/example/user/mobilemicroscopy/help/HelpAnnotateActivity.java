@@ -7,10 +7,16 @@ import android.widget.TextView;
 
 import com.example.user.mobilemicroscopy.R;
 
-
+/**
+ * Help page in AnnotateActivity
+ */
 public class HelpAnnotateActivity extends AppCompatActivity {
 
-
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);

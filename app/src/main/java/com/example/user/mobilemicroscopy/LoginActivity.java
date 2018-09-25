@@ -33,7 +33,9 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 public class LoginActivity extends AppCompatActivity {
-
+    /**
+     * Web API URL to validate user
+     */
     private static final String SIMPLE_USER_WEB_API_URL = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/users.php";
 
     /**
@@ -61,6 +63,11 @@ public class LoginActivity extends AppCompatActivity {
      */
     String username = "";
 
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,24 +85,17 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Logging in, please wait ...", Toast.LENGTH_SHORT).show();
                 login();
 
             }
         });
 
-//        // find guest login button
-//        guestLoginButton = (Button) findViewById(R.id.guest_login_button);
-//
-//        // specify the action when the button is clicked
-//        guestLoginButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                startActivity(intent);
-//            }
-//        });
     }
 
+    /**
+     * onResume method
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -117,19 +117,12 @@ public class LoginActivity extends AppCompatActivity {
         // If there is a network connection, fetch data
         if (networkInfo != null && networkInfo.isConnected()) {
 
-//            String webServerUrl = "http://ec2-13-210-117-22.ap-southeast-2.compute.amazonaws.com/api/users.php";
-
-//                Uri imageUri = Uri.parse(webServerUrl);
-//                Intent webIntent = new Intent(Intent.ACTION_VIEW, imageUri);
-//
-//                startActivity(webIntent);
-
             // make a background task to login
             LoginAsyncTask loginAsyncTask = new LoginAsyncTask();
             loginAsyncTask.execute(SIMPLE_USER_WEB_API_URL);
         } else {
             Toast.makeText(getApplicationContext(), "No internet connection", Toast.LENGTH_SHORT).show();
-            Log.d("AAAAAAAAAAAAAAAAAAAA", "bbbbbbbbbbbbbbbbbb");
+            Log.d(getClass().getName(), "Testing internet connection");
         }
     }
 
@@ -149,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
             URL url = null;
             try {
                 url = new URL(strings[0]);
-                Log.d("AAAAAAAAAAAAAAAAa", strings[0]);
+                Log.d(getClass().getName(), strings[0]);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -184,17 +177,17 @@ public class LoginActivity extends AppCompatActivity {
                 outputStream.close();
 
                 connection.connect();
-                Log.d("AAAAAAAAAAAAAAAAAA", connection.getResponseCode() + "");
+                Log.d(getClass().getName(), connection.getResponseCode() + "");
 
                 // If the request was successful (response code 200),
                 // then read the input stream and parse the response.
                 if (connection.getResponseCode() == 200) {
                     inputStream = connection.getInputStream();
                     jsonResponse = readInputStream(inputStream);
-                    Log.d("AAAAAAAAAAAAAAAAAAbbb", jsonResponse);
+                    Log.d(getClass().getName(), jsonResponse);
 //                    extractFeatureFromJson(jsonResponse);
                 } else {
-                    Log.e("AAAAAAAAAAAAA", "Error response code: " + connection.getResponseCode());
+                    Log.e(getClass().getName(), "Error response code: " + connection.getResponseCode());
                 }
 
             } catch (IOException e) {
@@ -262,7 +255,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (records.length() != 0) {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.putExtra("username", username);
-                    Log.e("AAAAAAAAAAAAAAAAAAA", username);
+                    Log.e(getClass().getName(), username);
                     startActivity(intent);
                     Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
                 } else if (records.length() == 0) {
@@ -270,7 +263,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
             } catch (JSONException e) {
-                Log.e("AAAAAAAAAAAAAAAAAAA", "Problem parsing the earthquake JSON results", e);
+                Log.e(getClass().getName(), "Problem parsing the earthquake JSON results", e);
             }
         }
     }

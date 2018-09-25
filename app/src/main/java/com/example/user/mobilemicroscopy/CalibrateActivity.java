@@ -80,7 +80,11 @@ public class CalibrateActivity extends AppCompatActivity {
      */
     TextView textViewEnterRealSize;
 
-
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,8 +189,6 @@ public class CalibrateActivity extends AppCompatActivity {
                 return true;
 
 
-
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -265,6 +267,9 @@ public class CalibrateActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Enter real size between the point and calculate length per µm
+     */
     public void enterRealSize() {
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -291,7 +296,7 @@ public class CalibrateActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Log.d("ccccccccccccccccc", "" + i);
+                Log.d(getClass().getName(), "" + i);
                 if (i == 0)
                 {
                     toMicron = 1;
@@ -324,7 +329,7 @@ public class CalibrateActivity extends AppCompatActivity {
                     double realSizeDouble = Double.parseDouble(realSizeString);
 //                    double objectSizeInOcularUnitsDouble = Double.parseDouble(objectSizeInOcularUnitsString);
 
-                    Log.d("ssssssssssssssss", "" + realSizeDouble);
+                    Log.d(getClass().getName(), "" + realSizeDouble);
 
                     DrawingItem point1 = mDrawingView.getDrawingItemList().get(0);
                     DrawingItem point2 = mDrawingView.getDrawingItemList().get(1);
@@ -343,7 +348,7 @@ public class CalibrateActivity extends AppCompatActivity {
                     else
                     {
                         double pixels = (double) Math.sqrt(Math.pow(centerX1 - centerX2, 2) + Math.pow(centerY1 - centerY2, 2));
-                        Log.d("ssssssssssssssss", "" + pixels);
+                        Log.d(getClass().getName(), "" + pixels);
 
                         // length per pixel in µm
                         double lengthPerPixel = realSizeDouble / pixels * toMicron;
@@ -351,7 +356,7 @@ public class CalibrateActivity extends AppCompatActivity {
 
                         // set the value to AnnotateActivity
                         AnnotateActivity.lengthPerPixel = lengthPerPixel;
-                        Log.d("ssssssssssssssss", "" + AnnotateActivity.lengthPerPixel);
+                        Log.d(getClass().getName(), "" + AnnotateActivity.lengthPerPixel);
 
                         onCalibrationDoneMsg();
 //                        Toast.makeText(getApplicationContext(), "Done calibrating", Toast.LENGTH_SHORT).show();
@@ -383,7 +388,6 @@ public class CalibrateActivity extends AppCompatActivity {
     /**
      *   Calibration Help Msg
      */
-
     public void onCalibrationMsg() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -405,7 +409,6 @@ public class CalibrateActivity extends AppCompatActivity {
     /**
      *   Calibration Move the Points Msg
      */
-
     public void onAddPointsMsg() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -427,7 +430,6 @@ public class CalibrateActivity extends AppCompatActivity {
     /**
      *   Calibration Move the Points Msg
      */
-
     public void onCalibrationPointsMsg() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -446,32 +448,9 @@ public class CalibrateActivity extends AppCompatActivity {
         dialog.show();
     }
 
-//    /**
-//     *   Calibration Add real size Msg
-//     */
-//
-//    public void onAddRealSizeMsg() {
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Calibration Help");
-//        builder.setMessage("Please enter the real size of the specimen");
-//        // Add the buttons
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog, int id) {
-//                // User clicked OK button
-//            }
-//        });
-//
-//        // Create the AlertDialog
-//        AlertDialog dialog = builder.create();
-//
-//        dialog.show();
-//    }
-
     /**
      *   Calibration Done Msg
      */
-
     public void onCalibrationDoneMsg() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -489,6 +468,5 @@ public class CalibrateActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
 
 }

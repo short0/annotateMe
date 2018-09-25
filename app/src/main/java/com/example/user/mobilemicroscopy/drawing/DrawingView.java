@@ -222,8 +222,8 @@ public class DrawingView extends View {
                     invalidate();
                 }
 
-                Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + x + " " + y);
-                Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + currentItem);
+                Log.d(getClass().getName(), "" + x + " " + y);
+                Log.d(getClass().getName(), "" + currentItem);
 //                return true;
                 break;
 
@@ -242,7 +242,7 @@ public class DrawingView extends View {
                     oldX = x;
                     oldY = y;
 
-                    Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + status + " " + differenceX + " " + differenceY);
+                    Log.d(getClass().getName(), "" + status + " " + differenceX + " " + differenceY);
                 } else if (status == SCALING) {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
@@ -256,7 +256,7 @@ public class DrawingView extends View {
 
                     oldX = x;
                     oldY = y;
-                    Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + status);
+                    Log.d(getClass().getName(), "" + status);
                 } else if (status == ROTATING) {
                     float differenceX = x - oldX;
                     float differenceY = y - oldY;
@@ -270,7 +270,7 @@ public class DrawingView extends View {
 
                     oldX = x;
                     oldY = y;
-                    Log.d("aaaaaaaaaaaaaaaaaaaaaa", "" + status);
+                    Log.d(getClass().getName(), "" + status);
                 }
 //                return true;
                 break;

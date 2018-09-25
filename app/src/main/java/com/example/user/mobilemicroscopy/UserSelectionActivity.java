@@ -7,11 +7,21 @@ import android.view.View;
 import android.widget.ImageView;
 
 public class UserSelectionActivity extends AppCompatActivity {
-
+    /**
+     * Login button
+     */
     ImageView selectLoginButton;
 
+    /**
+     * Guest button
+     */
     ImageView selectGuestButton;
 
+    /**
+     * onCreate method
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -354,86 +354,6 @@ public class AnnotateActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-
-
-
-//
-//
-//    //Array holds -> Best case scenario figures (for microns per division for x4, x10, x40, x100)
-//    double[] micronPerDivisionArray = new double[] {25, 10, 2.5, 1};
-//
-//
-//    //Added by Jon
-//    /**
-//     * Calibration activity gets inputs from user
-//     */
-//
-//    public void addCalibration(){
-//
-//        LayoutInflater layoutInflater = LayoutInflater.from(context);
-//        View scaleBarDialogView = layoutInflater.inflate(R.layout.calibration_dialog, null);
-//
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//
-//        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
-//        final EditText stageUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_stage_units);
-//        final EditText ocularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_ocular_units);
-//
-//        // set scale_bar_dialogalog.xml to alert dialog builder
-//        alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog,int id) {
-//                String objectiveLensString = objectiveLens.getText().toString();
-//                String stageUnitsString = stageUnits.getText().toString();
-//                String ocularUnitsString = ocularUnits.getText().toString();
-//
-//                if (!objectiveLensString.equals("") && !stageUnitsString.equals("") && !ocularUnitsString.equals("")) {
-////                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
-//                    double stageUnitsDouble = Double.parseDouble(stageUnitsString);
-//                    double ocularUnitsDouble = Double.parseDouble(ocularUnitsString);
-//
-//                    if (stageUnitsDouble != 0 && ocularUnitsDouble != 0) {
-//                        // Calculate the correct size when compared to micros per division based on Object Lens used
-//                        double micronSizePerOcularUnit = stageUnitsDouble * 10 / ocularUnitsDouble;
-//
-//
-//                        // Places the Ocular's Micron Per Division result in the corresponding Obj Lens's place in the array
-//                        switch (objectiveLensString) {
-//                            case "4":
-//                                micronPerDivisionArray[0] = micronSizePerOcularUnit;
-//                                break;
-//                            case "10":
-//                                micronPerDivisionArray[1] = micronSizePerOcularUnit;
-//                                break;
-//                            case "40":
-//                                micronPerDivisionArray[2] = micronSizePerOcularUnit;
-//                                break;
-//                            case "100":
-//                                micronPerDivisionArray[3] = micronSizePerOcularUnit;
-//                                break;
-//                        }
-//
-//                        mDrawingView.invalidate();
-//                    }
-//                }
-//            }
-//
-//        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//
-//            public void onClick(DialogInterface dialog,int id) {
-//                dialog.cancel();
-//            }
-//        });
-//
-//        // create alert dialog
-//        AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//        // show it
-//        alertDialog.show();
-//    }
-
-
-
-
     /**
      * Add scale bar
      */
@@ -451,7 +371,6 @@ public class AnnotateActivity extends AppCompatActivity {
 
             if (lengthPerPixel == -1) {
                 onCalibrationError();
-//                Toast.makeText(getApplicationContext(), "Please calibrate first", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -484,82 +403,9 @@ public class AnnotateActivity extends AppCompatActivity {
         else
         {
             onScaleBarError();
-//            Toast.makeText(getApplicationContext(), "Only one scale can be added", Toast.LENGTH_SHORT).show();
             return;
         }
 
-
-
-//        LayoutInflater layoutInflater = LayoutInflater.from(context);
-//        View scaleBarDialogView = layoutInflater.inflate(R.layout.scale_bar_dialog, null);
-//
-//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
-//
-//        final EditText objectiveLens = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_objective_lens);
-//        final EditText objectSizeInOcularUnits = (EditText) scaleBarDialogView.findViewById(R.id.edit_text_object_size_in_ocular_units);
-//
-//        // set scale_bar_dialogalog.xml to alert dialog builder
-//        alertDialogBuilder.setView(scaleBarDialogView).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            public void onClick(DialogInterface dialog,int id) {
-//                String objectiveLensString = objectiveLens.getText().toString();
-//                String objectSizeInOcularUnitsString = objectSizeInOcularUnits.getText().toString();
-//
-//            if (!objectiveLensString.equals("") && !objectSizeInOcularUnitsString.equals("")) {
-////                double objectiveLensDouble = Double.parseDouble(objectiveLensString);
-//                double objectSizeInOcularUnitsDouble = Double.parseDouble(objectSizeInOcularUnitsString);
-//
-//                double realSize = 0;
-//
-//
-//                // Calculate the correct size when compared to micros per division based on Object Lens used
-//                switch (objectiveLensString) {
-//                    case "4":
-//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[0];
-//                        break;
-//                    case "10":
-//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[1];
-//                        break;
-//                    case "40":
-//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[2];
-//                        break;
-//                    case "100":
-//                        realSize = objectSizeInOcularUnitsDouble * micronPerDivisionArray[3];
-//                        break;
-//                }
-//
-//
-//                String realSizeWithUnit = "";
-//                String formattedRealSize = "";
-//
-//                DecimalFormat formatter = new DecimalFormat("#.##");
-//                // if real size > 1000 µm
-//                if (realSize > 1000) {
-//                    formattedRealSize = formatter.format(realSize / 1000);
-//                    realSizeWithUnit = formattedRealSize + " mm";
-//                } else {
-//                    formattedRealSize = formatter.format(realSize);
-//                    realSizeWithUnit = formattedRealSize + " µm";
-//                }
-//
-//                mDrawingView.addTextForScaleBar(realSizeWithUnit, color);
-//                mDrawingView.addScaleBar(color);
-//
-//                mDrawingView.invalidate();
-//            }
-//            }
-//
-//        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//
-//            public void onClick(DialogInterface dialog,int id) {
-//                dialog.cancel();
-//            }
-//        });
-//
-//        // create alert dialog
-//        AlertDialog alertDialog = alertDialogBuilder.create();
-//
-//        // show it
-//        alertDialog.show();
     }
 
 
@@ -741,7 +587,9 @@ public class AnnotateActivity extends AppCompatActivity {
      *   ANNOTATE MESSAGES
      */
 
-
+    /**
+     * On Back Pressed
+     */
     @Override
     public void onBackPressed() {
 
@@ -773,6 +621,9 @@ public class AnnotateActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * On Clear Action
+     */
     public void onClearAction() {
 
         //warning on clearing annotations on image
@@ -805,7 +656,6 @@ public class AnnotateActivity extends AppCompatActivity {
     /**
      *     ERROR MESSAGES
      **/
-
     public void onCalibrationError() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -824,7 +674,9 @@ public class AnnotateActivity extends AppCompatActivity {
         dialog.show();
     }
 
-
+    /**
+     * On Scale Bar Error
+     */
     public void onScaleBarError() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

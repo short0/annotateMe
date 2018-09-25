@@ -29,6 +29,14 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         mList = list;
     }
 
+    /**
+     * get the view and display
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -118,6 +126,12 @@ public class ImageAdapter extends ArrayAdapter<Image> {
         }
     }
 
+    /**
+     * Display the image
+     *
+     * @param imageView
+     * @param path
+     */
     private void displayImage(ImageView imageView, String path) {
         // Get the dimensions of the View
         int targetW = 60; //imageView.getWidth();

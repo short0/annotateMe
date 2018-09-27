@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.LoaderManager;
 import android.content.ContentUris;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
@@ -17,6 +18,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -276,11 +278,11 @@ public class MainActivity extends AppCompatActivity {
         switch (menuItem.getItemId()) {
             case R.id.menu_login:
                 // go to LoginActivity
-//                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-//                startActivity(intent);
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
 
                 // end activity
-                finish();
+//                finish();
                 // Show text message
                 Toast.makeText(this, "Login", Toast.LENGTH_SHORT).show();
                 return true;
@@ -291,6 +293,15 @@ public class MainActivity extends AppCompatActivity {
 
                 // Show text message
                 Toast.makeText(this, "Log out", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.menu_delete_all:
+                // end activity
+                onDeleteAll();
+                //finish();
+
+                // Show text message
+ //               Toast.makeText(this, "Delete All", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(menuItem);
@@ -525,4 +536,38 @@ public class MainActivity extends AppCompatActivity {
         inStream.close();
         outStream.close();
     }
+
+
+
+    /**
+     * On Delete All Action Message
+     */
+    public void onDeleteAll() {
+
+        //warning on clearing annotations on image
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Warning!");
+        builder.setMessage("DELETE ALL images on your device?\n\nRecords cannot be retrieved once deleted. Are you sure?");
+        // Add the buttons
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+                //Deletes All Images
+                deleteAll();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+                // No = Cancels Delete All user request
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+
+        dialog.show();
+    }
+
 }

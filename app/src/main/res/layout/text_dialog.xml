@@ -12,9 +12,8 @@
 
     <EditText
         android:id="@+id/edit_text_text_dialog"
-        android:hint="Enter text"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
         <requestFocus />
 

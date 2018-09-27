@@ -14,7 +14,6 @@
         android:id="@+id/edit_text_objective_lens"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="10"
         android:inputType="numberDecimal"
         android:maxLength="4">
 
@@ -29,9 +28,8 @@
 
     <EditText
         android:id="@+id/edit_text_object_size_in_ocular_units"
-        android:hint="10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"/>
+        android:inputType="numberDecimal" />
 
 </LinearLayout>

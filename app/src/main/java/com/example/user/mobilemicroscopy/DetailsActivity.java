@@ -1,5 +1,6 @@
 package com.example.user.mobilemicroscopy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -53,6 +55,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -235,7 +240,27 @@ public class DetailsActivity extends AppCompatActivity {
                 mExifInterface = new ExifInterface(mImage.getAnnotatedImageLink());
 
                 // extract and format date and time
-                String dateTimeTag = mExifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+//                String dateTimeTag = mExifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+                /**
+                 *     Convert date into Australian format dd/mm/yyyy
+                 */
+                //Gets DateTime and converts date to Australian format
+                SimpleDateFormat dateParser = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss");
+                SimpleDateFormat dateConverter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date d = null;
+                try
+                {
+                    d = dateParser.parse(mExifInterface.getAttribute(ExifInterface.TAG_DATETIME));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String dateTimeTag = dateConverter.format(d);
+
+                /**
+                 *    END convert date code
+                 */
+
+
                 String dateTag = dateTimeTag.substring(0, 10).trim();
                 String timeTag = dateTimeTag.substring(10).trim();
 
@@ -373,6 +398,8 @@ public class DetailsActivity extends AppCompatActivity {
                 }
                 else {
                     // save the image to database whether insert new image or update a image
+                    //hides soft keyboard before saving
+                    hideSoftKeyboard(this);
                     saveImage();
 
                     // end activity
@@ -413,6 +440,8 @@ public class DetailsActivity extends AppCompatActivity {
                     }
 
                     // save the image to database whether insert new image or update a image
+                    //hides soft keyboard before saving
+                    hideSoftKeyboard(this);
                     saveImage();
 
                     // End the activity
@@ -427,7 +456,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
 
-    /**
+     /**
      * Triggered when this activity received a value from other activity
      *
      * @param requestCode
@@ -615,8 +644,6 @@ public class DetailsActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
         dialog.show();
-
-
     }
 
     /**
@@ -958,7 +985,7 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     /******************************************************************/
-    /*
+    /**
      * Begins to upload the file specified by the file path.
      */
     private void beginUpload(String filePath, String bucket) {
@@ -990,8 +1017,22 @@ public class DetailsActivity extends AppCompatActivity {
         outStream.close();
     }
 
-    /****************************************************************/
+    /**
+     * Method to hide soft keyboard
+     * @param activity
+     */
+    public static void hideSoftKeyboard(Activity activity) {
 
+        try {
+
+            InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
     /**
@@ -1040,8 +1081,8 @@ public class DetailsActivity extends AppCompatActivity {
     public void showEmptySpecimenMessage() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Warning");
-        builder.setMessage("Please enter specimen type");
+        builder.setTitle("Warning!");
+        builder.setMessage("Please enter the specimen type");
         // Add the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {

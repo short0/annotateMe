@@ -52,7 +52,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Specimen type"
                 android:maxLength="254"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -77,7 +76,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Objective Lens"
                 android:inputType="numberDecimal"
                 android:maxLength="7"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -94,7 +92,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date (yyyy:mm:dd)"
+                android:text="Date (dd/mm/yyyy)"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -175,7 +173,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Comment"
                 android:maxLength="254"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 

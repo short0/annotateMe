@@ -62,6 +62,10 @@
             android:enabled="true" />
 
         <activity
+            android:name=".SubmitActivity"
+            android:label="Submit Work"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ZoomActivity"
             android:label="Zoom"
             android:screenOrientation="portrait" />

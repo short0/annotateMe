@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -60,8 +61,14 @@ public class ImageAdapter extends ArrayAdapter<Image> {
 //        TextView gpsPositionView = (TextView) listItemView.findViewById(R.id.gps_position);
 
         // set the text to the views using data in currentImage
-        imageView.setImageBitmap(rotateImage(BitmapFactory.decodeFile(currentImage.getAnnotatedImageLink()), currentImage.getAnnotatedImageLink()));
-        displayImage(imageView, currentImage.getAnnotatedImageLink());
+//        imageView.setImageBitmap(rotateImage(BitmapFactory.decodeFile(currentImage.getAnnotatedImageLink()), currentImage.getAnnotatedImageLink()));
+
+        //creates Thumbnail size (reduced image quality for gallery only)
+        final int THUMBSIZE = 64;
+        imageView.setImageBitmap(rotateImage(ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(currentImage.getAnnotatedImageLink()), THUMBSIZE, THUMBSIZE), currentImage.getAnnotatedImageLink()));
+
+
+//        displayImage(imageView, currentImage.getAnnotatedImageLink());
         fileNameView.setText(currentImage.getAnnotatedFileName());
         dateView.setText(currentImage.getDate());
         timeView.setText(currentImage.getTime());

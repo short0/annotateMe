@@ -1,5 +1,6 @@
 package com.example.user.mobilemicroscopy;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -119,7 +121,7 @@ public class CalibrateActivity extends AppCompatActivity {
                 if (drawingItemList.size() == 2)
                 {
                     // Show text message
-                    Toast.makeText(getApplicationContext(), "2 points has been added, please enter the length between the points", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "2 points have been added, please enter the length between the points", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -293,6 +295,9 @@ public class CalibrateActivity extends AppCompatActivity {
         // Add action to when spinner (drop-down menu) option change
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
+
+
+
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -315,8 +320,9 @@ public class CalibrateActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        
+
         });
+
 
         // set scale_bar_dialogalog.xml to alert dialog builder
         // calculate the length per pixel

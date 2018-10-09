@@ -387,7 +387,12 @@ public class AnnotateActivity extends AppCompatActivity {
 
             DecimalFormat formatter = new DecimalFormat("#");
             // if real size > 1000 µm
-            if (realSize > 1000) {
+
+            if (realSize > 1000000){
+                formattedRealSize = formatter.format(realSize / 1000000);
+                realSizeWithUnit = formattedRealSize + " m";
+            }
+            else if (realSize > 1000) {
                 formattedRealSize = formatter.format(realSize / 1000);
                 realSizeWithUnit = formattedRealSize + " mm";
             } else {

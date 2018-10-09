@@ -56,10 +56,10 @@ public class PointItem extends DrawingItem {
      */
     public RectF rectangle;
 
-    /**
-     * Hold area of the delete button
-     */
-    private RectF deleteRectangle;
+//    /**
+//     * Hold area of the delete button
+//     */
+//    private RectF deleteRectangle;
 
     /**
      * Hold the state of being selected
@@ -110,12 +110,12 @@ public class PointItem extends DrawingItem {
         return rectangle;
     }
 
-    /**
-     * Accessor method
-     */
-    public RectF getDeleteRectangle() {
-        return deleteRectangle;
-    }
+//    /**
+//     * Accessor method
+//     */
+//    public RectF getDeleteRectangle() {
+//        return deleteRectangle;
+//    }
 
     /**
      * Mutator method
@@ -143,7 +143,7 @@ public class PointItem extends DrawingItem {
 
         // create rectangles for buttons
         rectangle = new RectF(left, top, left + width, top + height);
-        deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
+  //      deleteRectangle = new RectF(left - BUTTON_SIZE, top - BUTTON_SIZE, left, top);
 
         // get the original width
         originalWidth = rectangle.width();
@@ -163,9 +163,9 @@ public class PointItem extends DrawingItem {
     public void draw(Canvas canvas) {
         canvas.save();
 
-        if (haveButtons) {
-            canvas.drawBitmap(deleteBitmap, null, deleteRectangle, null);
-        }
+//        if (haveButtons) {
+//            canvas.drawBitmap(deleteBitmap, null, deleteRectangle, null);
+//        }
 
         canvas.drawBitmap(pointBitmap, matrix, null);
 
@@ -179,7 +179,7 @@ public class PointItem extends DrawingItem {
         matrix.postTranslate(dx, dy);
 
         rectangle.offset(dx, dy);
-        deleteRectangle.offset(dx, dy);
+ //       deleteRectangle.offset(dx, dy);
     }
 
 }

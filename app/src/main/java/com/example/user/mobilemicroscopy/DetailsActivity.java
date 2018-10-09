@@ -179,6 +179,15 @@ public class DetailsActivity extends AppCompatActivity {
      *
      * @param savedInstanceState
      */
+
+
+    /**
+     *   For web view - submission of work
+     *
+     */
+//    private WebView webview;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -338,11 +347,14 @@ public class DetailsActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
 
-        // hide login item if logged in
+        // hide items if logged in or a guest
         if (username == null || username.equals(""))
         {
             MenuItem uploadMenuItem = (MenuItem) menu.findItem(R.id.menu_upload);
+            MenuItem uploadSubmitItem = (MenuItem) menu.findItem(R.id.menu_submit);
             uploadMenuItem.setVisible(false);
+            uploadSubmitItem.setVisible(false);
+
         }
         else
         {
@@ -390,7 +402,6 @@ public class DetailsActivity extends AppCompatActivity {
                 return true;
 
 
-
             case R.id.menu_save:
                 if (mSpecimenTypeEditText.getText().toString() == null || mSpecimenTypeEditText.getText().toString().equals(""))
                 {
@@ -421,6 +432,7 @@ public class DetailsActivity extends AppCompatActivity {
 
                 return true;
 
+
             case R.id.menu_upload:
                 if (mSpecimenTypeEditText.getText().toString() == null || mSpecimenTypeEditText.getText().toString().equals(""))
                 {
@@ -439,9 +451,10 @@ public class DetailsActivity extends AppCompatActivity {
                         beginUpload(mImage.getAnnotatedImageLink(), Constants.BUCKET_NAME + "/" + username + "/annotated");
                     }
 
-                    // save the image to database whether insert new image or update a image
                     //hides soft keyboard before saving
                     hideSoftKeyboard(this);
+
+                    // save the image to database whether insert new image or update a image
                     saveImage();
 
                     // End the activity
@@ -451,9 +464,31 @@ public class DetailsActivity extends AppCompatActivity {
                     Toast.makeText(this, "Save and upload", Toast.LENGTH_SHORT).show();
                 }
                 return true;
+
+
+            //to submit user must save and upload first
+            case R.id.menu_submit:
+
+                 // Goes to the Submit activity
+                Intent submitWork = new Intent(DetailsActivity.this, SubmitActivity.class);
+                submitWork.putExtra("originalFileName", mCurrentOriginalImageFileName);
+                submitWork.putExtra("username", username);
+                startActivity(submitWork);
+
+                // End the activity
+                finish();
+
+                // Show text message
+                // Toast.makeText(this, "Save and Submit", Toast.LENGTH_SHORT).show();
+
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
+
     }
+
+
 
 
      /**
@@ -537,8 +572,8 @@ public class DetailsActivity extends AppCompatActivity {
             Uri u = getImageUri(this, rotateImage(BitmapFactory.decodeFile(mImage.getAnnotatedImageLink())));
             intent.setData(u);
 
-            intent.putExtra("outputX", 3000);
-            intent.putExtra("outputY", 3000);
+            intent.putExtra("outputX", 4000);  //have increased this value for crop from 3000 to 4000
+            intent.putExtra("outputY", 4000);  //have increased this value for crop from 3000 to 4000
             intent.putExtra("aspectX", 1);
             intent.putExtra("aspectY", 1);
             intent.putExtra("scale", true);
@@ -1019,7 +1054,6 @@ public class DetailsActivity extends AppCompatActivity {
 
     /**
      * Method to hide soft keyboard
-     * @param activity
      */
     public static void hideSoftKeyboard(Activity activity) {
 
@@ -1031,7 +1065,6 @@ public class DetailsActivity extends AppCompatActivity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-
     }
 
 
